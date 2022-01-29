@@ -1,4 +1,5 @@
 class NotebooksController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_notebook, only: %i[ show edit update destroy ]
 
   # GET /notebooks or /notebooks.json
@@ -49,6 +50,7 @@ class NotebooksController < ApplicationController
 
   # DELETE /notebooks/1 or /notebooks/1.json
   def destroy
+    # TODO: Probably shouldn't support deleting notebooks so remove this
     @notebook.destroy!
 
     respond_to do |format|
