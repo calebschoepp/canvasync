@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Notebooks</h1>
+
+<div id="notebooks">
+  <% @notebooks.each do |notebook| %>
+    <%= render notebook %>
+    <p>
+      <%= link_to "Show this notebook", notebook %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New notebook", new_notebook_path %>

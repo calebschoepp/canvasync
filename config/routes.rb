@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
+  resources :notebooks
+
   devise_for :users
   devise_scope :user do
     authenticated :user do
-      root 'test#index', as: :authenticated_root
+      root 'notebooks#index', as: :authenticated_root
     end
     unauthenticated :user do
       root 'devise/sessions#new', as: :unauthenticated_root
