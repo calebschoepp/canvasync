@@ -10,12 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_29_231838) do
+ActiveRecord::Schema.define(version: 2022_01_29_232900) do
 
   create_table "notebooks", force: :cascade do |t|
     t.text "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_notebooks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "notebook_id", null: false
+    t.boolean "is_owner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["notebook_id"], name: "index_user_notebooks_on_notebook_id"
+    t.index ["user_id"], name: "index_user_notebooks_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -35,4 +45,6 @@ ActiveRecord::Schema.define(version: 2022_01_29_231838) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "user_notebooks", "notebooks"
+  add_foreign_key "user_notebooks", "users"
 end
