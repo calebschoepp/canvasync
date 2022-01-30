@@ -10,9 +10,6 @@ gem "rails", github: "rails/rails", branch: "main"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record locally
-gem "sqlite3", "~> 1.4"
-
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
@@ -61,6 +58,9 @@ group :development, :test do
 
   # For formatting
   gem 'rubocop'
+
+  # Use sqlite3 as the database for Active Record locally
+  gem "sqlite3", "~> 1.4"
 end
 
 group :development do
