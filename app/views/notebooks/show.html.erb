@@ -1,0 +1,8 @@
+<%= render @notebook %>
+
+<div>
+  <%= link_to "Edit this notebook", edit_notebook_path(@notebook) %> |
+  <%= link_to "Back to notebooks", notebooks_path %>
+
+  <%= button_to "Destroy this notebook", @notebook, method: :delete %>
+</div>
