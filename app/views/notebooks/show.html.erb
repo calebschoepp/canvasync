@@ -1,8 +1,8 @@
-<%= render @notebook %>
-
 <div>
-  <%= link_to "Edit this notebook", edit_notebook_path(@notebook) %> |
-  <%= link_to "Back to notebooks", notebooks_path %>
+<!--  TODO: Decide how/if we should show edit and delete buttons-->
+  <%#= link_to "Edit this notebook", edit_notebook_path(@notebook), class: "secondary-button" %>
+  <%= link_to "Back to notebooks", notebooks_path, class: "secondary-button" %>
+  <%#= button_to "Destroy this notebook", @notebook, method: :delete, class: "danger-button inline" %>
 
-  <%= button_to "Destroy this notebook", @notebook, method: :delete %>
+  <p class="pt-4">Put a React app here that will connect over websockets to manage the live note taking.</p>
 </div>

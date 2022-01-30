@@ -1,12 +1,23 @@
-<h1>Notebooks</h1>
+<h1 class="heading-1">Your Notebooks</h1>
 
-<div id="notebooks">
+<div id="notebooks" class="flex flex-col space-y-4 mb-4">
   <% @notebooks.each do |notebook| %>
-    <%= render notebook %>
-    <p>
-      <%= link_to "Show this notebook", notebook %>
-    </p>
+    <%= link_to notebook do %>
+      <%= render notebook %>
+    <% end %>
   <% end %>
 </div>
 
-<%= link_to "New notebook", new_notebook_path %>
+<%= link_to "Create a notebook", new_notebook_path, class: "primary-button" %>
+
+<h1 class="heading-1">Joined Notebooks</h1>
+
+<div id="notebooks" class="flex flex-col space-y-4 mb-4">
+  <% @notebooks.each do |notebook| %>
+    <%= link_to notebook do %>
+      <%= render notebook %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= link_to "Join a notebook", new_notebook_path, class: "primary-button" %>

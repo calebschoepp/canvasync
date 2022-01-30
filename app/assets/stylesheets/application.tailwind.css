@@ -9,11 +9,11 @@
     }
 
     .animated-card {
-        @apply card transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-100 duration-300
+        @apply card transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-100 duration-300
     }
 
     .heading-1 {
-        @apply text-3xl mb-8 mt-10
+        @apply text-3xl my-8
     }
 
     .heading-2 {
@@ -34,6 +34,10 @@
 
     .secondary-button {
         @apply button bg-secondary-500 hover:bg-secondary-400 text-white
+    }
+
+    .danger-button {
+        @apply button bg-red-500 hover:bg-red-400 text-white
     }
 
     .text-field {
