@@ -2,6 +2,9 @@ class NotebooksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_notebook, only: %i[ show edit update destroy ]
 
+  # TODO: Actually implement correctly, i.e. create user_notebooks when creating a notebook etc.
+  # TODO: Authorization across this entire controller, maybe use pundit?
+
   # GET /notebooks or /notebooks.json
   def index
     @notebooks = Notebook.all

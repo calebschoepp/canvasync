@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*TODO: Customize all these styles*/
+@layer components {
+    .card {
+        @apply bg-neutral-50 rounded-lg p-4 drop-shadow-xl
+    }
+
+    .animated-card {
+        @apply card transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-100 duration-300
+    }
+
+    .heading-1 {
+        @apply text-3xl mb-8 mt-10
+    }
+
+    .heading-2 {
+        @apply text-2xl font-medium
+    }
+
+    .button {
+        @apply rounded-lg drop-shadow-md font-bold hover:cursor-pointer transition-colors px-4 py-2 text-center
+    }
+
+    .pill {
+        @apply rounded-lg bg-primary-400 drop-shadow-md font-light transition-colors px-2 py-1 text-center text-white
+    }
+
+    .primary-button {
+        @apply button bg-primary-500 hover:bg-primary-400 text-white
+    }
+
+    .secondary-button {
+        @apply button bg-secondary-500 hover:bg-secondary-400 text-white
+    }
+
+    .text-field {
+        @apply rounded-md grow w-full focus:ring-2 ring-primary-500 ring-inset
+        placeholder:italic placeholder:text-slate-400
+    }
+
+    .label {
+        @apply block text-gray-700 font-bold mb-2
+    }
+
+    .alert-base {
+        @apply p-4 rounded-lg border-2 border-solid mb-4
+    }
+
+    .notice {
+        @apply alert-base bg-primary-300/20 border-primary-400
+    }
+
+    .alert {
+        @apply alert-base bg-red-300/20 border-red-400
+    }
+
+    .field {
+        @apply flex flex-col text-lg grow
+    }
+
+    .checkbox-base {
+        @apply appearance-none h-4 w-4 border-neutral-300 rounded-sm bg-white focus:ring-primary-700
+        focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain float-left cursor-pointer
+    }
+
+    .checkbox-checked {
+        @apply checked:bg-primary-600 checked:border-primary-600 checked:hover:border-primary-700
+        checked:hover:bg-primary-700 checked:focus:bg-primary-700 checked:focus:ring-primary-700
+    }
+
+    .checkbox {
+        @apply checkbox-base checkbox-checked
+    }
+
+    .invisible-until-group-hover {
+        @apply opacity-50 group-hover:opacity-100 transition-opacity
+    }
+
+    .button-icon {
+        @apply max-h-8 p-1 w-full hover:bg-slate-200 rounded-md transition-colors
+    }
+
+    .file-input {
+        @apply text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm
+        file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-primary-400
+    }
+}
