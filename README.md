@@ -2,11 +2,12 @@
 
 It is expected that you have the following software already on your system.
 
-- Docker (for running Postgres and Redis)
+- Docker (for running Redis)
 - `rbenv`
 - `ruby 3.1.0` (installed via `rbenv`)
 - `node` (pretty much any version)
 - `yarn` (pretty much any version)
+- `sqlite`
 
 # Setup
 
@@ -38,10 +39,6 @@ rails db:migrate
 ```
 
 # Running in development
-
-## Start Postgres
-
-TODO: Ignore this for now, just using Sqlite locally
 
 ## Start Redis
 
