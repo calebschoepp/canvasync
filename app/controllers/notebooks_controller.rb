@@ -3,29 +3,37 @@ class NotebooksController < ApplicationController
   before_action :set_notebook, only: %i[ show edit update destroy ]
 
   # TODO: Actually implement correctly, i.e. create user_notebooks when creating a notebook etc.
-  # TODO: Authorization across this entire controller, maybe use pundit?
+  # TODO: Maybe use Pundit for authorization instead of ad-hoc?
 
   # GET /notebooks or /notebooks.json
   def index
-    @notebooks = Notebook.all
+    @notebooks = policy_scope(Notebook)
   end
 
   # GET /notebooks/1 or /notebooks/1.json
   def show
+    authorize @notebook
   end
 
   # GET /notebooks/new
   def new
-    @notebook = Notebook.new
+    authorize @notebook = Notebook.new
   end
 
   # GET /notebooks/1/edit
   def edit
+    authorize @notebook
   end
 
   # POST /notebooks or /notebooks.json
   def create
     @notebook = Notebook.new(notebook_params)
+    user_notebook = UserNotebook.new
+    user_notebook.user = current_user
+    user_notebook.notebook = @notebook
+    user_notebook.is_owner = true
+    @notebook.user_notebooks << user_notebook
+    authorize @notebook
 
     respond_to do |format|
       if @notebook.save
@@ -40,6 +48,7 @@ class NotebooksController < ApplicationController
 
   # PATCH/PUT /notebooks/1 or /notebooks/1.json
   def update
+    authorize @notebook
     respond_to do |format|
       if @notebook.update(notebook_params)
         format.html { redirect_to notebook_url(@notebook), notice: "Notebook was successfully updated." }
@@ -48,17 +57,6 @@ class NotebooksController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @notebook.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /notebooks/1 or /notebooks/1.json
-  def destroy
-    # TODO: Probably shouldn't support deleting notebooks so remove this
-    @notebook.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to notebooks_url, notice: "Notebook was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 
