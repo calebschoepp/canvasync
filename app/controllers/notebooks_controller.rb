@@ -7,20 +7,22 @@ class NotebooksController < ApplicationController
 
   # GET /notebooks or /notebooks.json
   def index
-    @notebooks = Notebook.all
+    @notebooks = policy_scope(Notebook)
   end
 
   # GET /notebooks/1 or /notebooks/1.json
   def show
+    authorize @notebook
   end
 
   # GET /notebooks/new
   def new
-    @notebook = Notebook.new
+    authorize @notebook = Notebook.new
   end
 
   # GET /notebooks/1/edit
   def edit
+    authorize @notebook
   end
 
   # POST /notebooks or /notebooks.json
@@ -31,6 +33,7 @@ class NotebooksController < ApplicationController
     user_notebook.notebook = @notebook
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
+    authorize @notebook
 
     respond_to do |format|
       if @notebook.save
@@ -45,6 +48,7 @@ class NotebooksController < ApplicationController
 
   # PATCH/PUT /notebooks/1 or /notebooks/1.json
   def update
+    authorize @notebook
     respond_to do |format|
       if @notebook.update(notebook_params)
         format.html { redirect_to notebook_url(@notebook), notice: "Notebook was successfully updated." }
@@ -67,13 +71,3 @@ class NotebooksController < ApplicationController
       params.require(:notebook).permit(:name)
     end
 end
-
-# index: only your user_notebooks
-# show: only notebooks you own or joined
-# create:
-# update:
-#
-# index:
-# show: make sure that current_user has a notebooks_user record and set a variable based on being owner or not
-# create: make sure that current_user
-# update: make sure that current_user owns the notebook?
