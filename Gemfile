@@ -57,6 +57,8 @@ gem "rolify"
 
 # For easy editing as admin
 gem 'rails_admin'
+gem "sassc-rails"
+gem 'coffee-rails'
 
 
 group :development, :test do
