@@ -308,4 +308,8 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # Workaround to fix compatability issue between Rails 7 and devise
+  # https://stackoverflow.com/questions/70413914/attempting-to-register-a-user-on-my-devise-app-causes-undefined-method-user-url
+  config.navigational_formats = ['*/*', :html, :turbo_stream]
 end
