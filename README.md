@@ -8,6 +8,7 @@ It is expected that you have the following software already on your system.
 - `node` (pretty much any version)
 - `yarn` (pretty much any version)
 - `sqlite`
+- `heroku` CLI
 
 # Setup
 
@@ -79,12 +80,32 @@ bin/rails server
 
 ## Add Heroku remotes
 
-TODO
+Before you can start interacting with production you'll need to setup your git remotes.
+
+```shell
+heroku git:remote -r prod -a canvasync
+```
 
 ## Pushing code
 
-TODO
+To push code up to production run:
+
+```shell
+git push prod main
+```
 
 ## Migrations
 
-TODO
+If you pushed some code that depends on some migrations you will need to run the following after you push your code.
+
+```shell
+heroku run bin/rails db:migrate
+```
+
+## Debugging
+
+If you need to debug something in production you can hop into a Rails console with the following. Note that `--sandbox` prevents you from writing to production for saftey.
+
+```shell
+heroku run bin/rails console --sandbox
+```
