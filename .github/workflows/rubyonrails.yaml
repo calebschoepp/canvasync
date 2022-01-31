@@ -1,5 +1,7 @@
 name: Rails - Install dependencies, run linters, and run tests
 
+# TODO: Don't let each of the steps fail
+
 on:
   push:
     branches: [ main ]
