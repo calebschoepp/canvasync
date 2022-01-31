@@ -1,0 +1,48 @@
+name: Rails - Install dependencies, run linters, and run tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  run-all:
+    runs-on: ubuntu-latest
+    steps:
+      # Basic setup
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        with:
+          bundler-cache: true
+
+      # Add or Replace any other security checks below here
+      - name: Run bundler-audit
+        continue-on-error: true
+        run: |
+          bundle exec bundler-audit update
+          bundle exec bundler-audit check
+
+      - name: Run brakeman
+        continue-on-error: true
+        run: |
+          bundle exec brakeman -q -w2
+
+      # Add or Replace any other Linters below here
+      - name: Run rubocop
+        continue-on-error: true
+        run: |
+          bundle exec rubocop --parallel
+
+      # Add or Replace any other tests below here
+      - name: Run unit & integration tests
+        continue-on-error: true
+        run: |
+          bin/rails test
+
+      - name: Run system tests
+        continue-on-error: true
+        run: |
+          bin/rails test:system
