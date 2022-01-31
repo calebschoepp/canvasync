@@ -2,9 +2,9 @@ name: Rails - Install dependencies, run linters, and run tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
   run-all:
     runs-on: ubuntu-latest
