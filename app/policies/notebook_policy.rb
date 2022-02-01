@@ -23,10 +23,6 @@ class NotebookPolicy < ApplicationPolicy
   end
 
   def update?
-    user_notebook = record.user_notebooks.find_by(user_id: user.id)
-    unless user_notebook
-      return false
-    end
-    user_notebook.is_owner
+    record.is_owner? user
   end
 end

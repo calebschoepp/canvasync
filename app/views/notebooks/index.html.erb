@@ -1,7 +1,7 @@
 <h1 class="heading-1">Your Notebooks</h1>
 
 <div id="notebooks" class="flex flex-col space-y-4 mb-4">
-  <% @notebooks.each do |notebook| %>
+  <% @owned_notebooks.each do |notebook| %>
     <%= link_to notebook do %>
       <%= render notebook %>
     <% end %>
@@ -13,7 +13,7 @@
 <h1 class="heading-1">Joined Notebooks</h1>
 
 <div id="notebooks" class="flex flex-col space-y-4 mb-4">
-  <% @notebooks.each do |notebook| %>
+  <% @joined_notebooks.each do |notebook| %>
     <%= link_to notebook do %>
       <%= render notebook %>
     <% end %>

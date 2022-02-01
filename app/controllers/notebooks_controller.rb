@@ -2,12 +2,15 @@ class NotebooksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_notebook, only: %i[ show edit update destroy ]
 
-  # TODO: Actually implement correctly, i.e. create user_notebooks when creating a notebook etc.
-  # TODO: Maybe use Pundit for authorization instead of ad-hoc?
-
   # GET /notebooks or /notebooks.json
   def index
     @notebooks = policy_scope(Notebook)
+    @owned_notebooks = @notebooks.select do |notebook|
+      notebook.is_owner? current_user
+    end
+    @joined_notebooks = @notebooks.select do |notebook|
+      not notebook.is_owner? current_user
+    end
   end
 
   # GET /notebooks/1 or /notebooks/1.json
