@@ -55,6 +55,12 @@ bin/dev
 
 Now you can see the app at http://localhost:3000.
 
+# Code Review
+
+For pushes to master are not allowed. Tests must pass in Github before a PR can merge. Ideally somebody reviews your code.
+
+If you need to fix the formatting of your code `bin/bundle exec rubocop --auto-correct-all` will usually do the trick.
+
 # Testing
 
 ```shell

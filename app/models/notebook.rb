@@ -4,21 +4,19 @@ class Notebook < ApplicationRecord
   # TODO: Validate that user_id notebook_id combo is unique?
   has_many :user_notebooks
   has_many :users, through: :user_notebooks
-  validates :name, presence: true, length: {maximum: 100}
+  validates :name, presence: true, length: { maximum: 100 }
 
-  def is_owner?(user)
-    user_notebook = self.user_notebooks.find_by(user_id: user.id)
-    unless user_notebook
-      return false
-    end
+  def owner?(user)
+    user_notebook = user_notebooks.find_by(user_id: user.id)
+    return false unless user_notebook
+
     user_notebook.is_owner
   end
 
-  def is_participant?(user)
-    user_notebook = self.user_notebooks.find_by(user_id: user.id)
-    unless user_notebook
-      return false
-    end
-    not user_notebook.is_owner
+  def participant?(user)
+    user_notebook = user_notebooks.find_by(user_id: user.id)
+    return false unless user_notebook
+
+    !user_notebook.is_owner
   end
 end

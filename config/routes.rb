@@ -21,5 +21,4 @@ Rails.application.routes.draw do
   authenticate :user, ->(user) { user.has_role? :admin } do
     mount RailsAdmin::Engine => '/special/sauce', as: 'rails_admin'
   end
-
 end

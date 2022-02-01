@@ -22,19 +22,16 @@ jobs:
 
       # Add or Replace any other security checks below here
       - name: Run bundler-audit
-        continue-on-error: true
         run: |
           bundle exec bundler-audit update
           bundle exec bundler-audit check
 
       - name: Run brakeman
-        continue-on-error: true
         run: |
           bundle exec brakeman -q -w2
 
       # Add or Replace any other Linters below here
       - name: Run rubocop
-        continue-on-error: true
         run: |
           bundle exec rubocop --parallel
 
