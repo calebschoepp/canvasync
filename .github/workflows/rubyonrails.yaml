@@ -22,13 +22,11 @@ jobs:
 
       # Add or Replace any other security checks below here
       - name: Run bundler-audit
-        continue-on-error: true
         run: |
           bundle exec bundler-audit update
           bundle exec bundler-audit check
 
       - name: Run brakeman
-        continue-on-error: true
         run: |
           bundle exec brakeman -q -w2
 
