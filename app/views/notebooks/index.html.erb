@@ -1,6 +1,6 @@
 <h1 class="heading-1">Your Notebooks</h1>
 
-<div id="notebooks" class="flex flex-col space-y-4 mb-4">
+<div id="notebooks" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4">
   <% @owned_notebooks.each do |notebook| %>
     <%= link_to notebook do %>
       <%= render notebook %>
