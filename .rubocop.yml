@@ -5,6 +5,10 @@ AllCops:
   Exclude:
     - 'bin/*'
     - 'gemfiles/vendor/bundle/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
 
 # TODO: Comeback and make these more strict
 Style/FrozenStringLiteralComment:
