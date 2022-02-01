@@ -34,7 +34,6 @@ jobs:
 
       # Add or Replace any other Linters below here
       - name: Run rubocop
-        continue-on-error: true
         run: |
           bundle exec rubocop --parallel
 
