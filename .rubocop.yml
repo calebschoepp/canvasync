@@ -1,9 +1,10 @@
 # TODO: Implement ideas from here
 # TODO: For some reason this is failing in the ci/cd environment
 AllCops:
+  NewCops: enable
   Exclude:
     - 'bin/*'
-  NewCops: enable
+    - 'gemfiles/vendor/bundle/**/*'
 
 # TODO: Comeback and make these more strict
 Style/FrozenStringLiteralComment:
