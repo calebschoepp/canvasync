@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     unauthenticated_root_path
   end
 end

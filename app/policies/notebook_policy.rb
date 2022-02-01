@@ -1,7 +1,7 @@
 class NotebookPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.joins(:user_notebooks).where(:user_notebooks => { user_id: user.id })
+      scope.joins(:user_notebooks).where(user_notebooks: { user_id: user.id })
     end
   end
 
