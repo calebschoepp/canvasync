@@ -10,4 +10,9 @@ class ApplicationController < ActionController::Base
     flash[:alert] = 'You are not authorized to perform this action.'
     redirect_to(request.referrer || authenticated_root_path || unauthenticated_root_path)
   end
+
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(resource_or_scope)
+    unauthenticated_root_path
+  end
 end
