@@ -1,7 +1,7 @@
 class NotebookPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.joins(:user_notebooks).where(:user_notebooks => {user_id: user.id})
+      scope.joins(:user_notebooks).where(:user_notebooks => { user_id: user.id })
     end
   end
 
@@ -23,10 +23,14 @@ class NotebookPolicy < ApplicationPolicy
   end
 
   def update?
-    user_notebook = record.user_notebooks.find_by(user_id: user.id)
-    unless user_notebook
-      return false
-    end
-    user_notebook.is_owner
+    record.is_owner? user
+  end
+
+  def preview?
+    true
+  end
+
+  def join?
+    true
   end
 end
