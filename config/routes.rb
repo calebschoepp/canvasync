@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :notebooks, except: :destroy
+  resources :notebooks, except: :destroy do
+    member do
+      get 'preview'
+      post 'join'
+    end
+  end
 
   # TODO: Login, signup pages aren't rendering errors
   devise_for :users
