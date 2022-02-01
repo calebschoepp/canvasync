@@ -6,14 +6,14 @@ class Notebook < ApplicationRecord
   has_many :users, through: :user_notebooks
   validates :name, presence: true, length: { maximum: 100 }
 
-  def is_owner?(user)
+  def owner?(user)
     user_notebook = user_notebooks.find_by(user_id: user.id)
     return false unless user_notebook
 
     user_notebook.is_owner
   end
 
-  def is_participant?(user)
+  def participant?(user)
     user_notebook = user_notebooks.find_by(user_id: user.id)
     return false unless user_notebook
 

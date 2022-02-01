@@ -6,10 +6,10 @@ class NotebooksController < ApplicationController
   def index
     @notebooks = policy_scope(Notebook)
     @owned_notebooks = @notebooks.select do |notebook|
-      notebook.is_owner? current_user
+      notebook.owner? current_user
     end
     @joined_notebooks = @notebooks.reject do |notebook|
-      notebook.is_owner? current_user
+      notebook.owner? current_user
     end
   end
 
@@ -73,10 +73,10 @@ class NotebooksController < ApplicationController
   def join
     authorize @notebook
 
-    if @notebook.is_owner?(current_user)
+    if @notebook.owner?(current_user)
       redirect_to notebooks_url, flash: { alert: 'You are already an owner of this notebook' }
       return
-    elsif @notebook.is_participant?(current_user)
+    elsif @notebook.participant?(current_user)
       redirect_to notebooks_url, flash: { alert: 'You are already a participant of this notebook' }
       return
     end

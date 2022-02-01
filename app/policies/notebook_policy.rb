@@ -23,7 +23,7 @@ class NotebookPolicy < ApplicationPolicy
   end
 
   def update?
-    record.is_owner? user
+    record.owner? user
   end
 
   def preview?
