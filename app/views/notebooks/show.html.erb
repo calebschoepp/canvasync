@@ -4,5 +4,8 @@
   <%= link_to "Back to notebooks", notebooks_path, class: "secondary-button" %>
   <%#= button_to "Destroy this notebook", @notebook, method: :delete, class: "danger-button inline" %>
 
-  <p class="pt-4">Put a React app here that will connect over websockets to manage the live note taking.</p>
+  <% content_for :for_head do -%>
+    <%= javascript_include_tag "index", "data-turbo-track": "reload", defer: true %>
+  <% end -%>
+  <div id="root"></div>
 </div>
