@@ -24,8 +24,13 @@ export default () => {
         paperHandler("select");
     });
 
+    const textCallback = useCallback(() => {
+        paperHandler("text");
+    });
+
     const paperHandler = (penState) => {
         let path = null;
+
         let rect = null;
         let p1 = null;
 
@@ -33,10 +38,23 @@ export default () => {
             Paper.project.deselectAll();
             if (penState === "pen" || penState === "eraser") {
                 path = new Paper.Path();
-            } else {
+            } else if (penState === "select") {
                 rect = new Paper.Rectangle();
                 path = new Paper.Path.Rectangle(rect);
                 p1 = new Paper.Point(event.point.x, event.point.y);
+            } else if (penState === "text") {
+                // add previous text to pathState
+                if (path) {
+                    setPathState(oldPaths => [...oldPaths, path]);
+                }
+                const point = new Paper.Point(event.point.x, event.point.y);
+                path = new Paper.PointText({
+                    point: point,
+                    fontFamily: 'Courier New',
+                    fontWeight: 'bold',
+                    fontSize: 25,
+                });
+                path.fullySelected = true;
             }
             path.strokeColor = "black";
             if (penState !== "pen") {
@@ -48,7 +66,7 @@ export default () => {
         Paper.view.onMouseDrag = (event) => {
             if (penState === "pen" || penState === "eraser") {
                 path.add(event.point);
-            } else {
+            } else if (penState === "select") {
                 const p2 = new Paper.Point(event.point.x, event.point.y);
                 rect.set(p1, p2);
                 path.segments = [
@@ -67,7 +85,7 @@ export default () => {
             } else if (penState === "eraser") {
                 const newPathState = [];
                 for (p of pathState) {
-                    if (path.getIntersections(p).length) {
+                    if (path.intersects(p)) {
                         p.remove();
                     } else {
                         newPathState.push(p);
@@ -75,24 +93,46 @@ export default () => {
                     setPathState(newPathState);
                 }
                 path.remove();
-            } else {
+            } else if (penState === "select") {
                 for (p of pathState) {
-                    if (p.segments.every((segment) => path.contains(segment.point))) {
+                    // check for path
+                    if (p.segments && p.segments.every((segment) => path.contains(segment.point))) {
+                        p.fullySelected = true;
+                    } else if (p.content && p.isInside(rect)) { // check for text
                         p.fullySelected = true;
                     }
                 }
                 path.remove();
             }
-        }
+        };
+
+        Paper.view.onKeyDown = (event) => {
+            if (penState !== "text") {
+                return;
+            }
+            if (event.key === "escape" || event.key === "enter") {
+                setPathState(oldPaths => [...oldPaths, path]);
+                path.fullySelected = false;
+                path = null;
+            } else if (event.key === "backspace") {
+                path.content = path.content.slice(0, -1);
+            }
+            if (penState === "text" && path && event.character !== "") {
+                path.content += event.character;
+            }
+        };
 
         Paper.view.draw();
     };
 
     return (
-        <div>
-            <button className="primary-button" onClick={penCallback}>Pen</button>
-            <button className="primary-button" onClick={eraserCallback}>Eraser</button>
-            <button className="primary-button" onClick={selectCallback}>Select</button>
+        <div className="flex flex-row">
+            <div className="flex flex-col">
+                <button className="primary-button" onClick={penCallback}>Pen</button>
+                <button className="primary-button" onClick={eraserCallback}>Eraser</button>
+                <button className="primary-button" onClick={selectCallback}>Select</button>
+                <button className="primary-button" onClick={textCallback}>Text</button>
+            </div>
             <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
         </div>
     );
