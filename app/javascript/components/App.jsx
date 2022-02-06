@@ -42,7 +42,7 @@ export default () => {
             if (penState !== "pen") {
                 path.dashArray = [10, 12];
             }
-            Math.strokeWidth = 3;
+            path.strokeWidth = 3;
         };
 
         Paper.view.onMouseDrag = (event) => {
