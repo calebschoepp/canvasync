@@ -61,7 +61,7 @@ export default () => {
                 pathRef.current.fullySelected = true;
             }
             if (penState !== "pen" && penState !== "text") {
-                path.strokeColor = colorState;
+                path.strokeColor = "black";
                 path.strokeWidth = 3;
                 path.dashArray = [10, 12];
             } else {
