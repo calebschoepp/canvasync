@@ -6,18 +6,19 @@ export default () => {
     const canvasRef = useRef(null);
     const pathRef = useRef(null);
     const [penState, setPenState] = useState("pen");
+    const [colorState, setColorState] = useState("black");
     const [pathState, setPathState] = useState([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         Paper.setup(canvas);
-        paperHandler("pen");
+        paperHandler("pen", "black");
     }, []);
 
     useEffect(() => {
         pathRef.current = null;
-        paperHandler(penState);
-    }, [pathState.length, penState]);
+        paperHandler(penState, colorState);
+    }, [pathState.length, penState, colorState]);
 
     const canvasToolCallback = useCallback((event) => {
         if (pathRef.current) {
@@ -26,7 +27,14 @@ export default () => {
         setPenState(event.currentTarget.innerText.toLowerCase());
     });
 
-    const paperHandler = (penState) => {
+    const colorToolCallback = useCallback((event) => {
+        if (pathRef.current) {
+            setPathState(oldPaths => [...oldPaths, pathRef.current]);
+        }
+        setColorState(event.currentTarget.innerText.toLowerCase());
+    });
+
+    const paperHandler = (penState, colorState) => {
         let path = null;
 
         let rect = null;
@@ -53,11 +61,11 @@ export default () => {
                 pathRef.current.fullySelected = true;
             }
             if (penState !== "pen" && penState !== "text") {
-                path.strokeColor = "black";
+                path.strokeColor = colorState;
                 path.strokeWidth = 3;
                 path.dashArray = [10, 12];
             } else {
-                pathRef.current.strokeColor = "black";
+                pathRef.current.strokeColor = colorState;
                 pathRef.current.strokeWidth = penState === "pen" ? 3 : 1;
             }
         };
@@ -149,6 +157,12 @@ export default () => {
                 <button className="primary-button" onClick={canvasToolCallback}>Text</button>
             </div>
             <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
+            <div classname="flex flex-col">
+                <button className="primary-button" onClick={colorToolCallback}>Black</button>
+                <button className="primary-button" onClick={colorToolCallback}>Red</button>
+                <button className="primary-button" onClick={colorToolCallback}>Green</button>
+                <button className="primary-button" onClick={colorToolCallback}>Blue</button>
+            </div>
         </div>
     );
 };
