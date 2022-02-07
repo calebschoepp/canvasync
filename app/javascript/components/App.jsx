@@ -12,12 +12,12 @@ export default () => {
     useEffect(() => {
         const canvas = canvasRef.current;
         Paper.setup(canvas);
-        paperHandler("pen", "black");
+        paperHandler();
     }, []);
 
     useEffect(() => {
         pathRef.current = null;
-        paperHandler(penState, colorState);
+        paperHandler();
     }, [pathState.length, penState, colorState]);
 
     const canvasToolCallback = useCallback((event) => {
@@ -34,7 +34,7 @@ export default () => {
         setColorState(event.currentTarget.innerText.toLowerCase());
     });
 
-    const paperHandler = (penState, colorState) => {
+    const paperHandler = () => {
         let path = null;
 
         let rect = null;
@@ -89,7 +89,7 @@ export default () => {
 
         Paper.view.onMouseUp = () => {
             if (penState === "pen") {
-                pathRef.current.simplify();
+                pathRef.current.simplify(10);
                 setPathState(oldPaths => [...oldPaths, pathRef.current]);
                 pathRef.current = null;
             } else if (penState === "eraser") {
