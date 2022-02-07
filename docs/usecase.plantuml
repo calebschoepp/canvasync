@@ -1,5 +1,5 @@
-@startuml WBS Use Case Diagram
-title WBS Use Case Diagram
+@startuml Use Case Diagram
+title Canvasync Use Case Diagram
 left to right direction
 
 actor User as user
