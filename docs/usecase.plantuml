@@ -1,0 +1,77 @@
+@startuml WBS Use Case Diagram
+title WBS Use Case Diagram
+left to right direction
+
+actor User as user
+actor Server as server
+actor "Participant" as participant
+actor Owner as owner
+user <|-- owner
+user <|-- participant
+rectangle Canvasync {
+    (User Registration - FR1) as (UC1)
+    (User Login - FR2) as (UC2)
+    (Change Password - FR3) as (UC3)
+    (Display Notebooks - FR4) as (UC4)
+    (Search Notebooks - FR5) as (UC5)
+    (Create Notebooks - FR6) as (UC6)
+    (Add Notebook - FR7) as (UC7)
+    (Open Notebook - FR8) as (UC8)
+    (Edit Canvas - FR9) as (UC9)
+    (Create Text Diff) as (UC10)
+    (Create Pen Diff) as (UC11)
+    (Set Diff Colour) as (UC12)
+    (Erase Diff) as (UC13)
+    (Select Diffs) as (UC14)
+    (Erase Selected Diffs) as (UC15)
+    (Move Selected Diffs) as (UC16)
+    (Owner Edit Canvas - FR10) as (UC17)
+    (Add New Canvas - FR11) as (UC18)
+    (Participant Edit Canvas - FR12) as (UC19)
+    (Export Notebook - FR13) as (UC20)
+    (Run background PDF export) as (UC21)
+
+    'user registration
+    user -- (UC1)
+    ' user login
+    user -- (UC2)
+    ' change password
+    user -- (UC3)
+    ' display notebooks
+    user -- (UC4)
+    ' open notebook
+    user -- (UC8)
+    ' search notebooks
+    user -- (UC5)
+    ' owner create notebooks
+    owner -- (UC6)
+    ' participant adds notebook
+    participant -- (UC7)
+    ' owner edit canvas
+    owner -- (UC17)
+    ' owner add new canvas
+    owner -- (UC18)
+    ' export notebook
+    user -- (UC20)
+    ' server runs background job
+    (UC21) -- server
+    ' participant edit canvas
+    participant -- (UC19)
+    ' edit canvas include diff functionality
+    (UC9) .> (UC10) : include
+    (UC9) .> (UC11) : include
+    (UC9) .> (UC12) : include
+    (UC9) .> (UC13) : include
+    (UC9) .> (UC14) : include
+    ' select diffs is extended by delete and move selected diffs
+    (UC14) <. (UC15) : extend
+    (UC14) <. (UC16) : extend
+    ' owner and participant edit includes edit canvas
+    (UC17) .> (UC9) : include
+    (UC19) .> (UC9) : include
+    ' export pdf includes background job
+    (UC20) .> (UC21) : include
+}
+note right of (UC2) : All use cases except User Registration,\n User Login, and Change Password\n include the use case User Login
+
+@enduml
