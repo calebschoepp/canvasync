@@ -1,0 +1,98 @@
+@startwbs Canvasync WBS
+* Canvasync WBS
+** 1. User Registration
+*** FR1 - Request.Registration
+**** 1.1.1 Design user registration form
+**** 1.1.2 Implement form to register a new user account with a new email address
+**** 1.1.3 Validate Registration Info (including security standards and email address uniqueness)
+**** 1.1.4 Display error message on invalid registration info
+**** 1.1.5 Store registration info in database in accordance with acceptable security standards
+**** 1.1.6 Return authentication user cookie on successful registration
+**** 1.1.7 Redirect to Notebook Dashboard on successful registration
+
+** 2. User Login
+*** FR2 - Request.Login
+**** 2.1.1 Design user login form
+**** 2.1.2 Implement form to login an existing user with an email address and password
+**** 2.1.3 Validate that the entered username and password match the credentials stored in the database
+**** 2.1.4 Display error message on unsuccessful login
+**** 2.1.5 Return authenticated user cookie on successful login
+**** 2.1.6 Redirect to Notebook Dashboard on successful login
+*** FR3 - Change.Password
+**** 2.2.1 Design form to allow authenticated users to reset the password associated with an account's email
+**** 2.2.2 Implement form to allow authenticated users to reset their password associated with an account's email
+**** 2.2.3 Validate entered email matches email format and has an existing account on user email submission
+**** 2.2.4 Email a password reset link to the user's email
+**** 2.2.5 Design form to allow authenticated users to reset password with a new password
+**** 2.2.6 Implement form to allow authenticated users to reset password with a new password
+**** 2.2.7 Validate new password adheres to password security standards
+**** 2.2.8 Store new password in database in accordance with acceptable security standards
+
+** 3. Notebook Dashboard
+*** FR4 - Display.Notebooks
+**** 3.1.1 Design notebook dashboard
+**** 3.1.2 Implement notebook dashboard displaying all notebooks that an authenticated user owns or is a participant in
+**** 3.1.3 Implement logic that returns all notebooks that an authenticated user owns
+**** 3.1.4 Implement logic that returns all notebooks that an authenticated user is a participant
+*** FR5 - Search.Notebooks
+**** 3.2.1 Design searchbar user interface element within notebook dashboard
+**** 3.2.2 Implement searchbar within notebook dashboard that allows an authenticated user to enter a search string
+**** 3.2.3 Implement logic for filtering an authenticated user's notebook dashboard to only show notebooks that match the specified search string
+
+** 4. Notebook
+*** FR6 - Create.Notebook
+**** 4.1.1 Design create notebook form
+**** 4.1.2 Implement create notebook form
+**** 4.1.3 Implement logic that will validate and create new notebook with the uploaded PDF
+**** 4.1.4 Display error message to authenticated user if uploaded PDF is of an invalid type or size
+**** 4.1.5 Store new notebook in database on valid notebook creation
+*** FR7 - Add.Notebook
+**** 4.2.1 Design add notebook form
+**** 4.2.2 Implement join notebook form such that an authenticated user can enter a unique id to join a notebook
+**** 4.2.3 Design preview notebook page
+**** 4.2.4 Implement preview notebook page such that an authenticated user can determine if they want to join the notebook or not
+**** 4.2.5 Implement logic that validates that an authenticated user is allowed to join a notebook
+**** 4.2.6 Store in database that an authenticated user has joined the given notebook
+*** FR8 - Open.Notebook
+**** 4.3.1 Design user interface element to allow a authenticated user to open a notebook they own or have joined
+**** 4.3.2 Implement user interface element to open a notebook
+**** 4.3.3 Implement logic to serve up React app that will allow authenticated user to edit the notebook
+
+** 5. Shared Canvas
+*** FR9 - Edit.Canvas
+**** 5.1.1 Design user interface element that displays the different canvas editing methods (e.g., pen, eraser, etc.) alongside the opened notebook
+**** 5.1.2 Implement user interface element that allows an authenticated user to select an editing method to apply to a canvas within the opened notebook
+**** 5.1.3 Implement logic allowing an authenticated user to edit a notebook with text and render resulting diff
+**** 5.1.4 Implement logic allowing an authenticated user to edit a canvas within a notebook with a pen and render resulting diff
+**** 5.1.5 Implement logic allowing an authenticated user to set a colour to be used by text and pen diffs
+**** 5.1.6 Implement logic allowing an authenticated user to edit a canvas within a notebook with an eraser and render resulting diff
+**** 5.1.7 Implement logic allowing an authenticated user to edit a canvas within a notebook by selecting and moving exisiting diffs
+**** 5.1.8 Implement logic allowing an authenticated user to edit a canvas within a notebook by selecting an existing text diff and clicking the delete key
+*** FR10 - OwnerEdit.Canvas
+**** 5.2.1 Allow participants to make edits to all Canvas pages within their notebook
+**** 5.2.2 Render any edits an owner makes to the respective Canvas page
+**** 5.2.3 Store any edits an owner makes to a Canvas page in the database
+**** 5.2.4 Broadcast any edits an owner makes to a Canvas page to all current notebook participants
+**** 5.2.5 Render any broadcasts received by participants to the respective owner Canvas layer
+*** FR11 - New.Canvas
+**** 5.3.1 Design user interface element to allow notebook owners to add a new Canvas page to a notebook
+**** 5.3.2 Implement User Interface element to allow notebook owners to add a new Canvas page to a notebook
+**** 5.3.3 Render a new Canvas page to the owner's notebook on Canvas addition
+**** 5.3.4 Store new Canvas page in database
+**** 5.3.5 Broadcast new Canvas page to all current notebook participants
+**** 5.3.6 Render any broadcasted new Canvas pages received by participants as a new Canvas page
+*** FR12 - ParticipantEdit.Canvas
+**** 5.4.1 Allow partipants to make edits to all Canvas pages within their notebook
+**** 5.4.2 Render any edits a participant makes to the respective Canvas page
+**** 5.4.3 Store any edits a participant makes to a Canvas page in the database
+
+** 6. Export Notebook
+*** FR13 - Export.Notebook
+**** 6.1.1 Design user interface element on dashboard to allow an authenticated user to export notebook
+**** 6.1.2 Implement user interface element to allow an authenticated user to export a notebook
+**** 6.1.3 Setup infrastructure to support asynchronous background jobs
+**** 6.1.4 Create background job that executes when an authenticated user exports a notebook
+**** 6.1.5 Write logic to export a snapshot of a notebook into a PDF with selectable text
+**** 6.1.6 Store generated PDF in server file storage
+**** 6.1.7 Create page on frontend that polls for completion of the export and downloads the PDF to the authenticated user's computer
+@endwbs
