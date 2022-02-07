@@ -31,7 +31,7 @@ export default () => {
         if (pathRef.current) {
             setPathState(oldPaths => [...oldPaths, pathRef.current]);
         }
-        setColorState(event.currentTarget.innerText.toLowerCase());
+        setColorState(event.target.value);
     });
 
     const paperHandler = () => {
@@ -39,19 +39,28 @@ export default () => {
 
         let rect = null;
         let p1 = null;
+        let p2 = null;
 
         Paper.view.onMouseDown = (event) => {
-            Paper.project.deselectAll();
             if (penState === "pen") {
+                Paper.project.deselectAll();
                 pathRef.current = new Paper.Path();
             } else if (penState === "eraser") {
+                Paper.project.deselectAll();
                 path = new Paper.Path();
             }
             else if (penState === "select") {
-                rect = new Paper.Rectangle();
-                path = new Paper.Path.Rectangle(rect);
                 p1 = new Paper.Point(event.point.x, event.point.y);
+                if (rect && p1.isInside(rect) && Paper.project.selectedItems.length > 0) {
+                    rect = null;
+                    path = null;
+                } else {
+                    Paper.project.deselectAll();
+                    rect = new Paper.Rectangle();
+                    path = new Paper.Path.Rectangle(rect);
+                }
             } else if (penState === "text") {
+                Paper.project.deselectAll();
                 const point = new Paper.Point(event.point.x, event.point.y);
                 pathRef.current = new Paper.PointText({
                     point: point,
@@ -60,11 +69,11 @@ export default () => {
                 });
                 pathRef.current.fullySelected = true;
             }
-            if (penState !== "pen" && penState !== "text") {
+            if (penState !== "pen" && penState !== "text" && Paper.project.selectedItems.length === 0) {
                 path.strokeColor = "black";
                 path.strokeWidth = 3;
                 path.dashArray = [10, 12];
-            } else {
+            } else if (Paper.project.selectedItems.length === 0 || (penState === "text")) {
                 pathRef.current.strokeColor = colorState;
                 pathRef.current.strokeWidth = penState === "pen" ? 3 : 1;
             }
@@ -76,14 +85,16 @@ export default () => {
             } else if (penState === "eraser") {
                 path.add(event.point);
              } else if (penState === "select") {
-                const p2 = new Paper.Point(event.point.x, event.point.y);
-                rect.set(p1, p2);
-                path.segments = [
-                    new Paper.Segment(new Paper.Point(rect.x, rect.y)),
-                    new Paper.Segment(new Paper.Point(rect.x + rect.width, rect.y)),
-                    new Paper.Segment(new Paper.Point(rect.x + rect.width, rect.y + rect.height)),
-                    new Paper.Segment(new Paper.Point(rect.x, rect.y + rect.height)),
-                ]
+                p2 = new Paper.Point(event.point.x, event.point.y);
+                if (Paper.project.selectedItems.length === 0) {
+                    rect.set(p1, p2);
+                    path.segments = [
+                        new Paper.Segment(new Paper.Point(rect.x, rect.y)),
+                        new Paper.Segment(new Paper.Point(rect.x + rect.width, rect.y)),
+                        new Paper.Segment(new Paper.Point(rect.x + rect.width, rect.y + rect.height)),
+                        new Paper.Segment(new Paper.Point(rect.x, rect.y + rect.height)),
+                    ];
+                }
             }
         };
 
@@ -105,16 +116,28 @@ export default () => {
                 path.remove();
                 path = null;
             } else if (penState === "select") {
-                for (p of pathState) {
-                    // check for path
-                    if (p.segments && p.segments.every((segment) => path.contains(segment.point))) {
-                        p.fullySelected = true;
-                    } else if (p.content && p.isInside(rect)) { // check for text
-                        p.fullySelected = true;
+                if (Paper.project.selectedItems.length === 0) {
+                    for (p of pathState) {
+                        // check for path
+                        if (p.segments && p.segments.every((segment) => path.contains(segment.point))) {
+                            p.fullySelected = true;
+                        } else if (p.content && p.isInside(rect)) { // check for text
+                            p.fullySelected = true;
+                        }
                     }
+                    path.remove();
+                    path = null;
+                } else {
+                    const newPathState = [];
+                    for (p of pathState) {
+                        if (Paper.project.selectedItems.find((selectedItem) => selectedItem.id === p.id)) {
+                            p.translate(p2.subtract(p1));
+                            p.fullySelected = false;
+                        }
+                        newPathState.push(p);
+                    }
+                    setPathState(newPathState);
                 }
-                path.remove();
-                path = null;
             }
         };
 
@@ -133,7 +156,7 @@ export default () => {
                     }
                 }
                 setPathState(newPathState);
-            }else if (event.key === "escape" || event.key === "enter") {
+            } else if (event.key === "escape" || event.key === "enter") {
                 setPathState(oldPaths => [...oldPaths, pathRef.current]);
                 pathRef.current.fullySelected = false;
                 pathRef.current = null;
@@ -152,17 +175,12 @@ export default () => {
         <div className="flex flex-row">
             <div className="flex flex-col">
                 <button className="primary-button" onClick={canvasToolCallback}>Pen</button>
+                <input type="color" onChange={colorToolCallback}/>
                 <button className="primary-button" onClick={canvasToolCallback}>Eraser</button>
                 <button className="primary-button" onClick={canvasToolCallback}>Select</button>
                 <button className="primary-button" onClick={canvasToolCallback}>Text</button>
             </div>
             <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
-            <div classname="flex flex-col">
-                <button className="primary-button" onClick={colorToolCallback}>Black</button>
-                <button className="primary-button" onClick={colorToolCallback}>Red</button>
-                <button className="primary-button" onClick={colorToolCallback}>Green</button>
-                <button className="primary-button" onClick={colorToolCallback}>Blue</button>
-            </div>
         </div>
     );
 };
