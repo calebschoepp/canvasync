@@ -4,6 +4,7 @@ import Paper from 'paper';
 export default () => {
 
     const canvasRef = useRef(null);
+    const [penState, setPenState] = useState("pen");
     const [pathState, setPathState] = useState([]);
 
     useEffect(() => {
@@ -12,20 +13,24 @@ export default () => {
         paperHandler("pen");
     }, []);
 
+    useEffect(() => {
+        paperHandler(penState);
+    }, [pathState.length, penState]);
+
     const penCallback = useCallback(() => {
-        paperHandler("pen");
+        setPenState("pen");
     });
 
     const eraserCallback = useCallback(() => {
-        paperHandler("eraser");
+        setPenState("eraser");
     });
 
     const selectCallback = useCallback(() => {
-        paperHandler("select");
+        setPenState("select");
     });
 
     const textCallback = useCallback(() => {
-        paperHandler("text");
+        setPenState("text");
     });
 
     const paperHandler = (penState) => {
@@ -35,6 +40,12 @@ export default () => {
         let p1 = null;
 
         Paper.view.onMouseDown = (event) => {
+
+            // todo: ensure to add previous text to pathState, especially when changing pen tool
+            if (path) {
+                setPathState(oldPaths => [...oldPaths, path]);
+            }
+
             Paper.project.deselectAll();
             if (penState === "pen" || penState === "eraser") {
                 path = new Paper.Path();
@@ -43,10 +54,6 @@ export default () => {
                 path = new Paper.Path.Rectangle(rect);
                 p1 = new Paper.Point(event.point.x, event.point.y);
             } else if (penState === "text") {
-                // add previous text to pathState
-                if (path) {
-                    setPathState(oldPaths => [...oldPaths, path]);
-                }
                 const point = new Paper.Point(event.point.x, event.point.y);
                 path = new Paper.PointText({
                     point: point,
@@ -82,6 +89,7 @@ export default () => {
             if (penState === "pen") {
                 path.simplify();
                 setPathState(oldPaths => [...oldPaths, path]);
+                path = null;
             } else if (penState === "eraser") {
                 const newPathState = [];
                 for (p of pathState) {
@@ -93,6 +101,7 @@ export default () => {
                     setPathState(newPathState);
                 }
                 path.remove();
+                path = null;
             } else if (penState === "select") {
                 for (p of pathState) {
                     // check for path
@@ -103,6 +112,7 @@ export default () => {
                     }
                 }
                 path.remove();
+                path = null;
             }
         };
 
