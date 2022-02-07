@@ -69,7 +69,7 @@
 **** 5.1.7 Implement logic allowing an authenticated user to edit a canvas within a notebook by selecting and moving exisiting diffs
 **** 5.1.8 Implement logic allowing an authenticated user to edit a canvas within a notebook by selecting an existing text diff and clicking the delete key
 *** FR10 - OwnerEdit.Canvas
-**** 5.2.1 Allow participants to make edits to all Canvas pages within their notebook
+**** 5.2.1 Allow owners to make edits to all Canvas pages within their notebook
 **** 5.2.2 Render any edits an owner makes to the respective Canvas page
 **** 5.2.3 Store any edits an owner makes to a Canvas page in the database
 **** 5.2.4 Broadcast any edits an owner makes to a Canvas page to all current notebook participants
