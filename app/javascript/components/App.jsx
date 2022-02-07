@@ -4,6 +4,7 @@ import Paper from 'paper';
 export default () => {
 
     const canvasRef = useRef(null);
+    const pathRef = useRef(null);
     const [penState, setPenState] = useState("pen");
     const [pathState, setPathState] = useState([]);
 
@@ -14,23 +15,15 @@ export default () => {
     }, []);
 
     useEffect(() => {
+        pathRef.current = null;
         paperHandler(penState);
     }, [pathState.length, penState]);
 
-    const penCallback = useCallback(() => {
-        setPenState("pen");
-    });
-
-    const eraserCallback = useCallback(() => {
-        setPenState("eraser");
-    });
-
-    const selectCallback = useCallback(() => {
-        setPenState("select");
-    });
-
-    const textCallback = useCallback(() => {
-        setPenState("text");
+    const canvasToolCallback = useCallback((event) => {
+        if (pathRef.current) {
+            setPathState(oldPaths => [...oldPaths, pathRef.current]);
+        }
+        setPenState(event.currentTarget.innerText.toLowerCase());
     });
 
     const paperHandler = (penState) => {
@@ -40,40 +33,41 @@ export default () => {
         let p1 = null;
 
         Paper.view.onMouseDown = (event) => {
-
-            // todo: ensure to add previous text to pathState, especially when changing pen tool
-            if (path) {
-                setPathState(oldPaths => [...oldPaths, path]);
-            }
-
             Paper.project.deselectAll();
-            if (penState === "pen" || penState === "eraser") {
+            if (penState === "pen") {
+                pathRef.current = new Paper.Path();
+            } else if (penState === "eraser") {
                 path = new Paper.Path();
-            } else if (penState === "select") {
+            }
+            else if (penState === "select") {
                 rect = new Paper.Rectangle();
                 path = new Paper.Path.Rectangle(rect);
                 p1 = new Paper.Point(event.point.x, event.point.y);
             } else if (penState === "text") {
                 const point = new Paper.Point(event.point.x, event.point.y);
-                path = new Paper.PointText({
+                pathRef.current = new Paper.PointText({
                     point: point,
-                    fontFamily: 'Courier New',
-                    fontWeight: 'bold',
+                    fontFamily: 'serif',
                     fontSize: 25,
                 });
-                path.fullySelected = true;
+                pathRef.current.fullySelected = true;
             }
-            path.strokeColor = "black";
-            if (penState !== "pen") {
+            if (penState !== "pen" && penState !== "text") {
+                path.strokeColor = "black";
+                path.strokeWidth = 3;
                 path.dashArray = [10, 12];
+            } else {
+                pathRef.current.strokeColor = "black";
+                pathRef.current.strokeWidth = penState === "pen" ? 3 : 1;
             }
-            path.strokeWidth = 3;
         };
 
         Paper.view.onMouseDrag = (event) => {
-            if (penState === "pen" || penState === "eraser") {
+            if (penState === "pen") {
+                pathRef.current.add(event.point);
+            } else if (penState === "eraser") {
                 path.add(event.point);
-            } else if (penState === "select") {
+             } else if (penState === "select") {
                 const p2 = new Paper.Point(event.point.x, event.point.y);
                 rect.set(p1, p2);
                 path.segments = [
@@ -87,9 +81,9 @@ export default () => {
 
         Paper.view.onMouseUp = () => {
             if (penState === "pen") {
-                path.simplify();
-                setPathState(oldPaths => [...oldPaths, path]);
-                path = null;
+                pathRef.current.simplify();
+                setPathState(oldPaths => [...oldPaths, pathRef.current]);
+                pathRef.current = null;
             } else if (penState === "eraser") {
                 const newPathState = [];
                 for (p of pathState) {
@@ -121,14 +115,14 @@ export default () => {
                 return;
             }
             if (event.key === "escape" || event.key === "enter") {
-                setPathState(oldPaths => [...oldPaths, path]);
-                path.fullySelected = false;
-                path = null;
+                setPathState(oldPaths => [...oldPaths, pathRef.current]);
+                pathRef.current.fullySelected = false;
+                pathRef.current = null;
             } else if (event.key === "backspace") {
-                path.content = path.content.slice(0, -1);
+                path.content = pathRef.current.content.slice(0, -1);
             }
-            if (penState === "text" && path && event.character !== "") {
-                path.content += event.character;
+            if (penState === "text" && pathRef.current && event.character !== "") {
+                pathRef.current.content += event.character;
             }
         };
 
@@ -138,10 +132,10 @@ export default () => {
     return (
         <div className="flex flex-row">
             <div className="flex flex-col">
-                <button className="primary-button" onClick={penCallback}>Pen</button>
-                <button className="primary-button" onClick={eraserCallback}>Eraser</button>
-                <button className="primary-button" onClick={selectCallback}>Select</button>
-                <button className="primary-button" onClick={textCallback}>Text</button>
+                <button className="primary-button" onClick={canvasToolCallback}>Pen</button>
+                <button className="primary-button" onClick={canvasToolCallback}>Eraser</button>
+                <button className="primary-button" onClick={canvasToolCallback}>Select</button>
+                <button className="primary-button" onClick={canvasToolCallback}>Text</button>
             </div>
             <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
         </div>
