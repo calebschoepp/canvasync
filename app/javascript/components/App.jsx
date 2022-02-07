@@ -111,10 +111,21 @@ export default () => {
         };
 
         Paper.view.onKeyDown = (event) => {
-            if (penState !== "text") {
+            if (penState !== "text" && penState !== "select") {
                 return;
             }
-            if (event.key === "escape" || event.key === "enter") {
+            Paper.project.selectedItems.length
+            if (penState === "select" && event.key === "delete" && Paper.project.selectedItems.length) {
+                const newPathState = [];
+                for (p of pathState) {
+                    if (Paper.project.selectedItems.find((selectedItem) => selectedItem.id === p.id)) {
+                        p.remove();
+                    } else {
+                        newPathState.push(p);
+                    }
+                }
+                setPathState(newPathState);
+            }else if (event.key === "escape" || event.key === "enter") {
                 setPathState(oldPaths => [...oldPaths, pathRef.current]);
                 pathRef.current.fullySelected = false;
                 pathRef.current = null;
