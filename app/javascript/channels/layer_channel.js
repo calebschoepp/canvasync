@@ -1,10 +1,10 @@
 import consumer from "./consumer"
 
 export default () => {
-    consumer.subscriptions.create("LayerChannel", {
+    consumer.subscriptions.create({channel: "LayerChannel", layer_id: window.layerIds[0]}, {
         connected() {
             // Called when the subscription is ready for use on the server
-            console.log("Connected to layer channel...")
+            console.log(`Connected to layer_channel_${window.layerIds[0]}...`);
         },
 
         disconnected() {

@@ -1,9 +1,8 @@
 <div>
-<!--  TODO: Decide how/if we should show edit and delete buttons-->
-  <%#= link_to "Edit this notebook", edit_notebook_path(@notebook), class: "secondary-button" %>
-  <%= link_to "Back to notebooks", notebooks_path, class: "secondary-button" %>
-  <%#= button_to "Destroy this notebook", @notebook, method: :delete, class: "danger-button inline" %>
-
+  <%= javascript_tag do %>
+    window.notebookName = "<%= @notebook.name %>";
+    window.layerIds = [<%= @notebook.pages.first.layers.first.id %>]; // TODO: This isn't correct
+  <% end %>
   <% content_for :for_head do -%>
     <%= javascript_include_tag "index", "data-turbo-track": "reload", defer: true %>
   <% end -%>
