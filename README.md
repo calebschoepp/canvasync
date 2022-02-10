@@ -44,7 +44,7 @@ rails db:migrate
 ## Start Redis
 
 ```shell
-docker run --name docker-redis -d redis
+docker run --name docker-redis -d -p 6379:6379 redis
 ```
 
 Run `docker ps` to confirm the container is running.

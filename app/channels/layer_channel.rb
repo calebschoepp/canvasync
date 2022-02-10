@@ -1,6 +1,6 @@
 class LayerChannel < ApplicationCable::Channel
   def subscribed
-    # stream_from "some_channel"
+    stream_from "layer_channel"
   end
 
   def unsubscribed
