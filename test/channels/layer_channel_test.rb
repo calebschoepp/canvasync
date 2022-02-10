@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 
 class LayerChannelTest < ActionCable::Channel::TestCase
   # test "subscribes" do
