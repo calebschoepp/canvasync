@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_044321) do
+ActiveRecord::Schema.define(version: 2022_02_10_045428) do
+
+  create_table "layers", force: :cascade do |t|
+    t.integer "page_id", null: false
+    t.integer "writer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["page_id"], name: "index_layers_on_page_id"
+    t.index ["writer_id"], name: "index_layers_on_writer_id"
+  end
 
   create_table "notebooks", force: :cascade do |t|
     t.text "name"
@@ -73,6 +82,8 @@ ActiveRecord::Schema.define(version: 2022_02_10_044321) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "layers", "pages"
+  add_foreign_key "layers", "user_notebooks", column: "writer_id"
   add_foreign_key "pages", "notebooks"
   add_foreign_key "user_notebooks", "notebooks"
   add_foreign_key "user_notebooks", "users"
