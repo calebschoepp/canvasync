@@ -49,7 +49,7 @@ class NotebooksController < ApplicationController
     # Setup page(s) and owner layer(s)
     # TODO: Dynamically build multiple pages and layers based on notebook PDF
     page = Page.new(number: 1, notebook: @notebook)
-    page.layers << Layer.new(page: page, writer: user_notebook)
+    page.layers << Layer.new(page:, writer: user_notebook)
     @notebook.pages << page
 
     authorize @notebook
@@ -101,7 +101,7 @@ class NotebooksController < ApplicationController
     # Setup layer(s) for participant
     # TODO: Dynamically build multiple layers based on notebook PDF
     page = @notebook.pages.first
-    page.layers << Layer.new(page: page, writer: user_notebook)
+    page.layers << Layer.new(page:, writer: user_notebook)
     respond_to do |format|
       if @notebook.save
         format.html { redirect_to notebook_url(@notebook), notice: "You've joined #{@notebook.name}." }

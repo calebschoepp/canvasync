@@ -6,7 +6,7 @@ class CreatePages < ActiveRecord::Migration[7.1]
 
       t.timestamps
 
-      t.index [:number, :notebook_id], unique: true
+      t.index %i[number notebook_id], unique: true
     end
   end
 end
