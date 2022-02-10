@@ -10,11 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_220_131_191_534) do
+ActiveRecord::Schema.define(version: 20_220_210_050_306) do
+  create_table 'diffs', force: :cascade do |t|
+    t.integer 'layer_id', null: false
+    t.integer 'seq'
+    t.json 'data', default: '{}', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['layer_id'], name: 'index_diffs_on_layer_id'
+  end
+
+  create_table 'layers', force: :cascade do |t|
+    t.integer 'page_id', null: false
+    t.integer 'writer_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['page_id'], name: 'index_layers_on_page_id'
+    t.index ['writer_id'], name: 'index_layers_on_writer_id'
+  end
+
   create_table 'notebooks', force: :cascade do |t|
     t.text 'name'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+  end
+
+  create_table 'pages', force: :cascade do |t|
+    t.integer 'number'
+    t.integer 'notebook_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['notebook_id'], name: 'index_pages_on_notebook_id'
+    t.index %w[number notebook_id], name: 'index_pages_on_number_and_notebook_id', unique: true
   end
 
   create_table 'roles', force: :cascade do |t|
@@ -63,6 +90,10 @@ ActiveRecord::Schema.define(version: 20_220_131_191_534) do
     t.index ['user_id'], name: 'index_users_roles_on_user_id'
   end
 
+  add_foreign_key 'diffs', 'layers'
+  add_foreign_key 'layers', 'pages'
+  add_foreign_key 'layers', 'user_notebooks', column: 'writer_id'
+  add_foreign_key 'pages', 'notebooks'
   add_foreign_key 'user_notebooks', 'notebooks'
   add_foreign_key 'user_notebooks', 'users'
 end

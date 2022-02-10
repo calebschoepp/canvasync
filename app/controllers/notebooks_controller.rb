@@ -36,12 +36,22 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
+    # TODO: This will be a bit slow so maybe it should be moved to a background job
     @notebook = Notebook.new(notebook_params)
+
+    # Setup user_notebook
     user_notebook = UserNotebook.new
     user_notebook.user = current_user
     user_notebook.notebook = @notebook
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
+
+    # Setup page(s) and owner layer(s)
+    # TODO: Dynamically build multiple pages and layers based on notebook PDF
+    page = Page.new(number: 1, notebook: @notebook)
+    page.layers << Layer.new(page: page, writer: user_notebook)
+    @notebook.pages << page
+
     authorize @notebook
 
     respond_to do |format|
@@ -81,12 +91,17 @@ class NotebooksController < ApplicationController
       return
     end
 
+    # Setup user_notebook
     user_notebook = UserNotebook.new
     user_notebook.user = current_user
     user_notebook.notebook = @notebook
     user_notebook.is_owner = false
     @notebook.user_notebooks << user_notebook
 
+    # Setup layer(s) for participant
+    # TODO: Dynamically build multiple layers based on notebook PDF
+    page = @notebook.pages.first
+    page.layers << Layer.new(page: page, writer: user_notebook)
     respond_to do |format|
       if @notebook.save
         format.html { redirect_to notebook_url(@notebook), notice: "You've joined #{@notebook.name}." }

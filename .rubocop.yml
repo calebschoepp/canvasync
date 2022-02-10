@@ -34,3 +34,6 @@ Metrics/PerceivedComplexity:
 
 Layout/LineLength:
   Enabled: false
+
+Style/HashSyntax:
+  Enabled: false

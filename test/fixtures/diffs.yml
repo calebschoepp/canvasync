@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  layer: one
+  seq: 1
+  data: MyText
+
+two:
+  layer: two
+  seq: 1
+  data: MyText

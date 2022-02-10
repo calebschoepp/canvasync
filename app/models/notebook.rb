@@ -4,6 +4,7 @@ class Notebook < ApplicationRecord
   # TODO: Validate that user_id notebook_id combo is unique?
   has_many :user_notebooks
   has_many :users, through: :user_notebooks
+  has_many :pages
   validates :name, presence: true, length: { maximum: 100 }
 
   def owner?(user)
