@@ -37,11 +37,18 @@ class NotebooksController < ApplicationController
   # POST /notebooks or /notebooks.json
   def create
     @notebook = Notebook.new(notebook_params)
+
+    # Setup user_notebook
     user_notebook = UserNotebook.new
     user_notebook.user = current_user
     user_notebook.notebook = @notebook
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
+
+    # TODO: Setup page(s)
+
+    # TODO: Setup layer(s) for owner
+
     authorize @notebook
 
     respond_to do |format|
@@ -81,11 +88,14 @@ class NotebooksController < ApplicationController
       return
     end
 
+    # Setup user_notebook
     user_notebook = UserNotebook.new
     user_notebook.user = current_user
     user_notebook.notebook = @notebook
     user_notebook.is_owner = false
     @notebook.user_notebooks << user_notebook
+
+    # TODO: Setup layer(s) for participant
 
     respond_to do |format|
       if @notebook.save
