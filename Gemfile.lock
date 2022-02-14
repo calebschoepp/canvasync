@@ -230,6 +230,7 @@ GEM
       rails (>= 6.0, < 8)
     rainbow (3.1.1)
     rake (13.0.6)
+    redis (4.6.0)
     regexp_parser (2.2.0)
     reline (0.3.1)
       io-console (~> 0.5)
@@ -332,6 +333,7 @@ DEPENDENCIES
   pundit
   rails!
   rails_admin
+  redis
   rolify
   rubocop
   rubocop-minitest
