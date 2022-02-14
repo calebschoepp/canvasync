@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import Paper from 'paper';
+import { CanvasTools } from './notebook';
 import consumer from '../channels/consumer';
 
-export function Layer({ layer, layerId, activeTool, activeColor }) {
+export function Layer({ layer, isOwner, layerId, activeTool, activeColor }) {
   /* Nayan's code */
   // const pathRef = useRef(null);
-  // const [penState, setPenState] = useState('pen');
+  // const [penState, setPenState] = useState(CanvasTools.pen);
   // const [pathState, setPathState] = useState([]);
 
-  const setupSubscription = (newLayer, newLayerId) => {
-    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: newLayerId }, {
+  const setupSubscription = (newLayer) => {
+    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
       connected() {
         // Called when the subscription is ready for use on the server
-        console.log(`Connected to layer_channel_${newLayerId}...`);
+        console.log(`Connected to layer_channel_${layerId}...`);
       },
 
       disconnected() {
@@ -26,7 +27,7 @@ export function Layer({ layer, layerId, activeTool, activeColor }) {
         newLayer.addChild(new Paper.PointText({
           point: [50, 50],
           content: data,
-          fillColor: (newLayerId == '0') ? 'red' : 'blue',
+          fillColor: (isOwner) ? 'red' : 'blue',
           fontSize: 25
         }));
       }
@@ -41,9 +42,9 @@ export function Layer({ layer, layerId, activeTool, activeColor }) {
   useEffect(() => {
     // Set up action cable subscriber once layer is created
     if (!!layer) {
-      setupSubscription(layer, layerId);
+      setupSubscription(layer);
     }
-  }, [layer, layerId]);
+  }, [layer]);
 
   useEffect(() => {
     paperHandler();

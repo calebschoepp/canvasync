@@ -2,10 +2,8 @@ import React, { useEffect, useState, useRef } from 'react'
 import Paper from 'paper';
 import { Layer } from './layer';
 
-export function Page({ activeTool, activeColor }) {
-  // owner layer corresponds to a layer_id of '0'
-  // participant layer corresponds to a layer_id of '1'
 
+export function Page({ activeTool, activeColor }) {
   const canvasRef = useRef(null);
   const [paperScope, setPaperScope] = useState(null);
   const [ownerLayer, setOwnerLayer] = useState(null);
@@ -37,11 +35,14 @@ export function Page({ activeTool, activeColor }) {
   }, []);
 
   // only render participant layer if user is a participant of notebook
+  // layer id corresponds to id of layer in database
+  // TODO: figure out how to pass in layer id when we allow creation of pages
   return (
     <div style={pageStyle}>
       <canvas ref={canvasRef} width='1017px' height='777px' style={canvasStyle} />
       <Layer
         layer={ownerLayer}
+        isOwner={true}
         layerId='0'
         activeTool={activeTool}
         activeColor={activeColor}
@@ -49,6 +50,7 @@ export function Page({ activeTool, activeColor }) {
       {!window.isOwner &&
         <Layer
           layer={participantLayer}
+          isOwner={false}
           layerId='1'
           activeTool={activeTool}
           activeColor={activeColor}

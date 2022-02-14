@@ -19,6 +19,7 @@ export function Notebook() {
     setActiveColor(event.target.value)
   );
 
+  // TODO: maybe pass in page id or layer id using window here
   return (
     <div className='flex flex-row'>
       <div className='flex flex-col'>
