@@ -3,7 +3,7 @@ import Paper from 'paper';
 import consumer from '../channels/consumer';
 
 export function Layer(props) {
-  const fontSize = 50;
+  const fontSize = 25;
 
   const pathRef = useRef(null);
   const [penState, setPenState] = useState('pen');
