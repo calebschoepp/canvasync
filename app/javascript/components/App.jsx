@@ -5,6 +5,7 @@ export default () => {
 
     const canvasRef = useRef(null);
     const pathRef = useRef(null);
+    const [pageState, setPageState] = useState(0);
     const [penState, setPenState] = useState("pen");
     const [colorState, setColorState] = useState("black");
     const [pathState, setPathState] = useState([]);
@@ -32,6 +33,18 @@ export default () => {
             setPathState(oldPaths => [...oldPaths, pathRef.current]);
         }
         setColorState(event.target.value);
+    });
+
+    const pageButtonHandler = useCallback((pageDelta) => {
+        const newPageState = Math.max(pageState + pageDelta, 0);
+        if (newPageState >= Paper.projects.length) {
+            const canvas = canvasRef.current;
+            new Paper.Project(canvas);
+        }
+        console.log(newPageState);
+        Paper.projects[newPageState].activate();
+        setPageState(newPageState);
+        paperHandler();
     });
 
     const paperHandler = () => {
@@ -106,7 +119,7 @@ export default () => {
             } else if (penState === "eraser") {
                 const newPathState = [];
                 for (p of pathState) {
-                    if (path.intersects(p)) {
+                    if (p.parent === Paper.project.activeLayer && path.intersects(p)) {
                         p.remove();
                     } else {
                         newPathState.push(p);
@@ -119,7 +132,7 @@ export default () => {
                 if (Paper.project.selectedItems.length === 0) {
                     for (p of pathState) {
                         // check for path
-                        if (p.segments && p.segments.every((segment) => path.contains(segment.point))) {
+                        if (p.parent === Paper.project.activeLayer && p.segments && p.segments.every((segment) => path.contains(segment.point))) {
                             p.fullySelected = true;
                         } else if (p.content && p.isInside(rect)) { // check for text
                             p.fullySelected = true;
@@ -180,7 +193,14 @@ export default () => {
                 <button className="primary-button" onClick={canvasToolCallback}>Select</button>
                 <button className="primary-button" onClick={canvasToolCallback}>Text</button>
             </div>
-            <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
+            <div className="flex flex-col">
+                <canvas ref={canvasRef} width="1017px" height="777px" id="canvas" style={{ border: "1px solid black" }} />
+                <h4>{`${pageState+1}/${Paper.projects.length}`}</h4>
+                <div className="flex flex-row">
+                    <button className="primary-button" onClick={() => pageButtonHandler(-1)}>Prev</button>
+                    <button className="primary-button" onClick={() => pageButtonHandler(1)}>{pageState === Paper.projects.length - 1 ? "Add" : "Next"}</button>
+                </div>
+            </div>
         </div>
     );
 };
