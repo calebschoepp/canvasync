@@ -1,7 +1,7 @@
 <div>
   <%= javascript_tag do %>
     window.notebookName = "<%= @notebook.name %>";
-    window.layerIds = [<%= @notebook.pages.first.layers.first.id %>]; // TODO: This isn't correct
+    window.isOwner = false; // TODO: set this based on whether user owns this notebook
   <% end %>
   <% content_for :for_head do -%>
     <%= javascript_include_tag "index", "data-turbo-track": "reload", defer: true %>
