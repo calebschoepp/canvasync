@@ -5,7 +5,7 @@ export const CanvasTools = {
   pen: 'Pen',
   eraser: 'Eraser',
   select: 'Select',
-  text: 'Pen',
+  text: 'Text',
 }
 
 export function Notebook() {
