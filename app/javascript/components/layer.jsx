@@ -3,7 +3,7 @@ import Paper from 'paper';
 import consumer from '../channels/consumer';
 
 export function Layer(props) {
-  const fontSize = 20;
+  const fontSize = 50;
 
   const pathRef = useRef(null);
   const [penState, setPenState] = useState('pen');
@@ -51,10 +51,10 @@ export function Layer(props) {
   }, []);
 
   /* Nayan's code */
-  useEffect(() => {
-    pathRef.current = null;
-    paperHandler();
-  }, [pathState.length, penState, colorState]);
+  // useEffect(() => {
+  //   pathRef.current = null;
+  //   paperHandler();
+  // }, [pathState.length, penState, colorState]);
 
   const paperHandler = () => {
     // let path = null;
