@@ -12,24 +12,12 @@ export function Notebook() {
   const [activeTool, setActiveTool] = useState(CanvasTools.pen);
   const [activeColor, setActiveColor] = useState('#00000');
 
-  const canvasToolCallback = useCallback((event) => {
-    setActiveTool(event.target.innerText);
-
-    /* Nayan's code */
-    // if (pathRef.current) {
-    //   setPathState(oldPaths => [...oldPaths, pathRef.current]);
-    // }
-    // setPenState(event.currentTarget.innerText.toLowerCase());
-  });
-  const colorToolCallback = useCallback((event) => {
-    setActiveColor(event.target.value);
-
-    /* Nayan's code */
-    // if (pathRef.current) {
-    //   setPathState(oldPaths => [...oldPaths, pathRef.current]);
-    // }
-    // setColorState(event.target.value);
-  });
+  const canvasToolCallback = useCallback((event) =>
+    setActiveTool(event.target.innerText)
+  );
+  const colorToolCallback = useCallback((event) =>
+    setActiveColor(event.target.value)
+  );
 
   return (
     <div className='flex flex-row'>

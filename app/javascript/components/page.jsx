@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Paper from 'paper';
 import { Layer } from './layer';
 
-export function Page(props) {
+export function Page({ activeTool, activeColor }) {
   // owner layer corresponds to a layer_id of '0'
   // participant layer corresponds to a layer_id of '1'
 
@@ -39,19 +39,19 @@ export function Page(props) {
   // only render participant layer if user is a participant of notebook
   return (
     <div style={pageStyle}>
-      <canvas ref={canvasRef} width='1017px' height='777px' id='owner' style={canvasStyle} />
+      <canvas ref={canvasRef} width='1017px' height='777px' style={canvasStyle} />
       <Layer
         layer={ownerLayer}
-        activeTool={props.activeTool}
-        activeColor={props.activeColor}
         layerId='0'
+        activeTool={activeTool}
+        activeColor={activeColor}
       />
       {!window.isOwner &&
         <Layer
           layer={participantLayer}
-          activeTool={props.activeTool}
-          activeColor={props.activeColor}
           layerId='1'
+          activeTool={activeTool}
+          activeColor={activeColor}
         />
       }
     </div>

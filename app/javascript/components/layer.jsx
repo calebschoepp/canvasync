@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Paper from 'paper';
 import consumer from '../channels/consumer';
 
-export function Layer(props) {
-  const fontSize = 25;
+export function Layer({ layer, layerId, activeTool, activeColor }) {
+  /* Nayan's code */
+  // const pathRef = useRef(null);
+  // const [penState, setPenState] = useState('pen');
+  // const [pathState, setPathState] = useState([]);
 
-  const pathRef = useRef(null);
-  const [penState, setPenState] = useState('pen');
-  const [pathState, setPathState] = useState([]);
-
-  const sub = (layer, layerId) => {
-    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
+  const setupSubscription = (newLayer, newLayerId) => {
+    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: newLayerId }, {
       connected() {
         // Called when the subscription is ready for use on the server
-        console.log(`Connected to layer_channel_${layerId}...`);
+        console.log(`Connected to layer_channel_${newLayerId}...`);
       },
 
       disconnected() {
@@ -24,11 +23,11 @@ export function Layer(props) {
         // Called when there's incoming data on the websocket for this channel
 
         // TODO: generalize to receive diff and add the proper type of element to the layer
-        layer.addChild(new Paper.PointText({
+        newLayer.addChild(new Paper.PointText({
           point: [50, 50],
           content: data,
-          fillColor: (layerId == '0') ? 'red' : 'blue',
-          fontSize: fontSize
+          fillColor: (newLayerId == '0') ? 'red' : 'blue',
+          fontSize: 25
         }));
       }
     });
@@ -41,14 +40,30 @@ export function Layer(props) {
 
   useEffect(() => {
     // Set up action cable subscriber once layer is created
-    if (!!props.layer) {
-      sub(props.layer, props.layerId);
+    if (!!layer) {
+      setupSubscription(layer, layerId);
     }
-  }, [props.layer, props.layerId]);
+  }, [layer, layerId]);
 
   useEffect(() => {
     paperHandler();
   }, []);
+
+  useEffect(() => {
+    /* Nayan's code */
+    // if (pathRef.current) {
+    //   setPathState(oldPaths => [...oldPaths, pathRef.current]);
+    // }
+    // setPenState(event.currentTarget.innerText.toLowerCase());
+  }, [activeTool]);
+
+  useEffect(() => {
+    /* Nayan's code */
+    // if (pathRef.current) {
+    //   setPathState(oldPaths => [...oldPaths, pathRef.current]);
+    // }
+    // setColorState(event.target.value);
+  }, [activeColor]);
 
   /* Nayan's code */
   // useEffect(() => {
