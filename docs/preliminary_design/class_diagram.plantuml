@@ -2,6 +2,8 @@
 skinparam classAttributeIconSize 0
 
 ' Controllers
+class ActionController::Base {}
+
 class ApplicationController {
     +user_not_authorized() : void
     +after_sign_out_path_for() : void
@@ -20,6 +22,9 @@ class NotebooksController {
     -set_notebook() : void
     -notebook_params() : void
 }
+
+ActionController::Base <|-- ApplicationController
+ApplicationController <|-- NotebooksController
 
 ' Models
 class ActiveRecord::Base {}
@@ -85,7 +90,6 @@ class User {
     +Datetime updated_at
 }
 
-' Relationships
 ActiveRecord::Base <|-- ApplicationRecord
 Diff <|-- ApplicationRecord
 Layer <|-- ApplicationRecord
@@ -95,5 +99,54 @@ Role <|-- ApplicationRecord
 UserNotebook <|-- ApplicationRecord
 User <|-- ApplicationRecord
 
-ApplicationController <|-- NotebookController
+' Channels
+class ActionCable::Channel::Base {
+
+}
+
+class Channel {
+
+}
+
+class LayerChannel {
+    +subscribed() : void
+    +unsubscribed() : void
+}
+
+class PageChannel {
+    +subscribed() : void
+    +unsubscribed() : void
+}
+
+ActionCable::Channel::Base <|-- Channel
+Channel <|-- LayerChannel
+Channel <|-- PageChannel
+
+' Front-End
+class PaperScope {
+
+}
+
+class PaperProject {
+
+}
+
+class PaperLayer {
+    +Integer id
+    +String className
+    +String name
+    +Json style
+    +Boolean locked
+    +Boolean visible
+    +String blendMode
+    +Float opacity
+    +Boolean selected
+    +Boolean clipMask
+    +Json data
+    +contains()
+}
+
+PaperScope "1" *-- "1" PaperProject
+PaperProject "1" *-- "2" PaperLayer
+
 @enduml
