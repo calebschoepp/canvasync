@@ -10,7 +10,7 @@ class ApplicationController {
 }
 
 class NotebooksController {
-    +Notebook notebook
+    +notebook : Notebook
     +index() : void
     +show() : void
     +new() : void
@@ -23,71 +23,94 @@ class NotebooksController {
     -notebook_params() : void
 }
 
+class DeviseController {
+}
+
+class SessionsController {
+    +new() : void
+    +create(email: String, password: String) : void
+}
+
+class RegistrationsController {
+    +new() : void
+    +create(email: String, password: String) : void
+}
+
 ActionController::Base <|-- ApplicationController
 ApplicationController <|-- NotebooksController
+ApplicationController <|-- DeviseController
+DeviseController <|-- SessionsController
+DeviseController <|-- RegistrationsController
 
 ' Models
 class ActiveRecord::Base {}
 
-class ApplicationRecord {}
+class ApplicationRecord {
+    +save() : void
+}
 
 class Diff {
-    +Integer layer_id
-    +Integer seq
-    +Json data
-    +Datetime created_at
-    +Datetime updated_at
+    +layer_id : Integer
+    +seq : Integer
+    +data : Json
+    +created_at : Datetime
+    +updated_at : Datetime
 }
 
 class Layer {
-    +Integer page_id
-    +Integer writer_id
-    +Datetime created_at
-    +Datetime updated_at
+    +page_id : Integer
+    +writer_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
 }
 
 class Notebook {
-    +String name
-    +Datetime created_at
-    +Datetime updated_at
+    +name : String
+    +created_at : Datetime
+    +updated_at : Datetime
 }
 
 class Page {
-    +Integer number
-    +Integer notebook_id
-    +Datetime created_at
-    +Datetime updated_at
+    +number : Integer
+    +notebook_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
 }
 
 class Role {
-    +String name
-    +String resource_type
-    +Integer resource_id
-    +Datetime created_at
-    +Datetime updated_at
+    +name : String
+    +resource_type : String
+    +resource_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
 }
 
 class UserNotebook {
-    +Integer user_id
-    +Integer notebook_id
-    +Boolean is_owner
-    +Datetime created_at
-    +Datetime updated_at
+    +user_id : Integer
+    +notebook_id : Integer
+    +is_owner : Boolean
+    +created_at : Datetime
+    +updated_at : Datetime
+    {static} +find_owned_by_user_id(user_id: Integer) : Array<UserNotebook>
+    {static} +find_joined_by_user_id(user_id: Integer) : Array<UserNotebook>
 }
 
 class User {
-    +String email
-    +String encrypted_password
-    +String reset_password_token
-    +Datetime reset_password_sent_at
-    +Datetime remember_created_at
-    +Integer sign_in_count
-    +Datetime current_sign_in_at
-    +Datetime last_sign_in_at
-    +String current_sign_in_ip
-    +String last_sign_in_ip
-    +Datetime created_at
-    +Datetime updated_at
+    +email : String
+    +encrypted_password : String
+    +reset_password_token : String
+    +reset_password_sent_at : Datetime
+    +remember_created_at : Datetime
+    +sign_in_count : Integer
+    +current_sign_in_at : Datetime
+    +last_sign_in_at : Datetime
+    +current_sign_in_ip : String
+    +last_sign_in_ip : String
+    +created_at : Datetime
+    +updated_at : Datetime
+    +set_session(at: Datetime, ip: String) : void
+    {static} +new(email: String, password: String): User
+    {static} +find_by_email(email: String) : User
 }
 
 ActiveRecord::Base <|-- ApplicationRecord
@@ -100,13 +123,9 @@ UserNotebook <|-- ApplicationRecord
 User <|-- ApplicationRecord
 
 ' Channels
-class ActionCable::Channel::Base {
+class ActionCable::Channel::Base {}
 
-}
-
-class Channel {
-
-}
+class Channel {}
 
 class LayerChannel {
     +subscribed() : void
@@ -123,27 +142,23 @@ Channel <|-- LayerChannel
 Channel <|-- PageChannel
 
 ' Front-End
-class PaperScope {
+class PaperScope {}
 
-}
-
-class PaperProject {
-
-}
+class PaperProject {}
 
 class PaperLayer {
-    +Integer id
-    +String className
-    +String name
-    +Json style
-    +Boolean locked
-    +Boolean visible
-    +String blendMode
-    +Float opacity
-    +Boolean selected
-    +Boolean clipMask
-    +Json data
-    +contains()
+    +id : Integer
+    +className : String
+    +name : String
+    +style : Json
+    +locked : Boolean
+    +visible : Boolean 
+    +blendMode : String
+    +opacity : Float
+    +selected : Boolean
+    +clipMask : Boolean
+    +data : Json
+    +contains() : Boolean
 }
 
 PaperScope "1" *-- "1" PaperProject

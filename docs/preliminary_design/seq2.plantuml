@@ -1,0 +1,19 @@
+
+@startuml User Registration
+title User Registration
+skinparam sequenceMessageAlign center
+
+actor User as user
+participant RegistrationController as rc
+participant User as um
+database Database as db
+
+user -> rc : new()
+user <-- rc : render registration form
+user -> rc : create(email, password)
+rc -> um : new(email, password)
+rc <-- um : return user1
+rc -> um : save()
+um -> db : save user to database
+user <-- rc : redirect to NotebooksController index
+@enduml
