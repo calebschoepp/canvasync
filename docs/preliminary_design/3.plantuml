@@ -1,0 +1,58 @@
+@startuml Notebook Owner Creating Diffs
+title Notebook Owner Creating Diffs
+skinparam sequenceMessageAlign center
+
+actor Owner as owner
+participant NotebookComponent as nc
+participant LayerComponent as lc
+participant PaperJs as pjs
+participant LayerChannel as lch
+participant Diff as d
+database Database as db
+actor Participant as participant
+
+' owner makes scribble diff
+' paperjs renders scribble diff
+' scribble diff broadcasted to server, saved in db, sent to participant
+' diff renders to 
+
+owner -> nc : selects pen tool
+nc -> nc : setActiveTool("pen")
+owner -> nc : select red for tool color
+nc -> nc : setActiveColor("red")
+activate owner
+owner -> lc : draws on canvas
+lc -> pjs : onMouseDown()
+lc -> pjs : onMouseDrag()
+lc -> pjs : onMouseUp()
+pjs -> lc : transmitDiff(diff)
+lc -> lch : transmit diff over network
+lch -> d : new(data)
+d -> d : save()
+d -> db : store diff in database
+deactivate owner
+lch -> lc : received(data) 
+' user -> sc : new()
+' user <-- sc : render login form
+' user -> sc : create(email, password)
+' sc -> um : find_by_email(email)
+' um -> db : get user by email
+' um <-- db : return user
+' sc <-- um : return user1
+' sc -> um : set_session(datetime.now, ip)
+' sc <-- um : return
+' sc -> um : save()
+' um -> db : save user to database
+' user <-- sc : redirect to NotebooksController index
+
+' user -> nc : index()
+' nc -> unm : find_owned_by_user_id(current_user)
+' unm -> db : get user_notebooks by id
+' unm <-- db : return user_notebooks
+' nc <-- unm : return user_notebooks owned by current user
+' nc -> unm : find_joined_by_user_id(current_user)
+' unm -> db : get user_notebooks by id
+' unm <-- db : return user_notebooks
+' nc <-- unm : return user_notebooks joined by current user
+' user <-- nc : return NotebooksController view which displays Notebooks
+@enduml

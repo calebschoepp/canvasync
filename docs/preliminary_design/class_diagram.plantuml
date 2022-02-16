@@ -142,26 +142,23 @@ Channel <|-- LayerChannel
 Channel <|-- PageChannel
 
 ' Front-End
-class PaperScope {}
+class AppComponent {}
 
-class PaperProject {}
+class NotebookComponent {}
 
-class PaperLayer {
-    +id : Integer
-    +className : String
-    +name : String
-    +style : Json
-    +locked : Boolean
-    +visible : Boolean 
-    +blendMode : String
-    +opacity : Float
-    +selected : Boolean
-    +clipMask : Boolean
-    +data : Json
-    +contains() : Boolean
+class PageComponent {}
+
+class LayerComponent {}
+
+class PaperJs {
+    +canvas : HTMLCanvas
+    +project : Json
+    +view : Json
 }
 
-PaperScope "1" *-- "1" PaperProject
-PaperProject "1" *-- "2" PaperLayer
-
+AppComponent "1" *-- "1" NotebookComponent
+NotebookComponent "1" *-- "1..n" PageComponent
+PageComponent "1" *-- "2" LayerComponent
+LayerComponent "1" *-- "1" LayerChannel
+NotebookComponent "1" *-- "1" PageChannel
 @enduml
