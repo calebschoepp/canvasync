@@ -68,7 +68,6 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
     let p2 = null;
 
     if (scope) {
-
       scope.view.onMouseDown = (event) => {
         scope.activate();
         if (activeTool === 'Pen') {
