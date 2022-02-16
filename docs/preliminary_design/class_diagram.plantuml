@@ -1,0 +1,99 @@
+@startuml Class Diagram
+skinparam classAttributeIconSize 0
+
+' Controllers
+class ApplicationController {
+    +user_not_authorized() : void
+    +after_sign_out_path_for() : void
+}
+
+class NotebooksController {
+    +Notebook notebook
+    +index() : void
+    +show() : void
+    +new() : void
+    +edit() : void
+    +preview() : void
+    +create() : void
+    +update() : void
+    +join() : void
+    -set_notebook() : void
+    -notebook_params() : void
+}
+
+' Models
+class ActiveRecord::Base {}
+
+class ApplicationRecord {}
+
+class Diff {
+    +Integer layer_id
+    +Integer seq
+    +Json data
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class Layer {
+    +Integer page_id
+    +Integer writer_id
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class Notebook {
+    +String name
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class Page {
+    +Integer number
+    +Integer notebook_id
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class Role {
+    +String name
+    +String resource_type
+    +Integer resource_id
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class UserNotebook {
+    +Integer user_id
+    +Integer notebook_id
+    +Boolean is_owner
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+class User {
+    +String email
+    +String encrypted_password
+    +String reset_password_token
+    +Datetime reset_password_sent_at
+    +Datetime remember_created_at
+    +Integer sign_in_count
+    +Datetime current_sign_in_at
+    +Datetime last_sign_in_at
+    +String current_sign_in_ip
+    +String last_sign_in_ip
+    +Datetime created_at
+    +Datetime updated_at
+}
+
+' Relationships
+ActiveRecord::Base <|-- ApplicationRecord
+Diff <|-- ApplicationRecord
+Layer <|-- ApplicationRecord
+Notebook <|-- ApplicationRecord
+Page <|-- ApplicationRecord
+Role <|-- ApplicationRecord
+UserNotebook <|-- ApplicationRecord
+User <|-- ApplicationRecord
+
+ApplicationController <|-- NotebookController
+@enduml
