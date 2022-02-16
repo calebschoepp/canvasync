@@ -1,0 +1,47 @@
+@startuml Notebook Owner Creating Diffs
+title Notebook Owner Creating Diffs
+skinparam sequenceMessageAlign center
+
+actor Owner as owner
+participant NotebookComponent as nc
+participant LayerComponent as olc
+participant PaperJs as pjs
+participant LayerChannel as lch
+participant Diff as d
+database Database as db
+participant LayerComponent as plc
+actor Participant as participant
+
+' PREREQUISITES
+' - owner has notebook open
+' - participant has notebook open
+
+owner -> nc : selects text tool
+nc -> nc : setActiveTool("text")
+owner -> nc : select blue for tool color
+nc -> nc : setActiveColor("blue")
+owner -> olc : enter text on canvas
+
+' TODO: maybe fix these to be text handlers?
+olc -> pjs : onMouseDown()
+olc -> pjs : onMouseDrag()
+olc -> pjs : onMouseUp()
+
+pjs -> olc : transmitDiff(diff)
+olc -> lch : send(diff)
+lch -> d : new(data)
+d -> d : save()
+d -> db : store diff in database
+
+' TODO: maybe denote that owner and participant flows below happen in parallel
+lch -> olc : received(data)
+olc -> olc : ignore echoed diff
+
+lch -> plc : received(data)
+plc -> pjs : new PointText(data)
+pjs --> plc : text
+plc -> plc : addChild(text)
+
+' TODO: is this needed?
+plc --> participant : render text
+@enduml
