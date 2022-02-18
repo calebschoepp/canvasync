@@ -1,0 +1,51 @@
+@startuml Export PDF
+title Export PDF
+skinparam sequenceMessageAlign center
+
+legend top
+User has logged in and is viewing notebooks on dashboard.
+endlegend
+
+actor User as user
+participant NotebooksController as nc
+participant Notebook as nm
+database Database as db
+
+user -> user : select notebook to \nexport and press \nbutton
+user -> nc : export()
+
+
+
+' user -> pc : new()
+' user <-- pc : render new password form
+' user -> pc : create(email)
+
+' pc -> um : find_by_email(email)
+' um -> db : get user by email
+' um <-- db : return user
+' pc <-- um : return user
+' pc -> pc : generate random reset_token
+' pc -> um : set_request_new_password(reset_token)
+' pc <-- um : return
+' pc -> um : save()
+' um -> db : save user to database
+
+' pc -> email : send email to reset password
+' user <-- email : send email to user
+' user -> user : follow link in email
+' user -> pc : edit()
+' user <-- pc : render edit password form
+' user -> pc : update(email, reset_token)
+
+' pc -> um : find_by_email(email)
+' um -> db : get user by email
+' um <-- db : return user
+' pc <-- um : return user
+' pc -> um : set_password(password)
+' pc <-- um : return
+' pc -> um : save()
+' um -> db : save user to database
+
+' user <- pc : redirect to login page
+
+@enduml

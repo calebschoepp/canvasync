@@ -1,0 +1,20 @@
+@startuml User Opens a Notebook
+title User Opens a Notebook
+skinparam sequenceMessageAlign center
+legend top
+User has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+actor User as user
+participant NotebooksController as nc
+participant Notebook as n
+database Database as db
+
+user -> nc : show(notebook)
+nc -> n : find(notebook_id)
+n -> db : get notebook by id
+db --> n : return notebook
+n --> nc : return notebook
+nc --> user : return Notebook view which displays a Notebook
+
+@enduml

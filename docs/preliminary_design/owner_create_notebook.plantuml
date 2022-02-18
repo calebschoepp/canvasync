@@ -1,24 +1,37 @@
 @startuml Owner Create Notebook
-title User Login & Display Notebooks
+title Owner Create Notebook
 skinparam sequenceMessageAlign center
+
+legend top
+Owner has logged in and is viewing notebooks on dashboard.
+endlegend
 
 actor User as user
 participant NotebooksController as nc
-participant User as um
+participant Notebook as nm
+participant Page as pm
+participant Layer as lm
 participant User_Notebook as unm
 database Database as db
 
-user -> nc : index()
-nc -> unm : find_owned_by_user_id(current_user)
-unm -> db : get user_notebooks by id
-unm <-- db : return user_notebooks
-nc <-- unm : return user_notebooks owned by current user
-nc -> unm : find_joined_by_user_id(current_user)
-unm -> db : get user_notebooks by id
-unm <-- db : return user_notebooks
-nc <-- unm : return user_notebooks joined by current user
-user <-- nc : return NotebooksController view which displays Notebooks
-
 user -> nc: new()
+user <-- nc : render new notebook form
+user -> nc : create(name, file)
+nc -> nm : new(name, file)
+nc <-- nm : return notebook
+nc -> unm : new(current_user, notebook, is_owner=true)
+nc <-- unm : return user_notebook
+nc -> nm : set_user_notebooks(user_notebook)
+loop for each page i in resource file
+    nc -> pm : new(i, notebook)
+    nc <-- pm : return page_i
+    nc -> lm : new(page_i, user_notebook)
+    nc <-- lm : return layer_i
+    nc -> pm : set_layers(layer_i)
+    nc -> nm : set_pages(page_i)
+nc -> nm : save()
+nm -> db : save notebook to database
+
+user <- nc : display successful notebook creation message
 
 @enduml
