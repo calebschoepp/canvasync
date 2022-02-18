@@ -1,0 +1,48 @@
+@startuml Notebook Participant Selecting and Deleting
+title Notebook Participant Selecting and Deleting Diffs
+skinparam sequenceMessageAlign center
+legend top
+Participant has logged in and opened a notebook and there are existing diffs on the participant's Layer.
+endlegend
+
+actor Participant as partic
+participant NotebookComponent as nc
+participant LayerComponent as lc
+participant PaperJs as pjs
+participant LayerChannel as lch
+participant Diff as d
+database Database as db
+
+partic -> nc : selects eraser tool
+nc -> nc : setActiveTool("select")
+partic -> lc : draws selection box on canvas
+
+lc -> pjs : onMouseDown()
+lc -> pjs : onMouseDrag()
+lc -> pjs : onMouseUp()
+loop for each diff contained by selection box
+  pjs -> pjs : set path as fully selected
+end
+
+partic -> lc : participant clicks delete key
+
+lc -> pjs : onKeyDown()
+
+lc --> partic : render changes
+
+loop for each selected diff
+  pjs -> lc : transmitDiff(updated_diff)
+
+  lc -> lch : send(updated_diff)
+  lch -> d : find(diff_id)
+  d -> db : get diff by id
+  db --> d : return selected_diff
+  d --> lch : return selected_diff
+  lch -> d : mark_invisible(selected_diff)
+  d -> db : save selected_diff marked as invisible to database
+
+  lch -> lc : received(updated_diff)
+  lc -> lc : ignore echoed diff
+end
+
+@enduml

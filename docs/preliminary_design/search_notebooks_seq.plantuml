@@ -7,15 +7,11 @@ endlegend
 
 actor User as user
 participant NotebooksController as nc
-participant Notebook as n
-database Database as db
 
-user -> user :
-' user -> nc : show(notebook)
-' nc -> n : find(notebook_id)
-' n -> db : get notebook by id
-' db --> n : return notebook
-' n --> nc : return notebook
-' nc --> user : return Notebook view which displays a Notebook
+user -> user : start typing into search bar
+user -> nc : filter(search_string)
+nc -> nc : filter owned_notebooks by notebooks \nthat contain search_string
+nc -> nc : filter joined_notebooks by notebooks \nthat contain search_string
+nc --> user : return NotebooksController view which displays Notebooks
 
 @enduml
