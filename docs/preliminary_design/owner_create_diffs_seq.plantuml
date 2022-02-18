@@ -1,20 +1,19 @@
 @startuml Notebook Owner Creating Diffs
 title Notebook Owner Creating Diffs
 skinparam sequenceMessageAlign center
+legend top
+Owner and participant have logged in and opened the same notebook.
+endlegend
 
 actor Owner as owner
 participant NotebookComponent as nc
 participant LayerComponent as olc
-participant PaperJs as pjs
+participant PaperJs as opjs
 participant LayerChannel as lch
 participant Diff as d
 database Database as db
 participant LayerComponent as plc
-actor Participant as participant
-
-' PREREQUISITES
-' - owner has notebook open
-' - participant has notebook open
+actor Participant as partic
 
 owner -> nc : selects text tool
 nc -> nc : setActiveTool("text")
@@ -22,26 +21,23 @@ owner -> nc : select blue for tool color
 nc -> nc : setActiveColor("blue")
 owner -> olc : enter text on canvas
 
-' TODO: maybe fix these to be text handlers?
-olc -> pjs : onMouseDown()
-olc -> pjs : onMouseDrag()
-olc -> pjs : onMouseUp()
+olc -> opjs : onMouseDown()
+olc -> opjs : onKeyDown(), user types "Hello"
+olc --> owner : render text
+olc -> opjs : onKeyDown(), user hits Enter
+opjs -> olc : transmitDiff(diff)
 
-pjs -> olc : transmitDiff(diff)
 olc -> lch : send(diff)
 lch -> d : new(data)
-d -> d : save()
-d -> db : store diff in database
+d --> lch : diff
+lch -> d : save()
+d -> db : save diff to database
 
-' TODO: maybe denote that owner and participant flows below happen in parallel
-lch -> olc : received(data)
+lch -> olc : received(diff)
 olc -> olc : ignore echoed diff
 
-lch -> plc : received(data)
-plc -> pjs : new PointText(data)
-pjs --> plc : text
-plc -> plc : addChild(text)
+lch -> plc : received(diff)
+plc -> plc : addChild(diff)
 
-' TODO: is this needed?
-plc --> participant : render text
+plc --> partic : render text
 @enduml

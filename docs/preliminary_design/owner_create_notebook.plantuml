@@ -1,26 +1,12 @@
-@startuml User Login & Display Notebooks
+@startuml Owner Create Notebook
 title User Login & Display Notebooks
 skinparam sequenceMessageAlign center
 
 actor User as user
 participant NotebooksController as nc
-participant SessionsController as sc
 participant User as um
 participant User_Notebook as unm
 database Database as db
-
-user -> sc : new()
-user <-- sc : render login form
-user -> sc : create(email, password)
-sc -> um : find_by_email(email)
-um -> db : get user by email
-um <-- db : return user
-sc <-- um : return user
-sc -> um : set_session(datetime.now, ip)
-sc <-- um : return
-sc -> um : save()
-um -> db : save user to database
-user <-- sc : redirect to NotebooksController index
 
 user -> nc : index()
 nc -> unm : find_owned_by_user_id(current_user)
@@ -32,4 +18,7 @@ unm -> db : get user_notebooks by id
 unm <-- db : return user_notebooks
 nc <-- unm : return user_notebooks joined by current user
 user <-- nc : return NotebooksController view which displays Notebooks
+
+user -> nc: new()
+
 @enduml

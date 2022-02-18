@@ -1,8 +1,11 @@
 @startuml Notebook Participant Creating Diffs
 title Notebook Participant Creating Diffs
 skinparam sequenceMessageAlign center
+legend top
+Participant has logged in and opened a notebook.
+endlegend
 
-actor Participant as owner
+actor Participant as partic
 participant NotebookComponent as nc
 participant LayerComponent as lc
 participant PaperJs as pjs
@@ -10,26 +13,24 @@ participant LayerChannel as lch
 participant Diff as d
 database Database as db
 
-' owner makes scribble diff
-' paperjs renders scribble diff
-' scribble diff broadcasted to server, saved in db, sent to participant
-' diff renders to 
-
-owner -> nc : selects pen tool
+partic -> nc : selects pen tool
 nc -> nc : setActiveTool("pen")
-owner -> nc : select red for tool color
+partic -> nc : select red for tool color
 nc -> nc : setActiveColor("red")
-owner -> lc : draws on canvas
+partic -> lc : draws on canvas
+
 lc -> pjs : onMouseDown()
 lc -> pjs : onMouseDrag()
 lc -> pjs : onMouseUp()
 pjs -> lc : transmitDiff(diff)
+
+lc --> partic : render drawing
 lc -> lch : send(diff)
 lch -> d : new(data)
-d -> d : save()
-d -> db : store diff in database
-lch -> lc : received(data)
+d --> lch : diff
+lch -> d : save()
+d -> db : save diff to database
+lch -> lc : received(diff)
 lc -> lc : ignore echoed diff
-@enduml
 
-' TODO: Lifetimes, methods in classes
+@enduml

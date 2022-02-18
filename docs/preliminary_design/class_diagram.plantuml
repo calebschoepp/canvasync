@@ -36,11 +36,19 @@ class RegistrationsController {
     +create(email: String, password: String) : void
 }
 
+class PasswordController {
+    +new() : void
+    +create(email: String) : void
+    +edit() : void
+    +update(email: String, reset_token: String) : void
+}
+
 ActionController::Base <|-- ApplicationController
 ApplicationController <|-- NotebooksController
 ApplicationController <|-- DeviseController
 DeviseController <|-- SessionsController
 DeviseController <|-- RegistrationsController
+DeviseController <|-- PasswordsController
 
 ' Models
 class ActiveRecord::Base {}
@@ -109,8 +117,11 @@ class User {
     +created_at : Datetime
     +updated_at : Datetime
     +set_session(at: Datetime, ip: String) : void
+    +set_request_new_password(reset_token: String) : void
+    +set_password(password: String) : void
     {static} +new(email: String, password: String): User
     {static} +find_by_email(email: String) : User
+    {static} +save() : void
 }
 
 ActiveRecord::Base <|-- ApplicationRecord
