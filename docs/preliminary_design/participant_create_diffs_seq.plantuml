@@ -27,7 +27,7 @@ pjs -> lc : transmitDiff(diff)
 lc --> partic : render drawing
 lc -> lch : send(diff)
 lch -> d : new(data)
-d --> lch : diff
+d --> lch : return diff
 lch -> d : save()
 d -> db : save diff to database
 lch -> lc : received(diff)

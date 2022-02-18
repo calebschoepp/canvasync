@@ -13,7 +13,9 @@ participant LayerChannel as lch
 participant Diff as d
 database Database as db
 participant LayerComponent as plc
+participant PaperJs as ppjs
 actor Participant as partic
+
 
 owner -> nc : selects text tool
 nc -> nc : setActiveTool("text")
@@ -29,7 +31,7 @@ opjs -> olc : transmitDiff(diff)
 
 olc -> lch : send(diff)
 lch -> d : new(data)
-d --> lch : diff
+d --> lch : return diff
 lch -> d : save()
 d -> db : save diff to database
 
@@ -37,7 +39,6 @@ lch -> olc : received(diff)
 olc -> olc : ignore echoed diff
 
 lch -> plc : received(diff)
-plc -> plc : addChild(diff)
-
-plc --> partic : render text
+plc -> ppjs : addChild(diff)
+ppjs --> partic : render text
 @enduml

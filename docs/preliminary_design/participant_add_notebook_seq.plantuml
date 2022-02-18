@@ -1,12 +1,12 @@
-@startuml Owner Create Notebook
-title Owner Create Notebook
+@startuml Participant Add Notebook
+title Participant Add Notebook
 skinparam sequenceMessageAlign center
 
 legend top
-Owner has logged in and is at the NotebooksController view which displays notebooks.
+Participant has logged in and is at the NotebooksController view which displays notebooks.
 endlegend
 
-actor Owner as owner
+actor Participant as partic
 participant NotebooksController as nc
 participant Notebook as nm
 participant Page as pm
@@ -14,17 +14,17 @@ participant Layer as lm
 participant User_Notebook as unm
 database Database as db
 
-owner -> nc: new()
-owner <-- nc : render new notebook form
-owner -> nc : create(name, file)
-nc -> nm : new(name, file)
-nc <-- nm : return notebook
-nc -> unm : new(current_user, notebook, is_owner=true)
+partic -> nc: preview()
+partic <-- nc : render preview notebook form
+partic -> nc : join(notebook)
+nc -> nm : find(notebook_id)
+nm -> db : get notebook by id
+db --> nm : return notebook
+nm --> nc : return notebook
+nc -> unm : new(current_user, notebook, is_owner=false)
 nc <-- unm : return user_notebook
 nc -> nm : set_user_notebooks(user_notebook)
 loop for each page i in resource file
-    nc -> pm : new(i, notebook)
-    nc <-- pm : return page_i
     nc -> lm : new(page_i, user_notebook)
     nc <-- lm : return layer_i
     nc -> pm : set_layers(layer_i)
@@ -33,6 +33,6 @@ end
 nc -> nm : save()
 nm -> db : save notebook to database
 
-owner <- nc : display successful create notebook message
+partic <- nc : display successful join notebook message
 
 @enduml
