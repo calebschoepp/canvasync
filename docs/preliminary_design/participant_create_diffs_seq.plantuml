@@ -31,6 +31,7 @@ pjs -> lc : transmitDiff(diff)
 activate lc
 lc --> partic : render drawing
 lc -> lch : send(diff)
+deactivate lc
 activate lch
 lch -> d : new(data)
 d --> lch : return diff
@@ -38,6 +39,7 @@ lch -> d : save()
 d -> db : save diff to database
 deactivate lch
 lch -> lc : received(diff)
+activate lc
 lc -> lc : ignore echoed diff
 deactivate lc
 

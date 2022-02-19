@@ -10,7 +10,7 @@ repeat
   ::RegistrationController
   create(email, password);
   backward :Create error message;
-repeat while (form contents are valid?) is (false)
+repeat while (Form contents are valid?) is (false)
 ->true;
 |DB|
 :Save new user to db;

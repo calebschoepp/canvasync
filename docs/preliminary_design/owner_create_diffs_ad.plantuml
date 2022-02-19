@@ -1,25 +1,33 @@
-@startuml Owner add new canvas
-Title Owner add new canvas
+@startuml Owner create diffs
+Title Owner create diffs
 legend top
 Owner has logged in and opened a notebook.
 endlegend
 
 |UI|
 start
-:Click add canvas button;
+:Select text canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("text");
+|UI|
+:Select blue canvas color button;
+|Domain|
+::NotebookComponent
+setActiveColor("blue");
+|UI|
+:Click and enter text on canvas and hit Enter;
 fork
     |UI|
-    :see new page;
+    :See rendered text;
 fork again
     |Domain|
-    ::NotebookComponent
-    setPage(page);
-    ::NotebookComponent
-    transmitNewCanvas();
-    ::PageChannel
-    send(new_page);
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
     |DB|
-    :Save page;
+    :Save diff;
     |UI|
 end fork
 stop

@@ -1,0 +1,29 @@
+@startuml Participant Erase Diff
+Title Participant Erase Diff
+legend top
+Participant has logged in and opened a notebook.
+endlegend
+
+|UI|
+start
+:Select erase canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("eraser");
+|UI|
+:Draw on Canvas;
+fork
+    |UI|
+    :See interesecting diffs removed;
+fork again
+    |Domain|
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
+    |DB|
+    :Mark erased diff as invisible;
+    |UI|
+end fork
+stop
+@enduml

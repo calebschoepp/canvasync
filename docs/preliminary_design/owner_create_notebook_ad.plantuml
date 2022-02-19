@@ -1,0 +1,34 @@
+@startuml Owner Create Notebook
+Title Owner Create Notebook
+legend top
+Owner has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+|UI|
+|Domain|
+|DB|
+|UI|
+start
+:Owner clicks create notebook;
+|Domain|
+::NotebooksController
+new();
+|UI|
+:Owner is presented new notebook form;
+repeat
+  :Owner completes form and clicks create;
+  |Domain|
+  ::NotebookController
+  create(name, file);
+  backward :Create error message;
+repeat while (Form contents are valid?) is (false)
+->true;
+|DB|
+:Save notebook, with associated 
+user_notebook, pages, and layers
+to database;
+|UI|
+:Display successful create notebook message;
+
+stop
+@enduml

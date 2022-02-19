@@ -16,9 +16,11 @@ class NotebooksController {
     +new() : void
     +edit() : void
     +preview() : void
-    +create() : void
+    +create(name: String, file: String) : void
     +update() : void
-    +join() : void
+    +filter(search_string: String) : void
+    +join(notebook: Notebook) : void
+    +export(notebook: Notebook) : void
     -set_notebook() : void
     -notebook_params() : void
 }
@@ -36,11 +38,12 @@ class RegistrationsController {
     +create(email: String, password: String) : void
 }
 
-class PasswordController {
+class PasswordsController {
     +new() : void
     +create(email: String) : void
     +edit() : void
-    +update(email: String, reset_token: String) : void
+    +update(email: String, reset_token: String, password: String) : void
+    +generate_random_password_reset_token() : void
 }
 
 ActionController::Base <|-- ApplicationController
@@ -51,11 +54,12 @@ DeviseController <|-- RegistrationsController
 DeviseController <|-- PasswordsController
 
 ' Models
-class ActiveRecord::Base {}
-
-class ApplicationRecord {
+class ActiveRecord::Base {
     +save() : void
+    +new() : <T>
 }
+
+class ApplicationRecord {}
 
 class Diff {
     +layer_id : Integer
@@ -63,6 +67,10 @@ class Diff {
     +data : Json
     +created_at : Datetime
     +updated_at : Datetime
+    +new(data: JSON) : Diff
+    {static} +find(diff_id: Integer) : Diff
+    {static} +mark_invisible(diff_ids : Array<Integer>) : void
+    {static} +apply_offset(diff_ids : Array<Integer>, offset : JSON) : void
 }
 
 class Layer {
@@ -70,12 +78,17 @@ class Layer {
     +writer_id : Integer
     +created_at : Datetime
     +updated_at : Datetime
+    +new(page: Page, user_notebook: UserNotebook) : Layer
 }
 
 class Notebook {
     +name : String
     +created_at : Datetime
     +updated_at : Datetime
+    {static} +find(id: Integer) : Notebook
+    +new(name: String, file: String) : Notebook
+    +set_user_notebooks(user_notebook: UserNotebook) : void
+    +set_pages(page : Page) : void
 }
 
 class Page {
@@ -83,6 +96,8 @@ class Page {
     +notebook_id : Integer
     +created_at : Datetime
     +updated_at : Datetime
+    +new(page_number: Integer, notebook_id: Integer) : Page
+    +set_layers(layer: Layer) : void
 }
 
 class Role {
@@ -99,6 +114,9 @@ class UserNotebook {
     +is_owner : Boolean
     +created_at : Datetime
     +updated_at : Datetime
+    +add_pdf_export(pdf_export: String) : void
+    +new(user: User, notebook: Notebook, is_owner: Boolean) : UserNotebook
+    {static} +find(notebook: Notebook, user: User) : UserNotebook
     {static} +find_owned_by_user_id(user_id: Integer) : Array<UserNotebook>
     {static} +find_joined_by_user_id(user_id: Integer) : Array<UserNotebook>
 }
@@ -119,19 +137,34 @@ class User {
     +set_session(at: Datetime, ip: String) : void
     +set_request_new_password(reset_token: String) : void
     +set_password(password: String) : void
+    +new(email: String, password: String) : User
     {static} +new(email: String, password: String): User
     {static} +find_by_email(email: String) : User
-    {static} +save() : void
 }
 
 ActiveRecord::Base <|-- ApplicationRecord
-Diff <|-- ApplicationRecord
-Layer <|-- ApplicationRecord
-Notebook <|-- ApplicationRecord
-Page <|-- ApplicationRecord
-Role <|-- ApplicationRecord
-UserNotebook <|-- ApplicationRecord
-User <|-- ApplicationRecord
+ApplicationRecord <|-- Diff
+ApplicationRecord <|-- Layer
+ApplicationRecord <|-- Notebook
+ApplicationRecord <|-- Page
+ApplicationRecord <|-- Role
+ApplicationRecord <|-- UserNotebook
+ApplicationRecord <|-- User
+
+' Jobs
+class ActiveJob::Base {}
+
+class ApplicationJob {
+}
+
+class ExportPDFJob {
+    {static} +perform_later(notebook: Notebook) : void
+    +perform(notebook: Notebook) : void
+    -generate_new_pdf_export() : void
+}
+
+ActiveJob::Base <|-- ApplicationJob
+ApplicationJob <|-- ExportPDFJob
 
 ' Channels
 class ActionCable::Channel::Base {}
@@ -141,11 +174,13 @@ class Channel {}
 class LayerChannel {
     +subscribed() : void
     +unsubscribed() : void
+    +send(diff: JSON) : void
 }
 
 class PageChannel {
     +subscribed() : void
     +unsubscribed() : void
+    +send(page: JSON) : void
 }
 
 ActionCable::Channel::Base <|-- Channel
@@ -153,19 +188,48 @@ Channel <|-- LayerChannel
 Channel <|-- PageChannel
 
 ' Front-End
+class Component {
+    +render() : JSX
+}
+
 class AppComponent {}
 
-class NotebookComponent {}
+class NotebookComponent {
+    +transmitNewCanvas() : void
+    +received(page: JSON) : void
+    +setActiveTool(tool: String) : void
+    +setActiveColor(color: String) : void
+}
 
-class PageComponent {}
+class PageComponent {
+    +setPaperScope(paperScope: PaperScope) : void
+    +setOwnerLayer(paperLayer: PaperLayer) : void
+    +setParticipantLayer(paperLayer: PaperLayer) : void
+}
 
-class LayerComponent {}
+class LayerComponent {
+    +transmitDiff(diff: JSON) : void
+    +received(diff: JSON) : void
+}
 
 class PaperJs {
     +canvas : HTMLCanvas
     +project : Json
     +view : Json
+    +paperScopes: Array<PaperJs.PaperScope>
+    +layers : Array<PaperJs.Layer>
+    +addLayer(layer: PaperJs.Layer) : void
+    +onMouseDown() : void
+    +onMouseUp() : void
+    +onMouseDrag() : void
+    +onKeyDown() : void
+    +addChild(diff: JSON) : void
 }
+
+Component <|-- AppComponent
+Component <|-- NotebookComponent
+Component <|-- PageComponent
+Component <|-- LayerComponent
 
 AppComponent "1" *-- "1" NotebookComponent
 NotebookComponent "1" *-- "1..n" PageComponent

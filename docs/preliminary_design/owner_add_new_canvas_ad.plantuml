@@ -9,7 +9,7 @@ start
 :Click add canvas button;
 fork
     |UI|
-    :see new page;
+    :See new page;
 fork again
     |Domain|
     ::NotebookComponent

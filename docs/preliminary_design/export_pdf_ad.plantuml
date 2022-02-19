@@ -1,0 +1,35 @@
+@startuml Export PDF
+Title Export PDF
+legend top
+Owner has logged in and is at dashboard.
+endlegend
+
+|UI|
+start
+:Select notebook to export and click export;
+|Domain|
+::NotebooksController
+export(notebook);
+fork
+    |UI|
+    :Redirect to dashboard;
+fork again
+    |Domain|
+    ::ExportPDFJob
+    perform_later(notebook);
+    |DB|
+    :Enqueue job to be performed;
+end fork
+|Domain|
+:Sidekiq pulls next job to be done;
+|DB|
+:Dequeue job to be performed;
+|Domain|
+::ExportPDFJob
+generate_new_pdf_export();
+|DB|
+:Save new PDF export;
+|UI|
+:Notify user;
+stop
+@enduml

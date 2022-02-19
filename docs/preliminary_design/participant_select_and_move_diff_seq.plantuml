@@ -35,36 +35,34 @@ lc -> pjs : onMouseUp()
 lc --> partic : render changes
 deactivate lc
 
-loop for each selected diff
-  pjs -> lc : transmitDiff(updated_diff)
-  activate lc
-  lc -> lch : send(updated_diff)
-  deactivate lc
-  activate lch
-  lch -> d : find(diff_id)
-  activate d
-  d -> db : get diff by id
-  activate db
-  db --> d : return selected_diff
-  deactivate db
-  d --> lch : return selected_diff
-  deactivate d
-  lch -> d : mark_invisible(selected_diff)
-  d -> db : save selected_diff marked as invisible to database
-
-
-  lch -> d : new(offset_diff)
-  activate d
-  d --> lch : return offset_diff
-  deactivate d
-  lch -> d : save()
-  d -> db : save offset_diff to database
-
-  deactivate lch
-  lch -> lc : received(updated_diff)
-  activate lc
-  lc -> lc : ignore echoed diff
-  deactivate lc
+pjs -> lc : transmitDiff(move_diff)
+activate lc
+lc -> lch : send(move_diff)
+deactivate lc
+activate lch
+lch -> d : new(move_diff_data)
+activate d
+d --> lch : return move_diff
+deactivate d
+lch -> d : save()
+d -> db : save move_diff to database
+lch -> d : find(diff_ids)
+activate d
+d -> db : get diffs to apply offset to by id
+activate db
+db --> d : return diffs
+deactivate db
+d --> lch : return diffs
+deactivate d
+lch -> d : apply_offset(diff_ids, offset)
+loop for each diff_id in diff_ids
+  d -> db : save updated diff with diff_id in database
 end
+
+deactivate lch
+lch -> lc : received(move_diff)
+activate lc
+lc -> lc : ignore echoed diff
+deactivate lc
 
 @enduml

@@ -1,0 +1,34 @@
+@startuml Participant Add Notebook
+Title Participant Add Notebook
+legend top
+Participant has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+|UI|
+start
+:Participant clicks join notebook;
+|Domain|
+::NotebooksController
+preview();
+|UI|
+:Participant is presented join notebook form;
+repeat
+  :Participant completes form and clicks submit;
+  |Domain|
+  ::NotebookController
+  join(notebook);
+  |DB|
+  :Get notebook with notebook id;
+  |Domain|
+  backward :Create error message;
+repeat while (Notebook with provided id exists?) is (false)
+->true;
+|DB|
+:Save notebook, with associated 
+user_notebook, pages, and layers
+to database;
+|UI|
+:Display successful join notebook message;
+
+stop
+@enduml

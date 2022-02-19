@@ -38,28 +38,35 @@ lc -> pjs : onKeyDown()
 lc --> partic : render changes
 deactivate lc
 
-loop for each selected diff
-  pjs -> lc : transmitDiff(updated_diff)
-  activate lc
+pjs -> lc : transmitDiff(delete_diff)
+activate lc
 
-  lc -> lch : send(updated_diff)
-  activate lch
-  lch -> d : find(diff_id)
-  activate d
-  d -> db : get diff by id
-  activate db
-  db --> d : return selected_diff
-  deactivate db
-  d --> lch : return selected_diff
-  deactivate d
-  lch -> d : mark_invisible(selected_diff)
-  d -> db : save selected_diff marked as invisible to database
-  deactivate lc
-
-  lch -> lc : received(updated_diff)
-  activate lc
-  lc -> lc : ignore echoed diff
-  deactivate lc
+lc -> lch : send(delete_diff)
+deactivate lc
+activate lch
+lch -> d : new(delete_diff_data)
+activate d
+d --> lch : return delete_diff
+deactivate d
+lch -> d : save()
+d -> db : save delete_diff to database
+lch -> d : find(diff_ids)
+activate d
+d -> db : get diffs to mark as invisibile by id
+activate db
+db --> d : return diffs
+deactivate db
+d --> lch : return diffs
+deactivate d
+lch -> d : mark_invisible(diff_ids)
+loop for each diff_id in diff_ids
+  d -> db : save updated diff with diff_id in database
 end
+deactivate lch
+
+lch -> lc : received(delete_diff)
+activate lc
+lc -> lc : ignore echoed diff
+deactivate lc
 
 @enduml
