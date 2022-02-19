@@ -1,0 +1,26 @@
+@startuml Owner add new canvas
+Title Owner add new canvas
+legend top
+Owner has logged in and opened a notebook.
+endlegend
+
+|UI|
+start
+:Click add canvas button;
+fork
+    |UI|
+    :see new page;
+fork again
+    |Domain|
+    ::NotebookComponent
+    setPage(page);
+    ::NotebookComponent
+    transmitNewCanvas();
+    ::PageChannel
+    send(new_page);
+    |DB|
+    :Save page;
+    |UI|
+end fork
+stop
+@enduml

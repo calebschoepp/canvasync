@@ -2,45 +2,19 @@
 Title Registration
 |UI|
 start
-:Fill out registration form;
-:Click the sign up button;
-|Domain|
-:
 
-fork
-  :Browse manuscript file;
+repeat
+  :Fill out registration form;
+  :Click the sign up button;
   |Domain|
-  :Get paper object;
-  |DB|
-  :Query
-  Paper(paper_id);
-  |Domain|
-  :Fetch file content from paper_source;
-  |UI|
-  :View manuscript file;
-fork again
-  :Fill out submission form;
-  |Domain|
-  :Validate Form;
-  |UI|
-  if (Form is valid?) then (true)
-    |UI|
-    :Active submit button;
-  else (false)
-    |UI|
-    :Inactive submit button;
-    :Show errors in red;
-  endif
-  :Click active submit button;
-  |Domain|
-  :Create new paper;
-  |DB|
-  :Insert
-  Paper;
-  |UI|
-  :Display success;
-end fork
+  ::RegistrationController
+  create(email, password);
+  backward :Create error message;
+repeat while (form contents are valid?) is (false)
+->true;
+|DB|
+:Save new user to db;
 |UI|
-:Navigate to homepage;
+:Redirect to dashboard;
 stop
 @enduml
