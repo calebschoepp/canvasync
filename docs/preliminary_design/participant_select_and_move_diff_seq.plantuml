@@ -14,42 +14,57 @@ participant Diff as d
 database Database as db
 
 partic -> nc : selects eraser tool
+activate nc
 nc -> nc : setActiveTool("select")
+deactivate nc
 partic -> lc : draws selection box on canvas
-
+activate lc
 lc -> pjs : onMouseDown()
 lc -> pjs : onMouseDrag()
 lc -> pjs : onMouseUp()
+deactivate lc
 loop for each diff contained by selection box
   pjs -> pjs : set path as fully selected
 end
 
 partic -> lc : drags and drops diffs elsewhere
-
+activate lc
 lc -> pjs : onMouseDown()
 lc -> pjs : onMouseDrag()
 lc -> pjs : onMouseUp()
-
 lc --> partic : render changes
+deactivate lc
 
 loop for each selected diff
   pjs -> lc : transmitDiff(updated_diff)
-
+  activate lc
   lc -> lch : send(updated_diff)
+  deactivate lc
+  activate lch
   lch -> d : find(diff_id)
+  activate d
   d -> db : get diff by id
+  activate db
   db --> d : return selected_diff
+  deactivate db
   d --> lch : return selected_diff
+  deactivate d
   lch -> d : mark_invisible(selected_diff)
   d -> db : save selected_diff marked as invisible to database
 
+
   lch -> d : new(offset_diff)
+  activate d
   d --> lch : return offset_diff
+  deactivate d
   lch -> d : save()
   d -> db : save offset_diff to database
 
+  deactivate lch
   lch -> lc : received(updated_diff)
+  activate lc
   lc -> lc : ignore echoed diff
+  deactivate lc
 end
 
 @enduml

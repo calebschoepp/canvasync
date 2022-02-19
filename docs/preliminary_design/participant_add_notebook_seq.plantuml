@@ -15,23 +15,35 @@ participant User_Notebook as unm
 database Database as db
 
 partic -> nc: preview()
+activate nc
 partic <-- nc : render preview notebook form
+deactivate nc
 partic -> nc : join(notebook)
+activate nc
 nc -> nm : find(notebook_id)
+activate nm
 nm -> db : get notebook by id
+activate db
 db --> nm : return notebook
+deactivate db
 nm --> nc : return notebook
+deactivate nm
 nc -> unm : new(current_user, notebook, is_owner=false)
+activate unm
 nc <-- unm : return user_notebook
+deactivate unm
 nc -> nm : set_user_notebooks(user_notebook)
 loop for each page i in resource file
     nc -> lm : new(page_i, user_notebook)
+    activate lm
     nc <-- lm : return layer_i
+    deactivate lm
     nc -> pm : set_layers(layer_i)
     nc -> nm : set_pages(page_i)
 end
 nc -> nm : save()
 nm -> db : save notebook to database
+deactivate nc
 
 partic <- nc : display successful join notebook message
 

@@ -13,36 +13,53 @@ participant LayerChannel as lch
 participant Diff as d
 database Database as db
 
-partic -> nc : selects eraser tool
+partic -> nc : selects selection tool
+activate nc
 nc -> nc : setActiveTool("select")
+deactivate nc
 partic -> lc : draws selection box on canvas
+activate lc
 
 lc -> pjs : onMouseDown()
 lc -> pjs : onMouseDrag()
 lc -> pjs : onMouseUp()
+activate pjs
 loop for each diff contained by selection box
   pjs -> pjs : set path as fully selected
+deactivate pjs
+deactivate lc
 end
 
 partic -> lc : participant clicks delete key
+activate lc
 
 lc -> pjs : onKeyDown()
 
 lc --> partic : render changes
+deactivate lc
 
 loop for each selected diff
   pjs -> lc : transmitDiff(updated_diff)
+  activate lc
 
   lc -> lch : send(updated_diff)
+  activate lch
   lch -> d : find(diff_id)
+  activate d
   d -> db : get diff by id
+  activate db
   db --> d : return selected_diff
+  deactivate db
   d --> lch : return selected_diff
+  deactivate d
   lch -> d : mark_invisible(selected_diff)
   d -> db : save selected_diff marked as invisible to database
+  deactivate lc
 
   lch -> lc : received(updated_diff)
+  activate lc
   lc -> lc : ignore echoed diff
+  deactivate lc
 end
 
 @enduml

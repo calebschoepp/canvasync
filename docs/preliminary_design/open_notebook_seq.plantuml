@@ -11,10 +11,15 @@ participant Notebook as n
 database Database as db
 
 user -> nc : show(notebook)
+activate nc
 nc -> n : find(notebook_id)
+activate n
 n -> db : get notebook by id
+activate db
 db --> n : return notebook
+deactivate db
 n --> nc : return notebook
+deactivate n
 nc --> user : return Notebook view which displays a Notebook
-
+deactivate nc
 @enduml

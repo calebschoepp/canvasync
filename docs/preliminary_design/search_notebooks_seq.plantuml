@@ -10,8 +10,9 @@ participant NotebooksController as nc
 
 user -> user : start typing into search bar
 user -> nc : filter(search_string)
+activate nc
 nc -> nc : filter owned_notebooks by notebooks \nthat contain search_string
 nc -> nc : filter joined_notebooks by notebooks \nthat contain search_string
 nc --> user : return NotebooksController view which displays Notebooks
-
+deactivate nc
 @enduml

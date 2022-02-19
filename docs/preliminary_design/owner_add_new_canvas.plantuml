@@ -19,46 +19,83 @@ actor Participant as partic
 
 owner -> onc : clicks "Add Canvas Button"
 onc -> onc : setPage(page)
+activate onc
 
 onc -> opc : render()
+activate opc
 opc -> opjs : new PaperScope()
+activate opjs
 opc <-- opjs : return scope
+deactivate opjs
 opc -> opjs : new Layer()
+activate opjs
 opc <-- opjs : return owner_layer
+deactivate opjs
 opc -> opjs : addLayer(owner_layer)
+activate opjs
 opc <-- opjs : adds owner_layer to scope
+deactivate opjs
 opc -> opc : setPaperScope(scope)
 opc -> opc : setOwnerLayer(owner_layer)
+onc <-- opc : render new page
+deactivate opc
 
 owner <-- onc : render new page
+deactivate onc
 
 onc -> onc : transmitNewCanvas()
+activate onc
 onc -> pch : send(new_page)
+activate pch
 pch -> pm : new(page_number, notebook_id)
+activate pm
 pch <-- pm : return page
+deactivate pm
 pch -> pm : save()
 pm -> db : save page to database
+deactivate pch
+deactivate onc
 
 pch -> onc : received(page)
+activate onc
 onc -> onc : ignore echoed page
+deactivate onc
 
 pch -> pnc : received(page)
+activate pnc
 pnc -> pnc : setPage(page)
+activate pnc
 
 pnc -> ppc : render()
+activate ppc
 ppc -> ppjs : new PaperScope()
+activate ppjs
 ppc <-- ppjs : return scope
+deactivate ppjs
 ppc -> ppjs : new Layer()
+activate ppjs
 ppc <-- ppjs : return owner_layer
+deactivate ppjs
 ppc -> ppjs : addLayer(owner_layer)
-ppc -> ppjs : new Layer()
-ppc <-- ppjs : return participant_layer
-ppc -> ppjs : addLayer(participant_layer)
+activate ppjs
 ppc <-- ppjs : adds owner_layer to scope
+deactivate ppjs
+ppc -> ppjs : new Layer()
+activate ppjs
+ppc <-- ppjs : return participant_layer
+deactivate ppjs
+ppc -> ppjs : addLayer(participant_layer)
+activate ppjs
+ppc <-- ppjs : adds participant_layer to scope
+deactivate ppjs
 ppc -> ppc : setPaperScope(scope)
 ppc -> ppc : setOwnerLayer(owner_layer)
 ppc -> ppc : setParticipantLayer(owner_layer)
+pnc <-- ppc : render new page
+deactivate ppc
 
 partic <-- pnc : render new page
+deactivate pnc
+deactivate pnc
 
 @enduml

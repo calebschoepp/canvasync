@@ -9,11 +9,17 @@ participant User as um
 database Database as db
 
 user -> rc : new()
+activate rc
 user <-- rc : render registration form
+deactivate rc
 user -> rc : create(email, password)
+activate rc
 rc -> um : new(email, password)
+activate um
 rc <-- um : return user
+deactivate um
 rc -> um : save()
 um -> db : save user to database
 user <-- rc : redirect to NotebooksController index
+deactivate rc
 @enduml

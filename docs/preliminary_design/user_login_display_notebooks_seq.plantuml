@@ -10,26 +10,46 @@ participant User_Notebook as unm
 database Database as db
 
 user -> sc : new()
+activate sc
 user <-- sc : render login form
+deactivate sc
 user -> sc : create(email, password)
+activate sc
 sc -> um : find_by_email(email)
+activate um
 um -> db : get user by email
+activate db
 um <-- db : return user
+deactivate db
 sc <-- um : return user
+deactivate um
 sc -> um : set_session(datetime.now, ip)
+activate um
 sc <-- um : return
+deactivate um
 sc -> um : save()
 um -> db : save user to database
 user <-- sc : redirect to NotebooksController index
+deactivate sc
 
 user -> nc : index()
+activate nc
 nc -> unm : find_owned_by_user_id(current_user)
+activate unm
 unm -> db : get user_notebooks by id
+activate db
 unm <-- db : return user_notebooks
+deactivate db
 nc <-- unm : return user_notebooks owned by current user
+deactivate unm
 nc -> unm : find_joined_by_user_id(current_user)
+activate unm
 unm -> db : get user_notebooks by id
+activate db
 unm <-- db : return user_notebooks
+deactivate db
 nc <-- unm : return user_notebooks joined by current user
+deactivate unm
 user <-- nc : return NotebooksController view which displays Notebooks
+deactivate nc
 @enduml
