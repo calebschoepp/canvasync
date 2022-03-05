@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(version: 20_220_210_050_306) do
   create_table 'diffs', force: :cascade do |t|
     t.integer 'layer_id', null: false
     t.integer 'seq'
-    t.json 'data', default: '""{}""', null: false
+    t.json 'data', default: '{}', null: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['layer_id'], name: 'index_diffs_on_layer_id'
