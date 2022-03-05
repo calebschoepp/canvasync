@@ -1,0 +1,19 @@
+@startuml Open Notebook
+Title Open Notebook
+legend top
+User has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+|UI|
+start
+:User clicks notebook icon;
+|Domain|
+::NotebooksController
+show(notebook);
+|DB|
+:Get notebook with id;
+|UI|
+:User is redirected to Notebook
+view which displays a notebook;
+stop
+@enduml

@@ -1,0 +1,31 @@
+@startuml Notebook Participant Selecting and Moving
+Title Notebook Participant Selecting and Moving
+legend top
+Participant has logged in, opened a notebook, and diffs exist on the canvas.
+endlegend
+
+|UI|
+start
+:Select selection canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("select");
+|UI|
+:Draw selection bounding box on canvas;
+:See diffs contained in bounding box as selected;
+:Participant drags and drops selected diffs to new location;
+fork
+    |UI|
+    :See diffs contained in bounding box as relocated;
+fork again
+    |Domain|
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
+    |DB|
+    :Reposition all selected diffs by x, y offset;
+    |UI|
+end fork
+stop
+@enduml

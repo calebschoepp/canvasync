@@ -1,0 +1,50 @@
+@startuml Owner Create Notebook
+title Owner Create Notebook
+skinparam sequenceMessageAlign center
+
+legend top
+Owner has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+actor Owner as owner
+participant NotebooksController as nc
+participant Notebook as nm
+participant Page as pm
+participant Layer as lm
+participant User_Notebook as unm
+database Database as db
+
+owner -> nc: new()
+activate nc
+owner <-- nc : render new notebook form
+deactivate nc
+owner -> nc : create(name, file)
+activate nc
+nc -> nm : new(name, file)
+activate nm
+nc <-- nm : return notebook
+deactivate nm
+nc -> unm : new(current_user, notebook, is_owner=true)
+activate unm
+nc <-- unm : return user_notebook
+deactivate unm
+nc -> nm : set_user_notebooks(user_notebook)
+loop for each page i in resource file
+    nc -> pm : new(i, notebook)
+    activate pm
+    nc <-- pm : return page_i
+    deactivate pm
+    nc -> lm : new(page_i, user_notebook)
+    activate lm
+    nc <-- lm : return layer_i
+    deactivate lm
+    nc -> pm : set_layers(layer_i)
+    nc -> nm : set_pages(page_i)
+end
+nc -> nm : save()
+nm -> db : save notebook to database
+deactivate nc
+
+owner <- nc : display successful create notebook message
+
+@enduml

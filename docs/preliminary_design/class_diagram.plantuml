@@ -1,0 +1,239 @@
+@startuml Class Diagram
+skinparam classAttributeIconSize 0
+
+' Controllers
+class ActionController::Base {}
+
+class ApplicationController {
+    +user_not_authorized() : void
+    +after_sign_out_path_for() : void
+}
+
+class NotebooksController {
+    +notebook : Notebook
+    +index() : void
+    +show() : void
+    +new() : void
+    +edit() : void
+    +preview() : void
+    +create(name: String, file: String) : void
+    +update() : void
+    +filter(search_string: String) : void
+    +join(notebook: Notebook) : void
+    +export(notebook: Notebook) : void
+    -set_notebook() : void
+    -notebook_params() : void
+}
+
+class DeviseController {
+}
+
+class SessionsController {
+    +new() : void
+    +create(email: String, password: String) : void
+}
+
+class RegistrationsController {
+    +new() : void
+    +create(email: String, password: String) : void
+}
+
+class PasswordsController {
+    +new() : void
+    +create(email: String) : void
+    +edit() : void
+    +update(email: String, reset_token: String, password: String) : void
+    +generate_random_password_reset_token() : void
+}
+
+ActionController::Base <|-- ApplicationController
+ApplicationController <|-- NotebooksController
+ApplicationController <|-- DeviseController
+DeviseController <|-- SessionsController
+DeviseController <|-- RegistrationsController
+DeviseController <|-- PasswordsController
+
+' Models
+class ActiveRecord::Base {
+    +save() : void
+    +new() : <T>
+}
+
+class ApplicationRecord {}
+
+class Diff {
+    +layer_id : Integer
+    +seq : Integer
+    +data : Json
+    +created_at : Datetime
+    +updated_at : Datetime
+    +new(data: JSON) : Diff
+    {static} +find(diff_id: Integer) : Diff
+    {static} +mark_invisible(diff_ids : Array<Integer>) : void
+    {static} +apply_offset(diff_ids : Array<Integer>, offset : JSON) : void
+}
+
+class Layer {
+    +page_id : Integer
+    +writer_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
+    +new(page: Page, user_notebook: UserNotebook) : Layer
+}
+
+class Notebook {
+    +name : String
+    +created_at : Datetime
+    +updated_at : Datetime
+    {static} +find(id: Integer) : Notebook
+    +new(name: String, file: String) : Notebook
+    +set_user_notebooks(user_notebook: UserNotebook) : void
+    +set_pages(page : Page) : void
+}
+
+class Page {
+    +number : Integer
+    +notebook_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
+    +new(page_number: Integer, notebook_id: Integer) : Page
+    +set_layers(layer: Layer) : void
+}
+
+class Role {
+    +name : String
+    +resource_type : String
+    +resource_id : Integer
+    +created_at : Datetime
+    +updated_at : Datetime
+}
+
+class UserNotebook {
+    +user_id : Integer
+    +notebook_id : Integer
+    +is_owner : Boolean
+    +created_at : Datetime
+    +updated_at : Datetime
+    +add_pdf_export(pdf_export: String) : void
+    +new(user: User, notebook: Notebook, is_owner: Boolean) : UserNotebook
+    {static} +find(notebook: Notebook, user: User) : UserNotebook
+    {static} +find_owned_by_user_id(user_id: Integer) : Array<UserNotebook>
+    {static} +find_joined_by_user_id(user_id: Integer) : Array<UserNotebook>
+}
+
+class User {
+    +email : String
+    +encrypted_password : String
+    +reset_password_token : String
+    +reset_password_sent_at : Datetime
+    +remember_created_at : Datetime
+    +sign_in_count : Integer
+    +current_sign_in_at : Datetime
+    +last_sign_in_at : Datetime
+    +current_sign_in_ip : String
+    +last_sign_in_ip : String
+    +created_at : Datetime
+    +updated_at : Datetime
+    +set_session(at: Datetime, ip: String) : void
+    +set_request_new_password(reset_token: String) : void
+    +set_password(password: String) : void
+    +new(email: String, password: String) : User
+    {static} +new(email: String, password: String): User
+    {static} +find_by_email(email: String) : User
+}
+
+ActiveRecord::Base <|-- ApplicationRecord
+ApplicationRecord <|-- Diff
+ApplicationRecord <|-- Layer
+ApplicationRecord <|-- Notebook
+ApplicationRecord <|-- Page
+ApplicationRecord <|-- Role
+ApplicationRecord <|-- UserNotebook
+ApplicationRecord <|-- User
+
+' Jobs
+class ActiveJob::Base {}
+
+class ApplicationJob {
+}
+
+class ExportPDFJob {
+    {static} +perform_later(notebook: Notebook) : void
+    +perform(notebook: Notebook) : void
+    -generate_new_pdf_export() : void
+}
+
+ActiveJob::Base <|-- ApplicationJob
+ApplicationJob <|-- ExportPDFJob
+
+' Channels
+class ActionCable::Channel::Base {}
+
+class Channel {}
+
+class LayerChannel {
+    +subscribed() : void
+    +unsubscribed() : void
+    +send(diff: JSON) : void
+}
+
+class PageChannel {
+    +subscribed() : void
+    +unsubscribed() : void
+    +send(page: JSON) : void
+}
+
+ActionCable::Channel::Base <|-- Channel
+Channel <|-- LayerChannel
+Channel <|-- PageChannel
+
+' Front-End
+class Component {
+    +render() : JSX
+}
+
+class AppComponent {}
+
+class NotebookComponent {
+    +transmitNewCanvas() : void
+    +received(page: JSON) : void
+    +setActiveTool(tool: String) : void
+    +setActiveColor(color: String) : void
+}
+
+class PageComponent {
+    +setPaperScope(paperScope: PaperScope) : void
+    +setOwnerLayer(paperLayer: PaperLayer) : void
+    +setParticipantLayer(paperLayer: PaperLayer) : void
+}
+
+class LayerComponent {
+    +transmitDiff(diff: JSON) : void
+    +received(diff: JSON) : void
+}
+
+class PaperJs {
+    +canvas : HTMLCanvas
+    +project : Json
+    +view : Json
+    +paperScopes: Array<PaperJs.PaperScope>
+    +layers : Array<PaperJs.Layer>
+    +addLayer(layer: PaperJs.Layer) : void
+    +onMouseDown() : void
+    +onMouseUp() : void
+    +onMouseDrag() : void
+    +onKeyDown() : void
+    +addChild(diff: JSON) : void
+}
+
+Component <|-- AppComponent
+Component <|-- NotebookComponent
+Component <|-- PageComponent
+Component <|-- LayerComponent
+
+AppComponent "1" *-- "1" NotebookComponent
+NotebookComponent "1" *-- "1..n" PageComponent
+PageComponent "1" *-- "2" LayerComponent
+LayerComponent "1" *-- "1" LayerChannel
+NotebookComponent "1" *-- "1" PageChannel
+@enduml

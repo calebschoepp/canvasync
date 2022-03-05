@@ -1,0 +1,18 @@
+@startuml User Searches Notebooks
+title User Searches Notebooks
+skinparam sequenceMessageAlign center
+legend top
+User has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+actor User as user
+participant NotebooksController as nc
+
+user -> user : start typing into search bar
+user -> nc : filter(search_string)
+activate nc
+nc -> nc : filter owned_notebooks by notebooks \nthat contain search_string
+nc -> nc : filter joined_notebooks by notebooks \nthat contain search_string
+nc --> user : return NotebooksController view which displays Notebooks
+deactivate nc
+@enduml

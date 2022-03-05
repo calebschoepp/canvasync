@@ -1,0 +1,28 @@
+@startuml User Login & Display Notebooks
+Title User Login & Display Notebooks
+
+|UI|
+start
+:Fill out log in form;
+:Click sign in button;
+|Domain|
+::NotebooksController
+create(email, password);
+|DB|
+:Get user by email;
+:Save user with new session info;
+|UI|
+:Redirect user to dashboard;
+|Domain|
+::NotebooksController
+index();
+|DB|
+fork
+:Find owned notebooks by id;
+fork again
+:Find joined notebooks by id;
+end fork
+|UI|
+:Render notebooks;
+stop
+@enduml

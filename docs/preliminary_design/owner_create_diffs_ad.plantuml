@@ -1,0 +1,34 @@
+@startuml Owner create diffs
+Title Owner create diffs
+legend top
+Owner has logged in and opened a notebook.
+endlegend
+
+|UI|
+start
+:Select text canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("text");
+|UI|
+:Select blue canvas color button;
+|Domain|
+::NotebookComponent
+setActiveColor("blue");
+|UI|
+:Click and enter text on canvas and hit Enter;
+fork
+    |UI|
+    :See rendered text;
+fork again
+    |Domain|
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
+    |DB|
+    :Save diff;
+    |UI|
+end fork
+stop
+@enduml

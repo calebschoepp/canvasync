@@ -1,0 +1,20 @@
+@startuml Registration
+Title Registration
+|UI|
+start
+
+repeat
+  :Fill out registration form;
+  :Click the sign up button;
+  |Domain|
+  ::RegistrationController
+  create(email, password);
+  backward :Create error message;
+repeat while (Form contents are valid?) is (false)
+->true;
+|DB|
+:Save new user to db;
+|UI|
+:Redirect to dashboard;
+stop
+@enduml

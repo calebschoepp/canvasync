@@ -1,0 +1,61 @@
+@startuml Notebook Owner Creating Diffs
+title Notebook Owner Creating Diffs
+skinparam sequenceMessageAlign center
+legend top
+Owner and participant have logged in and opened the same notebook.
+endlegend
+
+actor Owner as owner
+participant NotebookComponent as nc
+participant LayerComponent as olc
+participant PaperJs as opjs
+participant LayerChannel as lch
+participant Diff as d
+database Database as db
+participant LayerComponent as plc
+participant PaperJs as ppjs
+actor Participant as partic
+
+
+owner -> nc : selects text tool
+activate nc
+nc -> nc : setActiveTool("text")
+deactivate nc
+owner -> nc : select blue for tool color
+activate nc
+nc -> nc : setActiveColor("blue")
+deactivate nc
+owner -> olc : enter text on canvas
+activate olc
+olc -> opjs : onMouseDown()
+activate opjs
+olc -> opjs : onKeyDown(), user types "Hello"
+deactivate opjs
+olc --> owner : render text
+deactivate olc
+owner -> olc : user hits Enter
+activate olc
+olc -> opjs : onKeyDown()
+activate opjs
+opjs -> olc : transmitDiff(diff)
+deactivate opjs
+olc -> lch : send(diff)
+deactivate olc
+activate lch
+lch -> d : new(data)
+activate d
+d --> lch : return diff
+deactivate d
+lch -> d : save()
+d -> db : save diff to database
+deactivate lch
+lch -> olc : received(diff)
+activate olc
+olc -> olc : ignore echoed diff
+deactivate olc
+lch -> plc : received(diff)
+activate plc
+plc -> ppjs : addChild(diff)
+deactivate plc
+ppjs --> partic : render text
+@enduml

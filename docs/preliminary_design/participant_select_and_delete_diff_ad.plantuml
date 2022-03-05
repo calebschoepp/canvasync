@@ -1,0 +1,31 @@
+@startuml Participant Select and Delete Diff
+Title Participant Erase Diff
+legend top
+Participant has logged in, opened a notebook, and diffs exist on the canvas.
+endlegend
+
+|UI|
+start
+:Select selection canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("select");
+|UI|
+:Draw selection bounding box on canvas;
+:See diffs contained in bounding box as selected;
+:Participant hits delete key;
+fork
+    |UI|
+    :See diffs contained in bounding box as removed;
+fork again
+    |Domain|
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
+    |DB|
+    :Mark all deleted diffs as invisible;
+    |UI|
+end fork
+stop
+@enduml

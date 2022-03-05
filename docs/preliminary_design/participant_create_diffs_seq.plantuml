@@ -1,0 +1,46 @@
+@startuml Notebook Participant Creating Diffs
+title Notebook Participant Creating Diffs
+skinparam sequenceMessageAlign center
+legend top
+Participant has logged in and opened a notebook.
+endlegend
+
+actor Participant as partic
+participant NotebookComponent as nc
+participant LayerComponent as lc
+participant PaperJs as pjs
+participant LayerChannel as lch
+participant Diff as d
+database Database as db
+
+partic -> nc : selects pen tool
+activate nc
+nc -> nc : setActiveTool("pen")
+deactivate nc
+partic -> nc : select red for tool color
+activate nc
+nc -> nc : setActiveColor("red")
+deactivate nc
+partic -> lc : draws on canvas
+activate lc
+lc -> pjs : onMouseDown()
+lc -> pjs : onMouseDrag()
+lc -> pjs : onMouseUp()
+deactivate lc
+pjs -> lc : transmitDiff(diff)
+activate lc
+lc --> partic : render drawing
+lc -> lch : send(diff)
+deactivate lc
+activate lch
+lch -> d : new(data)
+d --> lch : return diff
+lch -> d : save()
+d -> db : save diff to database
+deactivate lch
+lch -> lc : received(diff)
+activate lc
+lc -> lc : ignore echoed diff
+deactivate lc
+
+@enduml

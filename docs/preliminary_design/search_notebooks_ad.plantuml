@@ -1,0 +1,16 @@
+@startuml Search Noteooks
+Title Search Noteooks
+legend top
+User has logged in and is at the NotebooksController view which displays notebooks.
+endlegend
+
+|UI|
+start
+:Type search query into search bar;
+|Domain|
+::NotebooksController
+filter(query);
+|UI|
+:Show filtered notebooks;
+stop
+@enduml

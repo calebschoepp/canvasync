@@ -1,0 +1,34 @@
+@startuml Participant Create Diffs
+Title Participant Create Diffs
+legend top
+Participant has logged in and opened a notebook.
+endlegend
+
+|UI|
+start
+:Select pen canvas tool button;
+|Domain|
+::NotebookComponent
+setActiveTool("pen");
+|UI|
+:Select red canvas color button;
+|Domain|
+::NotebookComponent
+setActiveColor("red");
+|UI|
+:Draw on Canvas;
+fork
+    |UI|
+    :See rendered pen stroke;
+fork again
+    |Domain|
+    ::LayerComponent
+    transmitDiff();
+    ::LayerChannel
+    send(diff);
+    |DB|
+    :Save diff;
+    |UI|
+end fork
+stop
+@enduml

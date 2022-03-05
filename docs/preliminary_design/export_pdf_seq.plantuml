@@ -1,0 +1,48 @@
+@startuml Export PDF
+title Export PDF
+skinparam sequenceMessageAlign center
+
+legend top
+User has logged in and is viewing notebooks on dashboard.
+endlegend
+
+actor User as user
+participant NotebooksController as nc
+participant ExportPDFJob as job
+participant UserNotebook as unm
+queue Redis as q
+participant Sidekiq as kiq
+database Database as db
+
+user -> user : select notebook to \nexport and press \nbutton
+user -> nc : export(notebook)
+activate nc
+nc -> job : perform_later(notebook)
+activate job
+job -> q : enqueue job to be performed later
+deactivate job
+user <-- nc : redirect user to dashboard
+deactivate nc
+q <- kiq : retreive job from queue
+activate q
+activate kiq
+q --> kiq : return job
+deactivate q
+job <- kiq : perform(notebook)
+deactivate kiq
+activate job
+job -> unm : find(notebook, current_user)
+activate unm
+unm -> db : get user_notebook by notebook and user
+activate db
+unm <-- db : return user_notebook
+deactivate db
+job <-- unm : return user_notebook
+deactivate unm
+job -> job : generate_new_pdf_export()
+job -> unm : add_pdf_export(pdf_export)
+job -> unm : save()
+deactivate job
+unm -> db : save notebook to database
+
+@enduml
