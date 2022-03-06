@@ -5,6 +5,10 @@ class LayerChannel < ApplicationCable::Channel
     stream_from "layer_channel_#{params[:layer_id]}"
   end
 
+  def receive(data)
+    ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", data)
+  end
+
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end

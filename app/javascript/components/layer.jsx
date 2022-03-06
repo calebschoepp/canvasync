@@ -4,12 +4,12 @@ import { CanvasTools } from './notebook';
 import consumer from '../channels/consumer';
 
 export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor }) {
-
   const pathRef = useRef(null);
   const [pathState, setPathState] = useState([]);
+  const [layerChannel, setLayerChannel] = useState(null);
 
   const setupSubscription = (newLayer) => {
-    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
+    return consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
       connected() {
         // Called when the subscription is ready for use on the server
         console.log(`Connected to layer_channel_${layerId}...`);
@@ -21,7 +21,8 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        // TODO: generalize to receive diff and add the proper type of element to the layer
+        // TODO: Generalize to receive diff and add the proper type of element to the layer
+        // TODO: Check to see if this diff has already been applied on this client
         newLayer.addChild(new Paper.PointText({
           point: [50, 50],
           content: data,
@@ -34,14 +35,16 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
 
   // Should be called after a user creates a diff
   const transmitDiff = (diff) => {
-    console.log("should transmit diff");
-    // TODO: implement logic to send diff back to server over `layer_channel_${layerId}`
+    // TODO: This isn't running the first time through. Why is it null the first time?
+    if (layerChannel !== null) {
+      layerChannel.send({ sent_by: "Caleb", body: "This is a cool app."});
+    }
   }
 
   useEffect(() => {
     // Set up action cable subscriber once layer is created
     if (!!layer) {
-      setupSubscription(layer);
+      setLayerChannel(setupSubscription(layer));
     }
   }, [layer]);
 
