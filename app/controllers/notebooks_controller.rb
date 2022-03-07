@@ -16,6 +16,9 @@ class NotebooksController < ApplicationController
   # GET /notebooks/1 or /notebooks/1.json
   def show
     authorize @notebook
+    # TODO: Support multiple pages
+    @owner_layers = @notebook.pages.first.layers.filter { |l| l.writer.is_owner }
+    @participant_layers = @notebook.pages.first.layers.filter { |l| l.writer.id == current_user.id && !l.writer.is_owner }
   end
 
   # GET /notebooks/new

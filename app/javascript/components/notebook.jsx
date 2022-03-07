@@ -22,11 +22,12 @@ export function Notebook() {
   const addPageCallback = useCallback(() => {
     setNumPages(prevNumPages => prevNumPages+1);
   });
-  
+
   const pages = [];
   for (let i = 0; i < numPages; i++) {
-    pages.push(      <Page activeTool={activeTool} activeColor={activeColor} />
-      );
+    const pid = window.participantLayers[i] ? window.participantLayers[i].id : null;
+    const oid = window.ownerLayers[i] ? window.ownerLayers[i].id : null;
+    pages.push(<Page activeTool={activeTool} activeColor={activeColor} ownerLayerId={oid} participantLayerId={pid} key={i} />);
   }
 
   // TODO: maybe pass in page id or layer id using window here
