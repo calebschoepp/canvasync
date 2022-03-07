@@ -3,13 +3,16 @@ import Paper from 'paper';
 import { CanvasTools } from './notebook';
 import consumer from '../channels/consumer';
 
-export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor }) {
+// TODO: Before subscribing to live events load up all previous diffs and render them
 
+export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor }) {
   const pathRef = useRef(null);
   const [pathState, setPathState] = useState([]);
+  const [layerChannel, setLayerChannel] = useState(null);
+  const [seq, setSeq] = useState(0) // TODO: Grow this number everytime something is drawn
 
   const setupSubscription = (newLayer) => {
-    consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
+    return consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
       connected() {
         // Called when the subscription is ready for use on the server
         console.log(`Connected to layer_channel_${layerId}...`);
@@ -21,27 +24,26 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        // TODO: generalize to receive diff and add the proper type of element to the layer
-        newLayer.addChild(new Paper.PointText({
-          point: [50, 50],
-          content: data,
-          fillColor: (isOwner) ? 'red' : 'blue',
-          fontSize: 25
-        }));
+        // TODO: Check to see if this diff has already been applied on this client
+        // TODO: Verify seq number is in order
+        newLayer.importJSON(data.diff)
       }
     });
   }
 
-  // Should be called after a user creates a diff
+  // Should be called after a user creates a diff. Diff should be a PaperJS object
   const transmitDiff = (diff) => {
-    console.log("should transmit diff");
-    // TODO: implement logic to send diff back to server over `layer_channel_${layerId}`
+    // TODO: This should be called for things like erase and text too
+    // TODO: This isn't running the first time through. Why is it null the first time?
+    if (layerChannel !== null) {
+      layerChannel.send({ diff: diff.exportJSON(), seq: seq, rebroadcast: window.isOwner });
+    }
   }
 
   useEffect(() => {
     // Set up action cable subscriber once layer is created
     if (!!layer) {
-      setupSubscription(layer);
+      setLayerChannel(setupSubscription(layer));
     }
   }, [layer]);
 
@@ -202,4 +204,4 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
   };
 
   return null;
-};
+}
