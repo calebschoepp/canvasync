@@ -1,12 +1,33 @@
-<header class="w-full bg-neutral-50 drop-shadow-md p-4 flex sticky top-0 z-50">
-  <div class="grow">
+<header class="flex flew-row justify-between items-center w-full bg-neutral-50 drop-shadow-md p-4 flex sticky top-0 z-50">
+  <div>
     <%= link_to '/' do %>
-<!--      TODO: Make this a logo image asset-->
-      <h1 class='font-bold text-xl text-gray-800'>Canvasync</h1>
+      <%= image_tag("logo.svg", class: 'inline-block max-h-8 mr-2', alt: 'Canvasync Logo') %>
     <% end %>
   </div>
 
   <% if user_signed_in? %>
-    <%= link_to "Sign Out", destroy_user_session_path, data: { "turbo-method": :delete } %>
+    <div class="flex flex-row items-center">
+      <div data-controller="dropdown" class="relative">
+        <button class="flex flex-row items-center" type="button" data-action="dropdown#toggle click@window->dropdown#hide">
+          <span class="mr-2 font-light"><%= current_user.email %></span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </button>
+
+        <div
+          data-dropdown-target="menu"
+          class="hidden transition transform origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+          data-transition-enter-from="opacity-0 scale-95"
+          data-transition-enter-to="opacity-100 scale-100"
+          data-transition-leave-from="opacity-100 scale-100"
+          data-transition-leave-to="opacity-0 scale-95"
+        >
+          <div class="py-1">
+            <%= link_to "Sign Out", destroy_user_session_path, data: { "turbo-method": :delete, action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
+          </div>
+        </div>
+      </div>
+    </div>
   <% end %>
 </header>
