@@ -28,8 +28,6 @@
 
 <div id="joined-notebooks" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4">
   <% @joined_notebooks.each do |notebook| %>
-    <%= link_to notebook do %>
-      <%= render notebook %>
-    <% end %>
+    <%= render notebook %>
   <% end %>
 </div>
