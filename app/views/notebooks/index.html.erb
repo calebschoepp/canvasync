@@ -1,6 +1,6 @@
 <div class='flex flex-row items-center justify-between'>
   <h1 class="heading-1">Your Notebooks</h1>
-  <%= link_to "Create a notebook", new_notebook_path, class: "primary-button" %>
+  <%= link_to "Create a Notebook", new_notebook_path, class: "primary-button" %>
 </div>
 
 <% if @owned_notebooks.empty? %>
@@ -18,9 +18,9 @@
 
 <div class="flex flex-row items-center justify-between">
   <h1 class="heading-1">Joined Notebooks</h1>
-  <div class='flex flex-row items-center justify-between'>
-    <input autofocus="autofocus" autocomplete="text" class="text-field inline-block mr-2 w-32" type="text" value="">
-    <%= link_to "Join a notebook", new_notebook_path, class: "primary-button whitespace-nowrap" %>
+  <div data-controller="join" class='flex flex-row items-center justify-between'>
+    <input data-join-target="id" autofocus="autofocus" autocomplete="text" class="text-field inline-block mr-2 w-32" type="text" value="">
+    <button data-action="click->join#preview" class='primary-button whitespace-nowrap'>Join a Notebook</button>
   </div>
 </div>
 
