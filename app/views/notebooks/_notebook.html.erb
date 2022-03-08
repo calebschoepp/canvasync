@@ -1,9 +1,7 @@
 <!--TODO: Render as a square card-->
 <div id="<%= dom_id notebook %>" class="card">
   <div class='flex flex-row items-center justify-between'>
-    <p class="heading-3 overflow-hidden">
-      <%= notebook.name %>
-    </p>
+    <%= link_to notebook.name, notebook, class: 'heading-3 overflow-hidden' %>
     <div data-controller="dropdown" class="relative">
       <div class="flex">
         <button class='' type="button" data-action="dropdown#toggle click@window->dropdown#hide">
