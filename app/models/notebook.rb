@@ -2,9 +2,9 @@ class Notebook < ApplicationRecord
   # TODO: Handle delete cascading
   # TODO: Include PDF uploads
   # TODO: Validate that user_id notebook_id combo is unique?
-  has_many :user_notebooks
+  has_many :user_notebooks, dependent: :destroy
   has_many :users, through: :user_notebooks
-  has_many :pages
+  has_many :pages, dependent: :destroy
   validates :name, presence: true, length: { maximum: 100 }
 
   def owner?(user)
