@@ -73,7 +73,7 @@ class NotebooksController < ApplicationController
     authorize @notebook
     respond_to do |format|
       if @notebook.update(notebook_params)
-        format.html { redirect_to notebook_url(@notebook), notice: 'Notebook was successfully updated.' }
+        format.html { redirect_to notebooks_url, notice: 'Notebook was successfully updated.' }
         format.json { render :show, status: :ok, location: @notebook }
       else
         format.html { render :edit, status: :unprocessable_entity }
