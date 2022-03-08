@@ -2,7 +2,10 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from "./application";
 
-import JoinController from "./join_controller.js"
-application.register("join", JoinController)
+import JoinController from "./join_controller.js";
+application.register("join", JoinController);
+
+import Dropdown from "stimulus-dropdown";
+application.register("dropdown", Dropdown);
