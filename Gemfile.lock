@@ -94,6 +94,11 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    active_storage_validations (0.9.6)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
@@ -316,6 +321,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_storage_validations
   bootsnap
   brakeman
   bundler-audit

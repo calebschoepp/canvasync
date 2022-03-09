@@ -1,7 +1,8 @@
 <%= form_with(model: notebook) do |form| %>
   <% if notebook.errors.any? %>
     <div class="alert">
-      <h2 class="font-bold"><%= pluralize(notebook.errors.count, "error") %> prohibited this notebook from being saved:</h2>
+      <h2 class="font-bold"><%= pluralize(notebook.errors.count, "error") %> prohibited this notebook from being
+        saved:</h2>
 
       <ul class="list-disc list-inside">
         <% notebook.errors.each do |error| %>
@@ -15,6 +16,13 @@
     <%= form.label :name, class: 'label' %>
     <%= form.text_field :name, class: 'text-field' %>
   </div>
+
+  <% unless notebook.persisted? %>
+    <div class="mb-8">
+      <%= form.label :background, class: 'label' %>
+      <%= form.file_field :background, class: 'file-input' %>
+    </div>
+  <% end %>
 
   <div class="flex">
     <%= form.submit class: 'primary-button mr-2' %>

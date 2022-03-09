@@ -125,6 +125,6 @@ class NotebooksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def notebook_params
-    params.require(:notebook).permit(:name)
+    params.require(:notebook).permit(:name, :background)
   end
 end
