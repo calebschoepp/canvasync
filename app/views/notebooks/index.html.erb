@@ -1,23 +1,33 @@
-<h1 class="heading-1">Your Notebooks</h1>
+<div class='flex flex-row items-center justify-between'>
+  <h1 class="heading-1">Your Notebooks</h1>
+  <%= link_to "Create a Notebook", new_notebook_path, class: "primary-button" %>
+</div>
 
-<div id="notebooks" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-4">
+<% if @owned_notebooks.empty? %>
+  <div>You don't have any of your own notebooks yet. Create one to get started.</div>
+<% end %>
+
+<div id="owned-notebooks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
   <% @owned_notebooks.each do |notebook| %>
-    <%= link_to notebook do %>
-      <%= render notebook %>
-    <% end %>
+    <%= render notebook %>
   <% end %>
 </div>
 
-<%= link_to "Create a notebook", new_notebook_path, class: "primary-button" %>
 
-<h1 class="heading-1">Joined Notebooks</h1>
+<div class="flex flex-row items-center justify-between">
+  <h1 class="heading-1">Joined Notebooks</h1>
+  <div data-controller="join" class='flex flex-row items-center justify-between'>
+    <input data-join-target="id" autofocus="autofocus" autocomplete="text" class="text-field inline-block mr-2 w-32" type="text" value="" placeholder="Notebook ID">
+    <button data-action="click->join#preview" class='primary-button whitespace-nowrap'>Join a Notebook</button>
+  </div>
+</div>
 
-<div id="notebooks" class="flex flex-col space-y-4 mb-4">
+<% if @joined_notebooks.empty? %>
+  <div>You haven't joined any notebooks yet. Enter a notebook code to join it and get started.</div>
+<% end %>
+
+<div id="joined-notebooks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
   <% @joined_notebooks.each do |notebook| %>
-    <%= link_to notebook do %>
-      <%= render notebook %>
-    <% end %>
+    <%= render notebook %>
   <% end %>
 </div>
-
-<%= link_to "Join a notebook", new_notebook_path, class: "primary-button" %>

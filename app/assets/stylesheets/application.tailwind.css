@@ -20,6 +20,10 @@
         @apply text-2xl font-medium
     }
 
+    .heading-3 {
+        @apply text-xl font-medium
+    }
+
     .button {
         @apply rounded-lg drop-shadow-md font-bold hover:cursor-pointer transition-colors px-4 py-2 text-center
     }

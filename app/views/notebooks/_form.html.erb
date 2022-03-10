@@ -16,7 +16,8 @@
     <%= form.text_field :name, class: 'text-field' %>
   </div>
 
-  <div>
-    <%= form.submit class: 'primary-button' %>
+  <div class="flex">
+    <%= form.submit class: 'primary-button mr-2' %>
+    <%= link_to "Back", notebooks_path, class: 'secondary-button' %>
   </div>
 <% end %>
