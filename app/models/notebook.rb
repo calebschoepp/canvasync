@@ -6,6 +6,7 @@ class Notebook < ApplicationRecord
   has_many :user_notebooks, dependent: :destroy
   has_many :users, through: :user_notebooks
   has_many :pages, dependent: :destroy
+  has_many :exports, dependent: :destroy
   has_one_attached :background, dependent: :purge_later
   validates :name, presence: true, length: { maximum: 100 }
   validates :background, attached: true, content_type: ALLOWED_FILE_TYPES, size: FILE_SIZE_SETTINGS
@@ -22,5 +23,10 @@ class Notebook < ApplicationRecord
     return false unless user_notebook
 
     !user_notebook.is_owner
+  end
+
+  def owner
+    user_notebook = user_notebooks.find_by(is_owner: true)
+    user_notebook.user
   end
 end

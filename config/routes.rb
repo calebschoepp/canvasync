@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
+  # Resources
   resources :notebooks, except: :destroy do
     member do
       get 'preview'
       post 'join'
     end
+    resources :exports, shallow: true, only: %i[index create destroy]
   end
 
-  # TODO: Login, signup pages aren't rendering errors
+  # Authentication
   devise_for :users
   devise_scope :user do
     authenticated :user do

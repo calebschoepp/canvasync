@@ -1,0 +1,39 @@
+<div id="<%= dom_id export %>" class='card'>
+  <div class='flex flex-row items-center justify-between'>
+    <div class='flex flex-row items-center justify-start'>
+      <span class='heading-3 mr-4'>Export as of <%= time_ago_in_words(export.updated_at) %> ago</span>
+      <% if export.ready && export.current %>
+        <span class='pill bg-green-500'>Ready</span>
+      <% elsif export.ready && !export.current %>
+        <span class='pill bg-neutral-500'>Out of Date</span>
+      <% else %>
+        <span class='pill bg-red-500'>Exporting</span>
+      <% end %>
+    </div>
+    <div data-controller="dropdown" class="relative flex-none">
+      <div class="flex">
+        <button class='' type="button" data-action="dropdown#toggle click@window->dropdown#hide">
+          <%= image_tag('3-dots.png', class: 'w-5 h-5 my-auto') %>
+        </button>
+      </div>
+
+<!--      TODO: Make this popup show in front of other cards-->
+      <div
+        data-dropdown-target="menu"
+        class="hidden transition transform origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+        data-transition-enter-from="opacity-0 scale-95"
+        data-transition-enter-to="opacity-100 scale-100"
+        data-transition-leave-from="opacity-100 scale-100"
+        data-transition-leave-to="opacity-0 scale-95"
+      >
+        <div class="py-1">
+          <% if export.ready %>
+            <%= link_to 'Preview', rails_blob_path(export.document.blob, disposition: 'preview'), data: { action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
+            <%= link_to 'Download', rails_blob_path(export.document.blob, disposition: 'attachment'), data: { action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
+          <% end %>
+          <%= link_to "Delete", export_path(export), data: { "turbo-method": :delete, action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

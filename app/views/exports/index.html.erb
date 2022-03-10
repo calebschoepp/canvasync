@@ -1,0 +1,30 @@
+
+<div class='flex flex-row items-center justify-between'>
+  <h1 class='heading-1'>Your exports of <%= @notebook.name %></h1>
+  <%= form_with(model: [@notebook, @export]) do |form| %>
+    <% if @export.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(export.errors.count, "error") %> prohibited this export from being saved:</h2>
+
+        <ul>
+          <% export.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :notebook_id, value: @notebook.id %>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    <div>
+      <%= form.submit 'Export Notebook', class: 'primary-button' %>
+    </div>
+  <% end %>
+</div>
+
+<div id="exports" class='flex flex-col gap-4'>
+  <% @exports.each_with_index do |export, i| %>
+    <%= render export, i: i %>
+  <% end %>
+</div>

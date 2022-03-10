@@ -1,5 +1,4 @@
 class NotebooksController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_notebook, only: %i[show edit update destroy preview join]
 
   # GET /notebooks or /notebooks.json
