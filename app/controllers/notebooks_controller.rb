@@ -36,10 +36,8 @@ class NotebooksController < ApplicationController
     authorize @notebook
     if @notebook.owner?(current_user)
       redirect_to notebooks_url, flash: { alert: 'You are already an owner of this notebook' }
-      return
     elsif @notebook.participant?(current_user)
       redirect_to notebooks_url, flash: { alert: 'You are already a participant of this notebook' }
-      return
     end
   end
 
@@ -58,7 +56,7 @@ class NotebooksController < ApplicationController
     File.open(params[:notebook][:background].tempfile, 'r') do |f|
       f.binmode
       r = PDF::Reader.new f
-      r.pages.each_with_index do |pdf_page, i|
+      r.pages.each_with_index do |_pdf_page, i|
         page = Page.new(number: i + 1, notebook: @notebook)
         page.layers << Layer.new(page: page, writer: user_notebook)
         @notebook.pages << page
