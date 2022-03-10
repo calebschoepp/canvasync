@@ -33,8 +33,14 @@ class NotebooksController < ApplicationController
 
   # GET /notebooks/1/preview
   def preview
-    # TODO: Show user if they own this notebook or if they have already joined it
     authorize @notebook
+    if @notebook.owner?(current_user)
+      redirect_to notebooks_url, flash: { alert: 'You are already an owner of this notebook' }
+      return
+    elsif @notebook.participant?(current_user)
+      redirect_to notebooks_url, flash: { alert: 'You are already a participant of this notebook' }
+      return
+    end
   end
 
   # POST /notebooks or /notebooks.json
