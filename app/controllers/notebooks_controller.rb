@@ -39,7 +39,6 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
-    # TODO: This will be a bit slow so maybe it should be moved to a background job
     @notebook = Notebook.new(notebook_params)
 
     # Setup user_notebook
@@ -50,10 +49,15 @@ class NotebooksController < ApplicationController
     @notebook.user_notebooks << user_notebook
 
     # Setup page(s) and owner layer(s)
-    # TODO: Dynamically build multiple pages and layers based on notebook PDF
-    page = Page.new(number: 1, notebook: @notebook)
-    page.layers << Layer.new(page: page, writer: user_notebook)
-    @notebook.pages << page
+    File.open(params[:notebook][:background].tempfile, 'r') do |f|
+      f.binmode
+      r = PDF::Reader.new f
+      r.pages.each_with_index do |pdf_page, i|
+        page = Page.new(number: i + 1, notebook: @notebook)
+        page.layers << Layer.new(page: page, writer: user_notebook)
+        @notebook.pages << page
+      end
+    end
 
     authorize @notebook
 
@@ -102,9 +106,9 @@ class NotebooksController < ApplicationController
     @notebook.user_notebooks << user_notebook
 
     # Setup layer(s) for participant
-    # TODO: Dynamically build multiple layers based on notebook PDF
-    page = @notebook.pages.first
-    page.layers << Layer.new(page: page, writer: user_notebook)
+    @notebook.pages.each do |page|
+      page.layers << Layer.new(page: page, writer: user_notebook)
+    end
     respond_to do |format|
       if @notebook.save
         format.html { redirect_to notebook_url(@notebook), notice: "You've joined #{@notebook.name}." }
