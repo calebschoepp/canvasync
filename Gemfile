@@ -66,6 +66,12 @@ gem 'pundit'
 # Access Redis for job queuing and Action Cable
 gem 'redis'
 
+# Validate attachements
+gem 'active_storage_validations'
+
+# Read PDFs
+gem 'pdf-reader'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
