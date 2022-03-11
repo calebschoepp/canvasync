@@ -1,5 +1,6 @@
 <div>
   <%= javascript_tag do %>
+    window.notebookId = "<%= @notebook.id %>";
     window.notebookName = "<%= @notebook.name %>";
     window.isOwner = <%= @notebook.owner?(current_user) %>;
     window.ownerLayers = <%= @owner_layers.to_json.html_safe %>
