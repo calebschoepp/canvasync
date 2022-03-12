@@ -4,8 +4,8 @@ class PageChannel < ApplicationCable::Channel
     stream_from "page_channel_#{params[:notebook_id]}"
   end
 
-  def receive(data)
-    unless page = persist_page(data)
+  def receive(_data)
+    unless (page = persist_page)
       # TODO: Handle scenario where save fails
       puts "\n\n\nFailed to save page\n\n\n"
     end
@@ -18,15 +18,14 @@ class PageChannel < ApplicationCable::Channel
 
   private
 
-  def persist_page(data)
-
+  def persist_page
     @notebook = Notebook.find(params[:notebook_id].to_i)
-    page_number = Page.page.where(notebook_id: params[:notebook_id]).max_by {|page| page.number}.number + 1
+    page_number = Page.page.where(notebook_id: params[:notebook_id]).max_by(&:number).number + 1
     page = Page.new(number: page_number, notebook: @notebook)
     user_notebooks = UserNotebook.where(notebook: @notebook)
-    user_notebooks.each {
-      |user_notebook| page.layers << Layer.new(page: page, writer_id: user_notebook.user_id)
-    }
+    user_notebooks.each do |user_notebook|
+      page.layers << Layer.new(page: page, writer_id: user_notebook.user_id)
+    end
     @notebook.pages << page
     page
   end
