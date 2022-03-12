@@ -16,8 +16,8 @@ class NotebooksController < ApplicationController
   def show
     authorize @notebook
     # TODO: Support multiple pages
-    @owner_layers = @notebook.pages.first.layers.filter { |l| l.writer.is_owner }
-    @participant_layers = @notebook.pages.first.layers.filter { |l| l.writer.id == current_user.id && !l.writer.is_owner }
+    @owner_layers = @notebook.pages.map { |page| page.layers }.flatten.filter { |l| l.writer.is_owner}
+    @participant_layers = @notebook.pages.map { |page| page.layers }.flatten.filter { |l| l.writer.id == current_user.id && !l.writer.is_owner }
   end
 
   # GET /notebooks/new

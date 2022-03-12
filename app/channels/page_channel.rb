@@ -5,11 +5,11 @@ class PageChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    unless persist_page(data)
+    unless page = persist_page(data)
       # TODO: Handle scenario where save fails
-      puts "\n\n\nFailed to save diff\n\n\n"
+      puts "\n\n\nFailed to save page\n\n\n"
     end
-    ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", data)
+    ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", page.layers)
   end
 
   def unsubscribed
@@ -23,9 +23,11 @@ class PageChannel < ApplicationCable::Channel
     @notebook = Notebook.find(params[:notebook_id].to_i)
     page_number = Page.page.where(notebook_id: params[:notebook_id]).max_by {|page| page.number}.number + 1
     page = Page.new(number: page_number, notebook: @notebook)
-    # page.notebook_id = params[:notebook_id].to_i
-    # page.number = Page.page.where(notebook_id: params[:notebook_id]).max_by {|page| page.number}.number + 1
-    puts page.number
-    page.save
+    user_notebooks = UserNotebook.where(notebook: @notebook)
+    user_notebooks.each {
+      |user_notebook| page.layers << Layer.new(page: page, writer_id: user_notebook.user_id)
+    }
+    @notebook.pages << page
+    page
   end
 end

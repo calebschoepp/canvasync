@@ -10,7 +10,7 @@ export const CanvasTools = {
 }
 
 export function Notebook() {
-  const [numPages, setNumPages] = useState(1);
+  const [numPages, setNumPages] = useState(Math.max(window.participantLayers.length, window.ownerLayers.length));
   const [activeTool, setActiveTool] = useState(CanvasTools.pen);
   const [activeColor, setActiveColor] = useState('#000000');
   const [pageChannel, setPageChannel] = useState(null);
@@ -29,7 +29,11 @@ export function Notebook() {
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        console.log(data);
+        window.ownerLayers.push(data.find(layer => layer.writer_id === window.ownerId));
+        if (!window.isOwner) {
+          window.participantLayers.push(data.find(layer => layer.writer_id === window.currentUser));
+        }
+        setNumPages(Math.max(window.participantLayers.length, window.ownerLayers.length));
       }
     });
   };
@@ -42,7 +46,7 @@ export function Notebook() {
 
   useEffect(() => {
     // Set up action cable subscriber once layer is created
-    setPageChannel(setupSubscription(1));
+    setPageChannel(setupSubscription(window.notebookId));
   }, []);
 
   const canvasToolCallback = useCallback((event) =>
@@ -53,7 +57,6 @@ export function Notebook() {
   );
   const addPageCallback = useCallback(() => {
     transmitNewPage(window.notebookId);
-    setNumPages(prevNumPages => prevNumPages+1);
   });
 
   const pages = [];
