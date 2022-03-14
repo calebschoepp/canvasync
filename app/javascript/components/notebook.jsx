@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import consumer from '../channels/consumer';
 import { Page } from './page';
 
 export const CanvasTools = {
@@ -9,9 +10,44 @@ export const CanvasTools = {
 }
 
 export function Notebook() {
-  const [numPages, setNumPages] = useState(1);
+  const [numPages, setNumPages] = useState(Math.max(window.participantLayers.length, window.ownerLayers.length));
   const [activeTool, setActiveTool] = useState(CanvasTools.pen);
   const [activeColor, setActiveColor] = useState('#000000');
+  const [pageChannel, setPageChannel] = useState(null);
+
+  const setupSubscription = () => {
+    const notebookId = window.notebookId;
+    return consumer.subscriptions.create({ channel: 'PageChannel', notebook_id: notebookId }, {
+      connected() {
+        // Called when the subscription is ready for use on the server
+        console.log(`Connected to page_channel_${notebookId} ...`);
+      },
+
+      disconnected() {
+        // Called when the subscription has been terminated by the server
+      },
+
+      received(data) {
+        // Called when there's incoming data on the websocket for this channel
+        window.ownerLayers.push(data.find(layer => layer.writer_id === window.ownerId));
+        if (!window.isOwner) {
+          window.participantLayers.push(data.find(layer => layer.writer_id === window.currentUser));
+        }
+        setNumPages(Math.max(window.participantLayers.length, window.ownerLayers.length));
+      }
+    });
+  };
+
+  const transmitNewPage = (notebookId) => {
+    if (pageChannel !== null) {
+      pageChannel.send({ notebookId: notebookId });
+    }
+  };
+
+  useEffect(() => {
+    // Set up action cable subscriber once layer is created
+    setPageChannel(setupSubscription(window.notebookId));
+  }, []);
 
   const canvasToolCallback = useCallback((event) =>
     setActiveTool(event.target.innerText)
@@ -20,7 +56,7 @@ export function Notebook() {
     setActiveColor(event.target.value)
   );
   const addPageCallback = useCallback(() => {
-    setNumPages(prevNumPages => prevNumPages+1);
+    transmitNewPage(window.notebookId);
   });
 
   const pages = [];

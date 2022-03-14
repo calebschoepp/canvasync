@@ -49,6 +49,10 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
 
   useEffect(() => {
     paperHandler();
+  }, [layerChannel]);
+
+  useEffect(() => {
+    paperHandler();
   }, [scope]);
 
   useEffect(() => {
