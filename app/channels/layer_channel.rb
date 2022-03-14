@@ -3,6 +3,10 @@ class LayerChannel < ApplicationCable::Channel
   # TODO: receive diffs from participant and store them in db
   def subscribed
     stream_from "layer_channel_#{params[:layer_id]}"
+
+    # Send existing diffs for the layer
+    ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}",
+                                 Diff.where(layer_id: params[:layer_id]).order(:seq).pluck(:seq, :visible, :data))
   end
 
   def receive(data)
