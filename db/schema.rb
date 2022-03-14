@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_220_314_001_732) do
+ActiveRecord::Schema[7.1].define(version: 20_220_310_153_625) do
   create_table 'active_storage_attachments', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -41,12 +41,12 @@ ActiveRecord::Schema[7.1].define(version: 20_220_314_001_732) do
 
   create_table 'diffs', force: :cascade do |t|
     t.integer 'layer_id', null: false
-    t.integer 'seq'
-    t.json 'data', default: '""{}""', null: false
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
+    t.integer 'seq', null: false
+    t.json 'data', default: '{}', null: false
     t.boolean 'visible', default: true, null: false
     t.string 'type', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
     t.index ['layer_id'], name: 'index_diffs_on_layer_id'
   end
 
