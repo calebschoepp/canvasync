@@ -12,10 +12,15 @@ class LayerChannel < ApplicationCable::Channel
   def receive(data)
     unless persist_diff(data)
       # TODO: Handle scenario where save fails
-      puts "\n\n\nFailed to save diff\n\n\n"
+      puts 'Failed to save diff!'
     end
-    rebroadcast = data['rebroadcast']
-    ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", data) if rebroadcast
+    puts 'Successfully saved diff!'
+    # TODO: refactor so 'Eraser' is not hardcoded
+    if data['type'].eql?('Eraser')
+      Diff.where(seq: data['data']).map(&diff.update_attribute(visible: false))
+      # TODO: rebroadcast if owner layer
+      ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", data)
+    end
   end
 
   def unsubscribed
@@ -24,17 +29,24 @@ class LayerChannel < ApplicationCable::Channel
 
   private
 
-  def persist_diff(data)
-    client_diff = data['diff']
-    return false if client_diff.nil?
+  def persist_diff(diff)
+    puts diff
 
-    seq = data['seq']
-    return false if seq.nil?
+    diff_type = diff['type']
+    diff_seq = diff['seq']
+    diff_data = diff['data']
+    return false if diff_type.nil? || diff_seq.nil? || diff_data.nil?
 
     diff = Diff.new
-    diff.data = client_diff
-    diff.seq = seq
+    diff.type = diff_type
+    diff.seq = diff_seq
+    diff.data = diff_data
+    diff.visible = diff_type.eql?('Pen') || diff_type.eql?('Text')
     diff.layer_id = params[:layer_id]
-    diff.save
+    diff.save!
+  rescue StandardError => e
+    # TODO: Improve logging
+    puts "Failed to save diff!\n#{e.inspect}"
+    false
   end
 end
