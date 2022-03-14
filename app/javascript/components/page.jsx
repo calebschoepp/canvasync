@@ -19,7 +19,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     owner = new Paper.Layer();
     scope.project.addLayer(owner);
 
-    // only create participant layer if user is a participant of notebook
+    // Only create participant layer if user is a participant of notebook
     if (!window.isOwner) {
       participant = new Paper.Layer();
       scope.project.addLayer(participant);
