@@ -46,7 +46,7 @@ ActiveRecord::Schema[7.1].define(version: 20_220_314_231_310) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.string 'diff_type', null: false
-    t.boolean 'visible', default: true, null: false
+    t.boolean 'visible'
     t.index ['layer_id'], name: 'index_diffs_on_layer_id'
   end
 
