@@ -5,15 +5,25 @@ import consumer from '../channels/consumer';
 
 // TODO: build in error handling with lost diffs
 // TODO: make font size, line width, etc. variables
+// TODO: only expose paperHandler on pariticipant layer
 
-export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor }) {
-  let seq = 0;
+const DiffTypes = {
+  text: 'text',
+  pen: 'pen',
+  remove: 'remove',
+  move: 'move'
+}
 
+export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
+  // Sequence number of next diff that is drawn or to accept
+  let seq = useRef(0);
+
+  // Other layer state
   const pathRef = useRef(null);
   const [pathState, setPathState] = useState([]);
   const [layerChannel, setLayerChannel] = useState(null);
 
-  const setupSubscription = (newLayer) => {
+  const setupSubscription = () => {
     return consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
       connected() {
         // Called when the subscription is ready for use on the server
@@ -26,54 +36,53 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        const processDiff = (diff) => {
-          let [diffSeq, diffVisible, diffData] = diff;
-          // Process an incoming diff
-          if (diffSeq < seq) {
-            // TODO: handle diff out of order
-            console.log(`Diff seq number too small... ${diff}`);
-          } else if (diffSeq > seq) {
-            // TODO: handle diff out of order
-            console.log(`Diff seq number too large... ${diff}`);
-          } else {
-            if (diffVisible) {
-              console.log(`Loading diff... ${diff}`)
-              newLayer.importJSON(diffData);
-            }
-            seq += 1;
-          }
-        };
+        console.log(`Receiving diff(s) on layer_channel_${layerId}...`);
 
         if (Array.isArray(data)) {
-          // Process array of incoming diffs
-          data.forEach(diff => processDiff(diff));
+          // Process array of incoming diffs (when we load existing diffs)
+          data.forEach(diff => processIncomingDiff(diff));
         } else {
           // Process single incoming diff
-          processDiff(data);
+          processIncomingDiff(data);
         }
       }
     });
   }
 
-  const transmitDiff = (tool, diff) => {
+  const processIncomingDiff = (diff) => {
+    // Process an incoming diff
+    let [diffType, diffSeq, diffData, diffVisible] = diff;
+    if (diffSeq === seq.current) {
+      console.log(`Processing diff with seq ${seq.current}`);
+      if (diffVisible) {
+        layer.importJSON(diffData);
+        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
+      }
+      seq.current++;
+    } else {
+      console.log(`Expected diff with seq of ${seq.current} but got ${diffSeq}`);
+    }
+  };
+
+  const transmitDiff = (effect, diff) => {
     if (!layerChannel) {
       return;
     }
 
-    console.log(diff.exportJSON());
-
-    // TODO: Refactor to handle select
-    if (tool === CanvasTools.pen || tool === CanvasTools.text) {
-      layerChannel.send({type: tool, seq: seq++, data: diff.exportJSON()});
-    } else if (tool === CanvasTools.eraser) {
-      layerChannel.send({type: tool, seq: seq++, data: diff});
+    console.log(`Transmitting ${effect} diff with seq ${seq.current}...`);
+    if (effect === DiffTypes.pen || effect === DiffTypes.text) {
+      layerChannel.send({diff_type: effect, seq: seq.current++, data: diff.exportJSON(), visible: true});
+    } else if (effect === DiffTypes.remove || effect === DiffTypes.move) {
+      layerChannel.send({diff_type: effect, seq: seq.current++, data: diff});
+    } else {
+      console.log(`Invalid effect: ${effect}`);
     }
   }
 
   useEffect(() => {
     // Set up action cable subscriber once layer is created
-    if (!layer) {
-      setLayerChannel(setupSubscription(layer));
+    if (!!layer) {
+      setLayerChannel(setupSubscription());
     }
   }, [layer]);
 
@@ -86,16 +95,16 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
   }, [scope]);
 
   useEffect(() => {
-    if (!!pathRef.current) {
+    if (!pathRef.current) {
       return;
     }
 
     // Update pathState
-    setPathState(oldPaths => [...oldPaths, {seq: seq, data: pathRef.current}]);
+    setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
 
     // Transmit text diff
     if (pathRef.current instanceof Paper.PointText) {
-      transmitDiff(CanvasTools.text, activeTool.current);
+      transmitDiff(CanvasTools.text, pathRef.current);
       pathRef.current.fullySelected = false;
     }
   }, [activeTool, activeColor]);
@@ -119,8 +128,8 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
       scope.activate();
 
       // Transmit text diff
-      if (!!pathRef && pathRef.current instanceof Paper.PointText) {
-        transmitDiff(CanvasTools.text, activeTool.current);
+      if (!!pathRef.current && pathRef.current instanceof Paper.PointText) {
+        transmitDiff(CanvasTools.text, pathRef.current);
         pathRef.current.fullySelected = false;
       }
 
@@ -141,7 +150,6 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
           path = new Paper.Path.Rectangle(rect);
         }
       } else if (activeTool === CanvasTools.text) {
-        console.log(scope.project.layers);
         scope.project.deselectAll();
         const point = new Paper.Point(event.point.x, event.point.y);
         pathRef.current = new Paper.PointText({
@@ -186,7 +194,7 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
     scope.view.onMouseUp = () => {
       if (activeTool === CanvasTools.pen) {
         pathRef.current.simplify(10);
-        setPathState(oldPaths => [...oldPaths, {seq: seq, data: pathRef.current}]);
+        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
         transmitDiff(CanvasTools.pen, pathRef.current);
         pathRef.current = null;
       } else if (activeTool === CanvasTools.eraser) {
@@ -251,7 +259,7 @@ export function Layer({ scope, layer, isOwner, layerId, activeTool, activeColor 
         // TODO
         setPathState(newPathState);
       } else if (event.key === 'escape' || event.key === 'enter') {
-        setPathState(oldPaths => [...oldPaths, {seq: seq, data: pathRef.current}]);
+        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
         transmitDiff(CanvasTools.text, pathRef.current);
         pathRef.current.fullySelected = false;
         pathRef.current = null;
