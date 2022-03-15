@@ -35,10 +35,12 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
       received(data) {
         // Called when there's incoming data on the websocket for this channel
         console.log(`Receiving diff(s) on layer_channel_${layerId}...`);
+        console.log(data);
 
         if (Array.isArray(data)) {
           // Process array of incoming diffs (when we load existing diffs)
-          data.forEach(diff => processIncomingDiff(diff));
+          // TODO: optimize to not process incoming remove and translate diffs?
+          data.forEach((diff) => processIncomingDiff(diff));
         } else {
           // Process single incoming diff
           processIncomingDiff(data);
@@ -49,16 +51,44 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
 
   const processIncomingDiff = (diff) => {
     // Process an incoming diff
-    let [diffType, diffSeq, diffData, diffVisible] = diff;
-    if (diffSeq === seq.current) {
-      console.log(`Processing diff with seq ${seq.current}`);
-      if (diffVisible) {
-        layer.importJSON(diffData);
+    const diffType = diff['diff_type'];
+    const diffSeq = diff['seq'];
+
+    if (diffSeq !== seq.current) {
+      console.log(`Out of order diff (expected seq = ${seq.current} but got seq = ${diffSeq})`);
+      return;
+    }
+    console.log(`Processing ${diffType} diff...`);
+
+    if (diffType === DiffType.Tangible) {
+      if (diff['visible']) {
+        layer.importJSON(diff['data']);
         setTangibleSeqs(existingSeqs => [...existingSeqs, seq.current]);
+        seq.current++;
+        console.log(`Tangible diff successfully applied`);
       }
-      seq.current++;
-    } else {
-      console.log(`Expected diff with seq of ${seq.current} but got ${diffSeq}`);
+    } else if (diffType === DiffType.Remove) {
+      const removedDiffs = diff['data']['removed_diffs'];
+      const removedItemIndices = [];
+      removedDiffs.forEach((removedSeq) => {
+        let i = tangibleSeqs.findIndex((seq) => removedSeq === seq);
+        // If removed items are drawn then remove them (layer.children has same order as tangibleSeqs)
+        if (i >= 0) {
+          removedItemIndices.push(i);
+        }
+      });
+      removeItems(removedItemIndices);
+    } else if (diffType === DiffType.Translate) {
+      const translatedDiffs = diff['data']['translated_diffs'];
+      translatedDiffs.forEach((diff) => {
+        let i = tangibleSeqs.findIndex((seq) => diff['seq'] === seq);
+        // If translated items are drawn then translate them (layer.children has same order as tangibleSeqs)
+        if (i >= 0) {
+          // TODO: replace data of layer.children[i] with diff['data']
+          console.log(layer.children[i]);
+          // layer.children.splice(removedItemIndex, 1);
+        }
+      });
     }
   };
 
@@ -66,8 +96,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     if (!layerChannel) {
       return;
     }
-
-    console.log(`Transmitting ${effect} diff with seq ${seq.current}...`);
+    console.log(`Transmitting ${diffType} diff with seq ${seq.current}...`);
     if (diffType === DiffType.Tangible) {
       // Store seq of tangible diff
       setTangibleSeqs(existingSeqs => [...existingSeqs, seq.current]);
@@ -91,8 +120,8 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
       // layer.children until next reload)
       const translatedDiffs = [];
       data.forEach((ind) => translatedDiffs.push({
-        seq: tangibleSeqs[ind],
-        data: layer.children[ind].exportJSON()
+        'seq': tangibleSeqs[ind],
+        'data': layer.children[ind].exportJSON()
       }));
       layerChannel.send({
         diff_type: diffType,
@@ -100,7 +129,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         data: {'translated_diffs': translatedDiffs}
       });
     } else {
-      console.log(`Invalid effect: ${diffType}`);
+      console.log(`Invalid diff type of ${diffType}`);
     }
   }
 
@@ -135,35 +164,44 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
 
   const eraseIntersectedItems = (path) => {
     // Handles item removal via eraser or deletion
-    const removedItemIndices = [];
+    const itemIndicesToRemove = [];
     layer.children.forEach((item, i) => {
       // Get index of removed items (layer.children has same order as tangibleSeqs)
       if (path.id !== item.id && path.intersects(item)) {
-        item.visible = false;
-        removedItemIndices.push(i);
+        itemIndicesToRemove.push(i);
       }
     });
-    if (removedItemIndices.length > 0) {
-      transmitDiff(DiffType.Remove, removedItemIndices);
+    if (itemIndicesToRemove.length > 0) {
+      removeItems(itemIndicesToRemove);
+      transmitDiff(DiffType.Remove, itemIndicesToRemove);
     }
-    path.remove();
-    path = null;
   };
 
-  const deleteSelectedItems = (path) => {
-    const removedItemIndices = [];
+  const deleteSelectedItems = () => {
+    const itemIndicesToRemove = [];
     scope.project.selectedItems.forEach((selectedItem) => {
       let selectedItemIndex = layer.children.findIndex((item) => selectedItem.id === item.id);
       // Only remove items in current index
       if (selectedItemIndex >= 0) {
-        removedItemIndices.push(selectedItemIndex);
+        itemIndicesToRemove.push(selectedItemIndex);
       }
     });
-    if (removedItemIndices.length > 0) {
-      transmitDiff(DiffType.Remove, removedItemIndices);
+    if (itemIndicesToRemove.length > 0) {
+      removeItems(itemIndicesToRemove);
+      transmitDiff(DiffType.Remove, itemIndicesToRemove);
     }
-    path.remove();
-    path = null;
+  };
+
+  const removeItems = (removedItemIndices) => {
+    const newTangibleSeqs = [...tangibleSeqs];
+    removedItemIndices.forEach((i) => {
+      layer.children.splice(i, 1);
+      newTangibleSeqs.splice(i, 1);
+    });
+    // Update state if necessary
+    if (tangibleSeqs.length !== newTangibleSeqs.length) {
+      setTangibleSeqs(newTangibleSeqs);
+    }
   };
 
   const selectItemsInLasso = (path, rect) => {
@@ -175,8 +213,6 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         item.fullySelected = true;
       }
     });
-    path.remove();
-    path = null;
   }
 
   const translateSelectedItems = (delta) => {
@@ -278,9 +314,13 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         pathRef.current = null;
       } else if (activeTool === CanvasTools.eraser) {
         eraseIntersectedItems(path);
+        path.remove();
+        path = null;
       } else if (activeTool === CanvasTools.select) {
         if (scope.project.selectedItems.length === 0) {
           selectItemsInLasso(path, rect);
+          path.remove();
+          path = null;
         } else {
           translateSelectedItems(p2.subtract(p1));
         }
@@ -290,6 +330,8 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     scope.view.onKeyDown = (event) => {
       if (activeTool === CanvasTools.select && event.key === 'delete' && scope.project.selectedItems.length > 0) {
         deleteSelectedItems();
+        path.remove();
+        path = null;
       } else if (activeTool === CanvasTools.text) {
         if (event.key === 'escape' || event.key === 'enter') {
           transmitDiff(DiffType.Tangible, pathRef.current);

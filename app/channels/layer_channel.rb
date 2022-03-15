@@ -8,8 +8,12 @@ class LayerChannel < ApplicationCable::Channel
   def subscribed
     stream_from "layer_channel_#{params[:layer_id]}"
     # Send existing diffs for the layer
-    ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}",
-                                 Diff.where(layer_id: params[:layer_id]).order(:seq).pluck(:diff_type, :seq, :data, :visible))
+    existing_diffs = []
+    Diff.where(layer_id: params[:layer_id]).order(:seq).pluck(:diff_type, :seq, :data, :visible).each do |diff|
+      existing_diffs.push({ :diff_type => diff[0], :seq => diff[1], :data => diff[2], :visible => diff[3] })
+    end
+    puts existing_diffs
+    ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", existing_diffs.as_json)
   end
 
   def receive(data)
