@@ -40,7 +40,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     <div style={pageStyle}>
       <canvas ref={canvasRef} width='1017px' height='777px' style={canvasStyle} />
       <Layer
-        scope={paperScope}
+        scope={window.isOwner ? paperScope : undefined}
         layer={ownerLayer}
         isOwner={true}
         layerId={ownerLayerId}
