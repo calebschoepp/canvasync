@@ -5,13 +5,11 @@ import consumer from '../channels/consumer';
 
 // TODO: build in error handling with lost diffs
 // TODO: make font size, line width, etc. variables
-// TODO: only expose paperHandler on pariticipant layer
 
-const DiffTypes = {
-  text: 'text',
-  pen: 'pen',
-  remove: 'remove',
-  move: 'move'
+const DiffType = {
+  Tangible: 'tangible',
+  Remove: 'remove',
+  Translate: 'translate'
 }
 
 export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
@@ -20,7 +18,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
 
   // Other layer state
   const pathRef = useRef(null);
-  const [pathState, setPathState] = useState([]);
+  const [tangibleSeqs, setTangibleSeqs] = useState([]);
   const [layerChannel, setLayerChannel] = useState(null);
 
   const setupSubscription = () => {
@@ -56,7 +54,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
       console.log(`Processing diff with seq ${seq.current}`);
       if (diffVisible) {
         layer.importJSON(diffData);
-        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
+        setTangibleSeqs(existingSeqs => [...existingSeqs, seq.current]);
       }
       seq.current++;
     } else {
@@ -64,18 +62,45 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     }
   };
 
-  const transmitDiff = (effect, diff) => {
+  const transmitDiff = (diffType, data) => {
     if (!layerChannel) {
       return;
     }
 
     console.log(`Transmitting ${effect} diff with seq ${seq.current}...`);
-    if (effect === DiffTypes.pen || effect === DiffTypes.text) {
-      layerChannel.send({diff_type: effect, seq: seq.current++, data: diff.exportJSON(), visible: true});
-    } else if (effect === DiffTypes.remove || effect === DiffTypes.move) {
-      layerChannel.send({diff_type: effect, seq: seq.current++, data: diff});
+    if (diffType === DiffType.Tangible) {
+      // Store seq of tangible diff
+      setTangibleSeqs(existingSeqs => [...existingSeqs, seq.current]);
+      layerChannel.send({
+        diff_type: diffType,
+        seq: seq.current++,
+        data: data.exportJSON(),
+        visible: true
+      });
+    } else if (diffType === DiffType.Remove) {
+      // Get seqs of removed diffs (these diffs still persist in layer.children until next reload)
+      const removedDiffs = [];
+      data.forEach((ind) => removedDiffs.push(tangibleSeqs[ind]));
+      layerChannel.send({
+        diff_type: diffType,
+        seq: seq.current++,
+        data: {'removed_diffs': removedDiffs}
+      });
+    } else if (diffType === DiffType.Translate) {
+      // Get seqs of translated diffs and the updated item data (these diffs still persist in
+      // layer.children until next reload)
+      const translatedDiffs = [];
+      data.forEach((ind) => translatedDiffs.push({
+        seq: tangibleSeqs[ind],
+        data: layer.children[ind].exportJSON()
+      }));
+      layerChannel.send({
+        diff_type: diffType,
+        seq: seq.current++,
+        data: {'translated_diffs': translatedDiffs}
+      });
     } else {
-      console.log(`Invalid effect: ${effect}`);
+      console.log(`Invalid effect: ${diffType}`);
     }
   }
 
@@ -93,24 +118,82 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   }, [layerChannel]);
 
   useEffect(() => {
-    if (!pathRef.current) {
-      return;
-    }
-    // Update pathState
-    setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
-    // Transmit text diff
-    if (pathRef.current instanceof Paper.PointText) {
-      transmitDiff(CanvasTools.text, pathRef.current);
+    // Transmit text diff if clicking out of a focused text box to change tool or color
+    if (!!pathRef.current && pathRef.current instanceof Paper.PointText) {
+      transmitDiff(DiffType.Tangible, pathRef.current);
       pathRef.current.fullySelected = false;
     }
+    paperHandler();
   }, [activeTool, activeColor]);
 
-  useEffect(() => {
-    if (!!scope) {
-      pathRef.current = null;
-      paperHandler();
+  // useEffect(() => {
+  //   if (!!scope) {
+  //     pathRef.current = null;
+  //     paperHandler();
+  //   }
+  // }, [pathState.length]);
+
+  const eraseIntersectedItems = (path) => {
+    // Handles item removal via eraser or deletion
+    const removedItemIndices = [];
+    layer.children.forEach((item, i) => {
+      // Get index of removed items (layer.children has same order as tangibleSeqs)
+      if (path.id !== item.id && path.intersects(item)) {
+        item.visible = false;
+        removedItemIndices.push(i);
+      }
+    });
+    if (removedItemIndices.length > 0) {
+      transmitDiff(DiffType.Remove, removedItemIndices);
     }
-  }, [pathState.length]);
+    path.remove();
+    path = null;
+  };
+
+  const deleteSelectedItems = (path) => {
+    const removedItemIndices = [];
+    scope.project.selectedItems.forEach((selectedItem) => {
+      let selectedItemIndex = layer.children.findIndex((item) => selectedItem.id === item.id);
+      // Only remove items in current index
+      if (selectedItemIndex >= 0) {
+        removedItemIndices.push(selectedItemIndex);
+      }
+    });
+    if (removedItemIndices.length > 0) {
+      transmitDiff(DiffType.Remove, removedItemIndices);
+    }
+    path.remove();
+    path = null;
+  };
+
+  const selectItemsInLasso = (path, rect) => {
+    // Only select items in current layer
+    layer.children.forEach((item) => {
+      // Check if path or text (respectively) is in lasso
+      if ((!!item.segments && item.segments.every((segment) => path.contains(segment.point))) ||
+          (!!item.content && item.isInside(rect))) {
+        item.fullySelected = true;
+      }
+    });
+    path.remove();
+    path = null;
+  }
+
+  const translateSelectedItems = (delta) => {
+    const selectedItemIndices = [];
+    scope.project.selectedItems.forEach((selectedItem) => {
+      let selectedItemIndex = layer.children.findIndex((item) => selectedItem.id === item.id);
+      // Only translate items in current layer
+      if (selectedItemIndex >= 0) {
+        selectedItemIndices.push(selectedItemIndex);
+        selectedItem.translate(delta);
+        selectedItem.fullySelected = false;
+      }
+    });
+    if (selectedItemIndices.length > 0) {
+      transmitDiff(DiffType.Translate, selectedItemIndices);
+    }
+  }
 
   const paperHandler = () => {
     let path = null;
@@ -124,13 +207,12 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
 
     scope.view.onMouseDown = (event) => {
       scope.activate();
-
-      // Transmit text diff
+      // Transmit text diff if clicking out of a focused text box
       if (!!pathRef.current && pathRef.current instanceof Paper.PointText) {
-        transmitDiff(CanvasTools.text, pathRef.current);
+        transmitDiff(DiffType.Tangible, pathRef.current);
         pathRef.current.fullySelected = false;
       }
-
+      // Handle event according to active tool
       if (activeTool === CanvasTools.pen) {
         scope.project.deselectAll();
         pathRef.current = new Paper.Path();
@@ -192,85 +274,34 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     scope.view.onMouseUp = () => {
       if (activeTool === CanvasTools.pen) {
         pathRef.current.simplify(10);
-        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
-        transmitDiff(CanvasTools.pen, pathRef.current);
+        transmitDiff(DiffType.Tangible, pathRef.current);
         pathRef.current = null;
       } else if (activeTool === CanvasTools.eraser) {
-        const newPathState = [...pathState];
-        const erasedDiffs = [];
-        // TODO
-        newPathState.forEach((diff) => {
-          if (path.intersects(diff)) {
-            diff.data.visible = false;
-            erasedDiffs.push(diff.seq);
-          }
-        });
-        if (erasedDiffs.length) {
-          // Only create an erase diff if state changed
-          setPathState(newPathState);
-          transmitDiff(CanvasTools.eraser, erasedDiffs);
-        }
-        path.remove();
-        path = null;
+        eraseIntersectedItems(path);
       } else if (activeTool === CanvasTools.select) {
         if (scope.project.selectedItems.length === 0) {
-          for (let p of pathState) {
-            if (p.segments && p.segments.every((segment) => path.contains(segment.point))) {
-              // Check for path
-              p.fullySelected = true;
-            } else if (p.content && p.isInside(rect)) {
-              // Check for text
-              p.fullySelected = true;
-            }
-          }
-          path.remove();
-          path = null;
+          selectItemsInLasso(path, rect);
         } else {
-          const newPathState = [];
-          for (let p of pathState) {
-            if (scope.project.selectedItems.find((selectedItem) => selectedItem.id === p.id)) {
-              p.translate(p2.subtract(p1));
-              p.fullySelected = false;
-            }
-            newPathState.push(p);
-          }
-          // TODO
-          setPathState(newPathState);
+          translateSelectedItems(p2.subtract(p1));
         }
       }
     };
 
     scope.view.onKeyDown = (event) => {
-      if (activeTool !== CanvasTools.text && activeTool !== CanvasTools.select) {
-        return;
-      }
-
-      if (activeTool === CanvasTools.select && event.key === 'delete' && scope.project.selectedItems.length) {
-        const newPathState = [];
-        for (let p of pathState) {
-          if (scope.project.selectedItems.find((selectedItem) => selectedItem.id === p.id)) {
-            p.remove();
-          } else {
-            newPathState.push(p);
-          }
+      if (activeTool === CanvasTools.select && event.key === 'delete' && scope.project.selectedItems.length > 0) {
+        deleteSelectedItems();
+      } else if (activeTool === CanvasTools.text) {
+        if (event.key === 'escape' || event.key === 'enter') {
+          transmitDiff(DiffType.Tangible, pathRef.current);
+          pathRef.current.fullySelected = false;
+          pathRef.current = null;
+        } else if (event.key === 'backspace') {
+          path.content = pathRef.current.content.slice(0, -1);
+        } else if (!!pathRef.current && event.character !== '') {
+          pathRef.current.content += event.character;
         }
-        // TODO
-        setPathState(newPathState);
-      } else if (event.key === 'escape' || event.key === 'enter') {
-        setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
-        transmitDiff(CanvasTools.text, pathRef.current);
-        pathRef.current.fullySelected = false;
-        pathRef.current = null;
-      } else if (event.key === 'backspace') {
-        path.content = pathRef.current.content.slice(0, -1);
-      }
-
-      if (activeTool === CanvasTools.text && pathRef.current && event.character !== '') {
-        pathRef.current.content += event.character;
       }
     };
-
-    scope.view.draw();
   };
 
   return null;
