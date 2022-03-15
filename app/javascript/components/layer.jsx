@@ -87,21 +87,17 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   }, [layer]);
 
   useEffect(() => {
-    paperHandler();
+    if (!!scope) {
+      paperHandler();
+    }
   }, [layerChannel]);
-
-  useEffect(() => {
-    paperHandler();
-  }, [scope]);
 
   useEffect(() => {
     if (!pathRef.current) {
       return;
     }
-
     // Update pathState
     setPathState(oldPaths => [...oldPaths, {seq: seq.current, data: pathRef.current}]);
-
     // Transmit text diff
     if (pathRef.current instanceof Paper.PointText) {
       transmitDiff(CanvasTools.text, pathRef.current);
@@ -110,8 +106,10 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   }, [activeTool, activeColor]);
 
   useEffect(() => {
-    pathRef.current = null;
-    paperHandler();
+    if (!!scope) {
+      pathRef.current = null;
+      paperHandler();
+    }
   }, [pathState.length]);
 
   const paperHandler = () => {
