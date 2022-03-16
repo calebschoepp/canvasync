@@ -83,7 +83,7 @@ class LayerChannel < ApplicationCable::Channel
       next_seq = existing_diffs.maximum(:seq) + 1
     end
     {
-      'diff_type' => FETCH_EXISTING_DIFF,
+      'diff_type' => FETCH_EXISTING_SIGNAL,
       'data' => visible_diffs.as_json,
       'next_seq' => next_seq
     }

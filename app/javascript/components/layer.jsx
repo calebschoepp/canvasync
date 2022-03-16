@@ -9,7 +9,7 @@ const DiffType = {
   Tangible: 'tangible',
   Remove: 'remove',
   Translate: 'translate',
-  FetchExisting: 'fetch-existing'
+  FetchExistingSignal: 'fetch-existing'
 }
 
 export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
@@ -32,7 +32,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        if (data['diff_type'] === DiffType.FetchExisting) {
+        if (data['diff_type'] === DiffType.FetchExistingSignal) {
           if (seqRef.current === 0) {
             // Load existing diffs (only want to allow this to be handled when next sequence number to accept is 0),
             // additionally do not check each diffs sequence number (we are only loading visible tangible diffs here)
@@ -132,14 +132,14 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     pathRef.current = null;
     layer.removeChildren();
     // Refetch data
-    transmitDiff(DiffType.FetchExisting, null);
+    transmitDiff(DiffType.FetchExistingSignal, null);
   };
 
   const transmitDiff = (diffType, data) => {
-    console.log(`Sending ${diffType} diff${(diffType !== DiffType.FetchExisting) ? 
+    console.log(`Sending ${diffType} diff${(diffType !== DiffType.FetchExistingSignal) ? 
         ` (seq = ${seqRef.current})` : ''}...`);
-    if (diffType === DiffType.FetchExisting) {
-      layerChannel.send({'diff_type': DiffType.FetchExisting});
+    if (diffType === DiffType.FetchExistingSignal) {
+      layerChannel.send({'diff_type': DiffType.FetchExistingSignal});
     } else if (diffType === DiffType.Tangible) {
       // Store seq of tangible diff
       tangibleSeqsRef.current.push(seqRef.current);
@@ -317,15 +317,14 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         pathRef.current.fullySelected = true;
       }
 
-      if (scope.project.selectedItems.length === 0) {
-        if (activeTool === CanvasTools.eraser || activeTool === CanvasTools.select) {
-          path.strokeColor = 'black';
-          path.strokeWidth = 3;
-          path.dashArray = [10, 12];
-        } else {
-          pathRef.current.strokeColor = activeColor;
-          pathRef.current.strokeWidth = (activeTool === CanvasTools.pen) ? 3 : 1;
-        }
+      if ((activeTool === CanvasTools.eraser || activeTool === CanvasTools.select) &&
+          scope.project.selectedItems.length === 0) {
+        path.strokeColor = 'black';
+        path.strokeWidth = 3;
+        path.dashArray = [10, 12];
+      } else if (activeTool === CanvasTools.text || scope.project.selectedItems.length === 0) {
+        pathRef.current.strokeColor = activeColor;
+        pathRef.current.strokeWidth = (activeTool === CanvasTools.pen) ? 3 : 1;
       }
     };
 
