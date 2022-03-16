@@ -19,7 +19,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     owner = new Paper.Layer();
     scope.project.addLayer(owner);
 
-    // only create participant layer if user is a participant of notebook
+    // Only create participant layer if user is a participant of notebook
     if (!window.isOwner) {
       participant = new Paper.Layer();
       scope.project.addLayer(participant);
@@ -40,9 +40,8 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     <div style={pageStyle}>
       <canvas ref={canvasRef} width='1017px' height='777px' style={canvasStyle} />
       <Layer
-        scope={paperScope}
+        scope={window.isOwner ? paperScope : undefined}
         layer={ownerLayer}
-        isOwner={true}
         layerId={ownerLayerId}
         activeTool={activeTool}
         activeColor={activeColor}
@@ -51,7 +50,6 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
         <Layer
           scope={paperScope}
           layer={participantLayer}
-          isOwner={false}
           layerId={participantLayerId}
           activeTool={activeTool}
           activeColor={activeColor}
