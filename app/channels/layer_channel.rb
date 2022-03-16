@@ -6,7 +6,6 @@ class LayerChannel < ApplicationCable::Channel
   TRANSLATE_DIFF = 'translate'.freeze
   FETCH_EXISTING_SIGNAL = 'fetch-existing'.freeze
 
-  # set_callback :after_subscribe, :subscribed
   def subscribed
     stream_from "layer_channel_#{params[:layer_id]}"
     puts "Connection established with layer #{params[:layer_id]}"
