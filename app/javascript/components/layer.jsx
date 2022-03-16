@@ -86,7 +86,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         }
       }
     } else if (diffType === DiffType.Remove) {
-      const removedDiffs = diff['data']['removed_diffs'].sort((a, b) => a - b);
+      const removedDiffs = diff['data']['removed_diffs'];
       const removedIndices = []
       removedDiffs.forEach((removedSeq) => {
         // If removed items are drawn then get their indices (layer.children has same order as tangibleSeqsRef)
