@@ -78,7 +78,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     if (diffType === DiffType.Tangible) {
       if (diff['visible']) {
         // Import tangible diff and mark as not selected (for some reason paperJS auto selects these imported items)
-        layer.importJSON(diff['data']).fullySelected = false;
+        layer.importJSON(diff['data']);
         if (checkSeq) {
           tangibleSeqsRef.current.push(seqRef.current);
         } else {
@@ -190,11 +190,21 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   useEffect(() => {
     // Transmit text diff if clicking out of a focused text box to change tool or color
     if (!!pathRef.current && pathRef.current instanceof Paper.PointText) {
-      transmitDiff(DiffType.Tangible, pathRef.current);
-      pathRef.current.fullySelected = false;
+      tryTransmittingTextDiff();
     }
     paperHandler();
   }, [activeTool, activeColor]);
+
+  const tryTransmittingTextDiff = () => {
+    // Only transmit text diff if the the text object has content
+    if (pathRef.current.content.length > 0) {
+      pathRef.current.fullySelected = false;
+      transmitDiff(DiffType.Tangible, pathRef.current);
+    } else {
+      pathRef.current.remove();
+    }
+    pathRef.current = null;
+  }
 
   const eraseIntersectedItems = (path) => {
     // Handles item removal via eraser
@@ -286,8 +296,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
       scope.activate();
       // Transmit text diff if clicking out of a focused text box
       if (!!pathRef.current && pathRef.current instanceof Paper.PointText) {
-        transmitDiff(DiffType.Tangible, pathRef.current);
-        pathRef.current.fullySelected = false;
+        tryTransmittingTextDiff();
       }
       // Handle event according to active tool
       if (activeTool === CanvasTools.pen) {
@@ -373,11 +382,9 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         path = null;
       } else if (activeTool === CanvasTools.text) {
         if (event.key === 'escape' || event.key === 'enter') {
-          transmitDiff(DiffType.Tangible, pathRef.current);
-          pathRef.current.fullySelected = false;
-          pathRef.current = null;
+          tryTransmittingTextDiff();
         } else if (event.key === 'backspace') {
-          path.content = pathRef.current.content.slice(0, -1);
+          pathRef.current.content = pathRef.current.content.slice(0, -1);
         } else if (!!pathRef.current && event.character !== '') {
           pathRef.current.content += event.character;
         }
