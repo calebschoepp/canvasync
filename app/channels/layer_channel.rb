@@ -12,7 +12,7 @@ class LayerChannel < ApplicationCable::Channel
     puts "Connection established with layer #{params[:layer_id]}"
     # Send existing diffs for the layer
     puts "Transmitting existing diffs for layer #{params[:layer_id]}"
-    transmit(get_existing_diffs_for_layer)
+    transmit(existing_diffs_for_layer)
   end
 
   def receive(data)
@@ -21,7 +21,7 @@ class LayerChannel < ApplicationCable::Channel
     # If channel requests existing data, transmit existing diffs back
     if diff_type.eql?(FETCH_EXISTING_DIFF)
       puts "Broadcasting existing diffs for layer #{params[:layer_id]}"
-      ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", get_existing_diffs_for_layer)
+      ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", existing_diffs_for_layer)
       return
     end
 
@@ -70,7 +70,7 @@ class LayerChannel < ApplicationCable::Channel
     diff.save!
   end
 
-  def get_existing_diffs_for_layer
+  def existing_diffs_for_layer
     existing_diffs = Diff.where(layer_id: params[:layer_id])
     visible_diffs = []
     next_seq = 0
