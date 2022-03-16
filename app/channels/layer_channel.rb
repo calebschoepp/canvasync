@@ -4,7 +4,7 @@ class LayerChannel < ApplicationCable::Channel
   TANGIBLE_DIFF = 'tangible'.freeze
   REMOVE_DIFF = 'remove'.freeze
   TRANSLATE_DIFF = 'translate'.freeze
-  FETCH_EXISTING_DIFF = 'fetch-existing'.freeze
+  FETCH_EXISTING_SIGNAL = 'fetch-existing'.freeze
 
   # set_callback :after_subscribe, :subscribed
   def subscribed
@@ -19,7 +19,7 @@ class LayerChannel < ApplicationCable::Channel
     diff_type = data['diff_type']
 
     # If channel requests existing data, transmit existing diffs back
-    if diff_type.eql?(FETCH_EXISTING_DIFF)
+    if diff_type.eql?(FETCH_EXISTING_SIGNAL)
       puts "Broadcasting existing diffs for layer #{params[:layer_id]}"
       ActionCable.server.broadcast("layer_channel_#{params[:layer_id]}", existing_diffs_for_layer)
       return
