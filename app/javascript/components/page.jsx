@@ -42,7 +42,6 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       <Layer
         scope={window.isOwner ? paperScope : undefined}
         layer={ownerLayer}
-        isOwner={true}
         layerId={ownerLayerId}
         activeTool={activeTool}
         activeColor={activeColor}
@@ -51,7 +50,6 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
         <Layer
           scope={paperScope}
           layer={participantLayer}
-          isOwner={false}
           layerId={participantLayerId}
           activeTool={activeTool}
           activeColor={activeColor}
