@@ -123,6 +123,16 @@ class NotebooksController < ApplicationController
     end
   end
 
+  def search
+    @query = params[:query]
+    @notebooks = policy_scope(Notebook.where("name LIKE ?", "%#{@query}%"))
+    @notebooks = Notebook.none if @query.blank?
+    authorize @notebooks
+    respond_to do |format|
+      format.html { render :search, layout: false }
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -132,6 +142,6 @@ class NotebooksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def notebook_params
-    params.require(:notebook).permit(:name, :background)
+    params.require(:notebook).permit(:name, :background, :query)
   end
 end
