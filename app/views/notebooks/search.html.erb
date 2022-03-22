@@ -1,0 +1,7 @@
+<% @notebooks.each do |notebook| %>
+  <a href="<%= notebook_path notebook %>" class="hover:bg-gray-100 block px-4 py-2"><%= notebook.name %></a>
+<% end %>
+
+<% if @notebooks.empty? && !@query.blank?%>
+  <div class="hover:bg-gray-100 block px-4 py-2">No results found!</div>
+<% end %>

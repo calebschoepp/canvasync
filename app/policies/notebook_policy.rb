@@ -33,4 +33,8 @@ class NotebookPolicy < ApplicationPolicy
   def join?
     true
   end
+
+  def search?
+    true
+  end
 end
