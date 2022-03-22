@@ -4,6 +4,8 @@ require 'json'
 class ExportNotebookJob < ApplicationJob
   queue_as :default
 
+  PAGE_HEIGHT = 777
+
   def perform(export_id)
     export = Export.find(export_id)
 
@@ -26,9 +28,9 @@ class ExportNotebookJob < ApplicationJob
                 segments = data[1]["segments"]
                 for point in 1..(segments.length - 1)
                   # get last point anchor
-                  source = [segments[point-1][0][0].to_f, 777 - segments[point-1][0][1].to_f]
+                  source = [segments[point-1][0][0].to_f, PAGE_HEIGHT - segments[point-1][0][1].to_f]
                   # get this point anchor
-                  dest = [segments[point][0][0].to_f, 777 - segments[point][0][1].to_f]
+                  dest = [segments[point][0][0].to_f, PAGE_HEIGHT - segments[point][0][1].to_f]
                   # get last point handle out + last point anchor to get first bezier anchor point
                   bezier1 = [source[0] + segments[point-1][2][0].to_f, source[1] - segments[point-1][2][1].to_f]
                   # get this point handle in + this point anchor to get second bezier anchor point
@@ -43,7 +45,7 @@ class ExportNotebookJob < ApplicationJob
                 line_width 3
                 stroke
               elsif data[0] == "PointText"
-                draw_text data[1]["content"], :at => [data[1]["matrix"][4].to_f, 777 - data[1]["matrix"][5].to_f], :size => 25
+                draw_text data[1]["content"], :at => [data[1]["matrix"][4].to_f, PAGE_HEIGHT - data[1]["matrix"][5].to_f], :size => 25
               end
             end
           end
