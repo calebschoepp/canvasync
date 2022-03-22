@@ -100,9 +100,12 @@ class ExportNotebookJob < ApplicationJob
               pdf.curve source, dest, :bounds => [bezier1, bezier2]
             end
           end
-          red = data[1]['strokeColor'][0].to_i.to_s(16).rjust(2, '0').upcase
-          green = data[1]['strokeColor'][1].to_i.to_s(16).rjust(2, '0').upcase
-          blue = data[1]['strokeColor'][2].to_i.to_s(16).rjust(2, '0').upcase
+          red = data[1]['strokeColor'][0].to_f
+          red = (red * 255).round.to_s(16).rjust(2, '0').upcase
+          green = data[1]['strokeColor'][1].to_f
+          green = (green * 255).round.to_s(16).rjust(2, '0').upcase
+          blue = data[1]['strokeColor'][2].to_f
+          blue = (blue * 255).round.to_s(16).rjust(2, '0').upcase
 
           pdf.stroke_color "#{red}#{green}#{blue}"
           pdf.line_width 3
