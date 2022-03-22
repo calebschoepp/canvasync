@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     end
     resources :exports, shallow: true, only: %i[index create destroy]
   end
+  get '/search', to: 'notebooks#search'
 
   # Authentication
   devise_for :users

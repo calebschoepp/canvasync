@@ -10,7 +10,7 @@
         <div class="field">
           <%= f.label :password, "New password", class: 'label mb-0' %>
           <% if @minimum_password_length %>
-            <em class="text-gray-700 mb-2">(<%= @minimum_password_length %> characters minimum)</em>
+            <em class="text-gray-700 mb-2">(<%= @minimum_password_length %> characters minimum must include at least one lowercase letter, one uppercase letter, and one digit)</em>
           <% end %>
           <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: 'text-field' %>
         </div>
