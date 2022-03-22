@@ -14,36 +14,40 @@ class ExportNotebookJob < ApplicationJob
 
     tempfile = Tempfile.new ['export', '.pdf']
 
-    notebook.background.blob.open do |template|
-      Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => [0, 0, 0, 0]) do |pdf|
-        (1..notebook.pages.length).each do |i|
-          pdf.start_new_page :template => template, :template_page => i
-          pdf.go_to_page(i)
- 
-          if i <= count_pdf_pages(template)
-            # Set the transformation matrix for the page
-            set_transformation_matrix(pdf, template.path)
-          end
+    begin
+      notebook.background.blob.open do |template|
+        Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => [0, 0, 0, 0]) do |pdf|
+          (1..notebook.pages.length).each do |i|
+            pdf.start_new_page :template => template, :template_page => i
+            pdf.go_to_page(i)
+  
+            if i <= count_pdf_pages(template)
+              # Set the transformation matrix for the page
+              set_transformation_matrix(pdf, template.path)
+            end
 
-          page = notebook.pages.find_by(:number => i)
-          if page && user_notebook.is_owner
-            layer = page.layers.find_by(:writer => user_notebook)
-            draw_layer_diffs(pdf, layer)
-          elsif page
-            owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
-            owner_layer = page.layers.find_by(:writer => owner_user_notebook)
-            draw_layer_diffs(pdf, owner_layer)
-            participant_layer = page.layers.find_by(:writer => user_notebook)
-            draw_layer_diffs(pdf, participant_layer)
+            page = notebook.pages.find_by(:number => i)
+            if page && user_notebook.is_owner
+              layer = page.layers.find_by(:writer => user_notebook)
+              draw_layer_diffs(pdf, layer)
+            elsif page
+              owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
+              owner_layer = page.layers.find_by(:writer => owner_user_notebook)
+              draw_layer_diffs(pdf, owner_layer)
+              participant_layer = page.layers.find_by(:writer => user_notebook)
+              draw_layer_diffs(pdf, participant_layer)
+            end
           end
         end
       end
+    rescue
+      export.failed = true
+    else
+      export.document.attach(io: File.open(tempfile.path), filename: "#{notebook.name}.pdf")
+      export.ready = true
+    ensure
+      export.save
     end
-
-    export.document.attach(io: File.open(tempfile.path), filename: "#{notebook.name}.pdf")
-
-    export.ready = true
-    export.save
   end
 
   def count_pdf_pages(pdf_file_path)

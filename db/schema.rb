@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.1].define(version: 20_220_314_231_310) do
   create_table 'diffs', force: :cascade do |t|
     t.integer 'layer_id', null: false
     t.integer 'seq'
-    t.json 'data', default: '{}', null: false
+    t.json 'data', default: '""{}""', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.string 'diff_type', null: false
@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.1].define(version: 20_220_314_231_310) do
     t.integer 'notebook_id', null: false
     t.integer 'user_id', null: false
     t.boolean 'ready'
+    t.boolean 'failed'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['notebook_id'], name: 'index_exports_on_notebook_id'

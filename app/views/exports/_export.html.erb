@@ -2,12 +2,14 @@
   <div class='flex flex-row items-center justify-between'>
     <div class='flex flex-row items-center justify-start'>
       <span class='heading-3 mr-4'>Export as of <%= time_ago_in_words(export.updated_at) %> ago</span>
-      <% if export.ready && export.current %>
+      <% if export.failed %>
+        <span class='pill bg-red-500'>Failed</span>
+      <% elsif export.ready && export.current %>
         <span class='pill bg-green-500'>Ready</span>
       <% elsif export.ready && !export.current %>
         <span class='pill bg-neutral-500'>Out of Date</span>
       <% else %>
-        <span class='pill bg-red-500'>Exporting</span>
+        <span class='pill bg-orange-500'>Exporting</span>
       <% end %>
     </div>
     <div data-controller="dropdown" class="relative flex-none">
