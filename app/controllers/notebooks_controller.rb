@@ -125,7 +125,7 @@ class NotebooksController < ApplicationController
 
   def search
     @query = params[:query]
-    @notebooks = policy_scope(Notebook.where("name LIKE ?", "%#{@query}%"))
+    @notebooks = policy_scope(Notebook.where('name LIKE ?', "%#{@query}%"))
     @notebooks = Notebook.none if @query.blank?
     authorize @notebooks
     respond_to do |format|
