@@ -19,15 +19,21 @@ class ExportNotebookJob < ApplicationJob
         (1..notebook.pages.length).each do |i|
           pdf.start_new_page :template => template, :template_page => i
           pdf.go_to_page(i)
+ 
+          if i <= count_pdf_pages(template)
+            # Set the transformation matrix for the page
+            set_transformation_matrix(pdf, template.path)
+          end
 
-          page = notebook.pages.find(i)
+          page = notebook.pages.find_by(:number => i)
           if user_notebook.is_owner
-            layer = page.layers.find_by(:writer_id => export.user_id)
+            layer = page.layers.find_by(:writer => user_notebook)
             draw_layer_diffs(pdf, layer)
           else
-            owner_layer = page.layers.find_by(:writer_id => notebook.owner)
+            owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
+            owner_layer = page.layers.find_by(:writer => owner_user_notebook)
             draw_layer_diffs(pdf, owner_layer)
-            participant_layer = page.layers.find_by(:writer_id => export.user_id)
+            participant_layer = page.layers.find_by(:writer => user_notebook)
             draw_layer_diffs(pdf, participant_layer)
           end
         end
@@ -38,6 +44,38 @@ class ExportNotebookJob < ApplicationJob
 
     export.ready = true
     export.save
+  end
+
+  def count_pdf_pages(pdf_file_path)
+    pdf = Prawn::Document.new(:template => pdf_file_path)
+    pdf.page_count
+  end
+
+  def set_transformation_matrix(pdf, filename)
+    pdf_reader = PDF::Reader.new(filename)
+    return if pdf_reader.pages.empty?
+    page = pdf_reader.pages.first
+  
+    buffer = PDF::Reader::Buffer.new(StringIO.new(page.raw_content), content_stream: true)
+    parser = PDF::Reader::Parser.new(buffer)
+    params = []
+  
+    while (token = parser.parse_token(PDF::Reader::PagesStrategy::OPERATORS))
+      if token.kind_of?(PDF::Reader::Token) && PDF::Reader::PagesStrategy::OPERATORS.has_key?(token)
+        operator = PDF::Reader::PagesStrategy::OPERATORS[token]
+        if operator == :concatenate_matrix && params[0..3] == [1, 0, 0, -1]
+          pdf.transformation_matrix(*params)
+        elsif operator == :concatenate_matrix
+          pdf.transformation_matrix(*params)
+        else
+          pdf.transformation_matrix(1, 0, 0, 1, 0, 0)
+        end
+        # If first token was not a concatenate_matrix operator, then do nothing.
+        return
+      else
+        params << token
+      end
+    end
   end
 
   def draw_layer_diffs(pdf, layer)
