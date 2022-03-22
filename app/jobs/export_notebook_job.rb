@@ -26,10 +26,10 @@ class ExportNotebookJob < ApplicationJob
           end
 
           page = notebook.pages.find_by(:number => i)
-          if user_notebook.is_owner
+          if page && user_notebook.is_owner
             layer = page.layers.find_by(:writer => user_notebook)
             draw_layer_diffs(pdf, layer)
-          else
+          elsif page
             owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
             owner_layer = page.layers.find_by(:writer => owner_user_notebook)
             draw_layer_diffs(pdf, owner_layer)
@@ -79,33 +79,37 @@ class ExportNotebookJob < ApplicationJob
   end
 
   def draw_layer_diffs(pdf, layer)
-    layer.diffs.each do |diff|
-      next unless diff.diff_type == 'tangible' && diff.visible
+    if layer
+      layer.diffs.each do |diff|
+        next unless diff.diff_type == 'tangible' && diff.visible
 
-      data = JSON.parse(diff.data)
-      case data[0]
-      when 'Path'
-        segments = data[1]['segments']
-        (1..(segments.length - 1)).each do |point|
-          # get last point anchor
-          source = [segments[point - 1][0][0].to_f, PAGE_HEIGHT - segments[point - 1][0][1].to_f]
-          # get this point anchor
-          dest = [segments[point][0][0].to_f, PAGE_HEIGHT - segments[point][0][1].to_f]
-          # get last point handle out + last point anchor to get first bezier anchor point
-          bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
-          # get this point handle in + this point anchor to get second bezier anchor point
-          bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
-          pdf.curve source, dest, :bounds => [bezier1, bezier2]
+        data = JSON.parse(diff.data)
+        case data[0]
+        when 'Path'
+          segments = data[1]['segments']
+          if segments
+            (1..(segments.length - 1)).each do |point|
+              # get last point anchor
+              source = [segments[point - 1][0][0].to_f, PAGE_HEIGHT - segments[point - 1][0][1].to_f]
+              # get this point anchor
+              dest = [segments[point][0][0].to_f, PAGE_HEIGHT - segments[point][0][1].to_f]
+              # get last point handle out + last point anchor to get first bezier anchor point
+              bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
+              # get this point handle in + this point anchor to get second bezier anchor point
+              bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
+              pdf.curve source, dest, :bounds => [bezier1, bezier2]
+            end
+          end
+          red = data[1]['strokeColor'][0].to_i.to_s(16).rjust(2, '0').upcase
+          green = data[1]['strokeColor'][1].to_i.to_s(16).rjust(2, '0').upcase
+          blue = data[1]['strokeColor'][2].to_i.to_s(16).rjust(2, '0').upcase
+
+          pdf.stroke_color "#{red}#{green}#{blue}"
+          pdf.line_width 3
+          pdf.stroke
+        when 'PointText'
+          pdf.draw_text data[1]['content'], :at => [data[1]['matrix'][4].to_f, PAGE_HEIGHT - data[1]['matrix'][5].to_f], :size => 25
         end
-        red = data[1]['strokeColor'][0].to_i.to_s(16).rjust(2, '0').upcase
-        green = data[1]['strokeColor'][1].to_i.to_s(16).rjust(2, '0').upcase
-        blue = data[1]['strokeColor'][2].to_i.to_s(16).rjust(2, '0').upcase
-
-        pdf.stroke_color "#{red}#{green}#{blue}"
-        pdf.line_width 3
-        pdf.stroke
-      when 'PointText'
-        pdf.draw_text data[1]['content'], :at => [data[1]['matrix'][4].to_f, PAGE_HEIGHT - data[1]['matrix'][5].to_f], :size => 25
       end
     end
   end
