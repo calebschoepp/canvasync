@@ -28,7 +28,18 @@ yarn install
 
 ## Set environment variables with Figaro
 
-TODO
+Create a file at `config/application.yml` and insert the following contents:
+
+```yaml
+development:
+  EMAIL_USERNAME: "<A Gmail username>"
+  EMAIL_PASSWORD: "<A Gmail app password>"
+```
+
+### Email Username and Password
+
+For sending email locally you can use a Gmail account. You'll need to [generate an app password](https://devanswers.co/create-application-specific-password-gmail/).
+
 
 ## Initialize database
 
