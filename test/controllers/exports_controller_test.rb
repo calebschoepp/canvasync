@@ -17,7 +17,7 @@ class ExportsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create export' do
     assert_difference('Export.count') do
-      post exports_url, params: { export: { notebook_id: @export.notebook_id, ready: @export.ready } }
+      post exports_url, params: { export: { notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
     end
 
     assert_redirected_to export_url(Export.last)
@@ -34,7 +34,7 @@ class ExportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update export' do
-    patch export_url(@export), params: { export: { notebook_id: @export.notebook_id, ready: @export.ready } }
+    patch export_url(@export), params: { export: { notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
     assert_redirected_to export_url(@export)
   end
 

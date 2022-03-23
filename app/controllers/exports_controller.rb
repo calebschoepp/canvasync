@@ -12,6 +12,7 @@ class ExportsController < ApplicationController
   def create
     @export = Export.new(export_params)
     @export.ready = false
+    @export.failed = false
     authorize @export
 
     respond_to do |format|
