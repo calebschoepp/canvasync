@@ -47,19 +47,17 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
-    if !params[:notebook][:background].nil? && (params[:notebook][:background].content_type.eql?(PNG_MIME) ||
-       JPEG_MIME.include?(params[:notebook][:background].content_type) ||
-       POWERPOINT_MIME.include?(params[:notebook][:background].content_type))
-
+    if !params[:notebook][:background].nil? && params[:notebook][:background].size < 30.megabytes && (
+        params[:notebook][:background].content_type.eql?(PNG_MIME) ||
+        JPEG_MIME.include?(params[:notebook][:background].content_type) ||
+        POWERPOINT_MIME.include?(params[:notebook][:background].content_type))
       # Convert allowed file types (JPEG, PNG, PowerPoint) that are not PDF to PDF
       content_name = params[:notebook][:background].original_filename
       new_content_name = "#{content_name[...content_name.rindex(/\./)]}.pdf"
       tempfile = Tempfile.new(new_content_name)
-
       # Generate PDF containing uploaded PowerPoint
       pdf = ConvertApi.convert('pdf', { File: ConvertApi::UploadIO.new(File.open(params[:notebook][:background].tempfile)) })
       pdf.save_files(tempfile.path)
-
       # Replace uploaded file with its PDF replacement
       params[:notebook][:background] = ActionDispatch::Http::UploadedFile.new({
                                                                                 :filename => new_content_name,
