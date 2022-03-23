@@ -1,8 +1,10 @@
+require 'prawn'
+require './app/lib/page_dimensions'
+require './app/lib/accepted_file_types'
+
 class NotebooksController < ApplicationController
-  PDF = 'application/pdf'.freeze
-  PNG = 'image/png'.freeze
-  PPT = %w[application/vnd.ms-powerpoint application/vnd.openxmlformats-officedocument.presentationml.presentation].freeze
-  JPEG = %w[image/jpg image/jpeg].freeze
+  include PageDimensions
+  include AcceptedFileTypes
 
   before_action :set_notebook, only: %i[show edit update destroy preview join]
 
@@ -47,6 +49,32 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
+    content_type = params[:notebook][:background].content_type
+
+    # Convert allowed file types (JPEG, PNG, PowerPoint) that are not PDF to PDF
+    if content_type.eql?(PNG_MIME) || JPEG_MIME.include?(content_type)
+      content_name = params[:notebook][:background].original_filename
+      tempfile = Tempfile.new [content_name[...content_name.rindex(/\./)], '.pdf']
+
+      # Generate PDF containing uploaded PNG or JPEG
+      Prawn::Document.generate(
+        tempfile.path,
+        :page_size => PAGE_SIZE,
+        :margin => PAGE_MARGINS
+      ) do |pdf|
+        pdf.image params[:notebook][:background].tempfile, fit: [PAGE_DIMS[0], PAGE_DIMS[1]]
+      end
+
+      # Replace uploaded file with its PDF replacement
+      params[:notebook][:background] = ActionDispatch::Http::UploadedFile.new({
+                                                                                :filename => content_name,
+                                                                                :type => 'application/pdf',
+                                                                                :tempfile => tempfile
+                                                                              })
+    elsif POWERPOINT_MIME.include?(content_type)
+      puts 'PPT FILE UPLOADED'
+    end
+
     @notebook = Notebook.new(notebook_params)
 
     # Setup user_notebook
@@ -56,35 +84,12 @@ class NotebooksController < ApplicationController
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
 
-    puts "\n\nNOTEBOOK TYPE: #{params[:notebook][:background].content_type}"
-
     if params[:notebook][:background].nil?
       # Create single page and corresponding owner layer when no background is specified
       page = Page.new(number: 1, notebook: @notebook)
       page.layers << Layer.new(page: page, writer: user_notebook)
       @notebook.pages << page
-    else
-      content_type = params[:notebook][:background].content_type
-      content_name = params[:notebook][:background].original_filename
-      if content_type.eql?(PNG) || JPEG.include?(content_type)
-        File.open(params[:notebook][:background].tempfile, 'r') do |f|
-          f.binmode
-          pdf = Prawn::Document.new(:background => content_name,
-                                    :page_size => "LETTER",
-                                    :page_layout => :portrait,
-                                    :margin => 0)
-          content_name = "#{content_name[...content_name.rindex(/\./)]}.pdf"
-          pdf.render_file(content_name)
-          params[:notebook][:background].tempfile = content_name
-        end
-      elsif PPT.include?(params[:notebook][:background].content_type)
-        puts "PPT FILE UPLOADED"
-      elsif PDF
-        puts "PDF Uploaded"
-      else
-        puts "INvalid file"
-      end
-
+    elsif params[:notebook][:background].content_type.eql?(PDF_MIME)
       # Create page and corresponding owner layer for each page in uploaded file
       File.open(params[:notebook][:background].tempfile, 'r') do |f|
         f.binmode
