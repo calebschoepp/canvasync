@@ -1,4 +1,9 @@
 class NotebooksController < ApplicationController
+  PDF = 'application/pdf'.freeze
+  PNG = 'image/png'.freeze
+  PPT = %w[application/vnd.ms-powerpoint application/vnd.openxmlformats-officedocument.presentationml.presentation].freeze
+  JPEG = %w[image/jpg image/jpeg].freeze
+
   before_action :set_notebook, only: %i[show edit update destroy preview join]
 
   # GET /notebooks or /notebooks.json
@@ -51,14 +56,44 @@ class NotebooksController < ApplicationController
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
 
-    # Setup page(s) and owner layer(s)
-    File.open(params[:notebook][:background].tempfile, 'r') do |f|
-      f.binmode
-      r = PDF::Reader.new f
-      r.pages.each_with_index do |_pdf_page, i|
-        page = Page.new(number: i + 1, notebook: @notebook)
-        page.layers << Layer.new(page: page, writer: user_notebook)
-        @notebook.pages << page
+    puts "\n\nNOTEBOOK TYPE: #{params[:notebook][:background].content_type}"
+
+    if params[:notebook][:background].nil?
+      # Create single page and corresponding owner layer when no background is specified
+      page = Page.new(number: 1, notebook: @notebook)
+      page.layers << Layer.new(page: page, writer: user_notebook)
+      @notebook.pages << page
+    else
+      content_type = params[:notebook][:background].content_type
+      content_name = params[:notebook][:background].filename.to_s
+      if content_type.eql?(PNG) || JPEG.include?(content_type)
+        File.open(params[:notebook][:background].tempfile, 'r') do |f|
+          f.binmode
+          pdf = Prawn::Document.new(:background => content_name,
+                                    :page_size => "LETTER",
+                                    :page_layout => :portrait,
+                                    :margin => 0)
+          content_name = "#{content_name[...content_name.rindex(/\./)]}.pdf"
+          pdf.render_file(content_name)
+          params[:notebook][:background].tempfile = content_name
+        end
+      elsif PPT.include?(params[:notebook][:background].content_type)
+        puts "PPT FILE UPLOADED"
+      elsif PDF
+        puts "PDF Uploaded"
+      else
+        puts "INvalid file"
+      end
+
+      # Create page and corresponding owner layer for each page in uploaded file
+      File.open(params[:notebook][:background].tempfile, 'r') do |f|
+        f.binmode
+        r = PDF::Reader.new f
+        r.pages.each_with_index do |_pdf_page, i|
+          page = Page.new(number: i + 1, notebook: @notebook)
+          page.layers << Layer.new(page: page, writer: user_notebook)
+          @notebook.pages << page
+        end
       end
     end
 
