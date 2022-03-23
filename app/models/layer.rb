@@ -5,9 +5,9 @@ class Layer < ApplicationRecord
   belongs_to :writer, class_name: 'UserNotebook', foreign_key: :writer_id
   # TODO: Validations
 
-  def as_json(options = nil)
+  def as_json(_options = nil)
     layer = super()
-    layer["writer"] = self.writer.as_json
+    layer['writer'] = writer.as_json
     layer
   end
 end
