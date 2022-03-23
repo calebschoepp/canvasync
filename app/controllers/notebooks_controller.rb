@@ -1,9 +1,7 @@
-require 'prawn'
-require './app/lib/page_dimensions'
+require 'convert_api'
 require './app/lib/accepted_file_types'
 
 class NotebooksController < ApplicationController
-  include PageDimensions
   include AcceptedFileTypes
 
   before_action :set_notebook, only: %i[show edit update destroy preview join]
@@ -49,30 +47,25 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
-    content_type = params[:notebook][:background].content_type
+    if !params[:notebook][:background].nil? && (params[:notebook][:background].content_type.eql?(PNG_MIME) ||
+       JPEG_MIME.include?(params[:notebook][:background].content_type) ||
+       POWERPOINT_MIME.include?(params[:notebook][:background].content_type))
 
-    # Convert allowed file types (JPEG, PNG, PowerPoint) that are not PDF to PDF
-    if content_type.eql?(PNG_MIME) || JPEG_MIME.include?(content_type)
+      # Convert allowed file types (JPEG, PNG, PowerPoint) that are not PDF to PDF
       content_name = params[:notebook][:background].original_filename
-      tempfile = Tempfile.new [content_name[...content_name.rindex(/\./)], '.pdf']
+      new_content_name = "#{content_name[...content_name.rindex(/\./)]}.pdf"
+      tempfile = Tempfile.new(new_content_name)
 
-      # Generate PDF containing uploaded PNG or JPEG
-      Prawn::Document.generate(
-        tempfile.path,
-        :page_size => PAGE_SIZE,
-        :margin => PAGE_MARGINS
-      ) do |pdf|
-        pdf.image params[:notebook][:background].tempfile, fit: [PAGE_DIMS[0], PAGE_DIMS[1]]
-      end
+      # Generate PDF containing uploaded PowerPoint
+      pdf = ConvertApi.convert('pdf', { File: ConvertApi::UploadIO.new(File.open(params[:notebook][:background].tempfile)) })
+      pdf.save_files(tempfile.path)
 
       # Replace uploaded file with its PDF replacement
       params[:notebook][:background] = ActionDispatch::Http::UploadedFile.new({
-                                                                                :filename => content_name,
-                                                                                :type => 'application/pdf',
+                                                                                :filename => new_content_name,
+                                                                                :type => PDF_MIME,
                                                                                 :tempfile => tempfile
                                                                               })
-    elsif POWERPOINT_MIME.include?(content_type)
-      puts 'PPT FILE UPLOADED'
     end
 
     @notebook = Notebook.new(notebook_params)

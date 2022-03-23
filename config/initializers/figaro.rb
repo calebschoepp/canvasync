@@ -1,1 +1,1 @@
-
+Figaro.require_keys('EMAIL_USERNAME', 'EMAIL_PASSWORD', 'CONVERT_API_SECRET')
