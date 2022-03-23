@@ -29,9 +29,9 @@ export function Notebook() {
 
       received(data) {
         // Called when there's incoming data on the websocket for this channel
-        window.ownerLayers.push(data.find(layer => layer.writer.user === window.ownerId));
+        window.ownerLayers.push(data.find(layer => layer.writer.user_id === window.ownerId));
         if (!window.isOwner) {
-          window.participantLayers.push(data.find(layer => layer.writer.user === window.currentUser));
+          window.participantLayers.push(data.find(layer => layer.writer.user_id === window.currentUser));
         }
         setNumPages(Math.max(window.participantLayers.length, window.ownerLayers.length));
       }
