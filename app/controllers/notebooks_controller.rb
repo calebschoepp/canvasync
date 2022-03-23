@@ -65,7 +65,7 @@ class NotebooksController < ApplicationController
       @notebook.pages << page
     else
       content_type = params[:notebook][:background].content_type
-      content_name = params[:notebook][:background].filename.to_s
+      content_name = params[:notebook][:background].original_filename
       if content_type.eql?(PNG) || JPEG.include?(content_type)
         File.open(params[:notebook][:background].tempfile, 'r') do |f|
           f.binmode
