@@ -63,7 +63,7 @@ export function Notebook() {
   for (let i = 0; i < numPages; i++) {
     const pid = window.participantLayers[i] ? window.participantLayers[i].id : null;
     const oid = window.ownerLayers[i] ? window.ownerLayers[i].id : null;
-    pages.push(<Page activeTool={activeTool} activeColor={activeColor} ownerLayerId={oid} participantLayerId={pid} key={i} />);
+    pages.push(<Page activeTool={activeTool} activeColor={activeColor} ownerLayerId={oid} participantLayerId={pid} key={i} pageNumber={i + 1} />);
   }
 
   // TODO: maybe pass in page id or layer id using window here
