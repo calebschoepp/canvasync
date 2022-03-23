@@ -54,6 +54,7 @@ ActiveRecord::Schema[7.1].define(version: 20_220_314_231_310) do
     t.integer 'notebook_id', null: false
     t.integer 'user_id', null: false
     t.boolean 'ready'
+    t.boolean 'failed'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['notebook_id'], name: 'index_exports_on_notebook_id'

@@ -72,6 +72,10 @@ gem 'active_storage_validations'
 # Read PDFs
 gem 'pdf-reader'
 
+# generate PDFs
+gem 'prawn'
+gem 'prawn-templates'
+
 # Configuration
 gem 'figaro'
 

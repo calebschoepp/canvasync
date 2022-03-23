@@ -9,7 +9,7 @@ class PageChannel < ApplicationCable::Channel
       # TODO: Handle scenario where save fails
       puts "\n\n\nFailed to save page\n\n\n"
     end
-    ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", page.layers)
+    ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", page.layers.as_json)
   end
 
   def unsubscribed
@@ -24,7 +24,7 @@ class PageChannel < ApplicationCable::Channel
     page = Page.new(number: page_number, notebook: @notebook)
     user_notebooks = UserNotebook.where(notebook: @notebook)
     user_notebooks.each do |user_notebook|
-      page.layers << Layer.new(page: page, writer_id: user_notebook.user_id)
+      page.layers << Layer.new(page: page, writer: user_notebook)
     end
     @notebook.pages << page
     page
