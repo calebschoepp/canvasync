@@ -1,4 +1,9 @@
+require 'convert_api'
+require './app/lib/accepted_file_types'
+
 class NotebooksController < ApplicationController
+  include AcceptedFileTypes
+
   before_action :set_notebook, only: %i[show edit update destroy preview join]
 
   # GET /notebooks or /notebooks.json
@@ -42,6 +47,25 @@ class NotebooksController < ApplicationController
 
   # POST /notebooks or /notebooks.json
   def create
+    if !params[:notebook][:background].nil? && params[:notebook][:background].size < 30.megabytes && (
+        params[:notebook][:background].content_type.eql?(PNG_MIME) ||
+        JPEG_MIME.include?(params[:notebook][:background].content_type) ||
+        POWERPOINT_MIME.include?(params[:notebook][:background].content_type))
+      # Convert allowed file types (JPEG, PNG, PowerPoint) that are not PDF to PDF
+      content_name = params[:notebook][:background].original_filename
+      new_content_name = "#{content_name[...content_name.rindex(/\./)]}.pdf"
+      tempfile = Tempfile.new(new_content_name)
+      # Generate PDF containing uploaded PowerPoint
+      pdf = ConvertApi.convert('pdf', { File: ConvertApi::UploadIO.new(File.open(params[:notebook][:background].tempfile)) })
+      pdf.save_files(tempfile.path)
+      # Replace uploaded file with its PDF replacement
+      params[:notebook][:background] = ActionDispatch::Http::UploadedFile.new({
+                                                                                :filename => new_content_name,
+                                                                                :type => PDF_MIME,
+                                                                                :tempfile => tempfile
+                                                                              })
+    end
+
     @notebook = Notebook.new(notebook_params)
 
     # Setup user_notebook
@@ -51,14 +75,21 @@ class NotebooksController < ApplicationController
     user_notebook.is_owner = true
     @notebook.user_notebooks << user_notebook
 
-    # Setup page(s) and owner layer(s)
-    File.open(params[:notebook][:background].tempfile, 'r') do |f|
-      f.binmode
-      r = PDF::Reader.new f
-      r.pages.each_with_index do |_pdf_page, i|
-        page = Page.new(number: i + 1, notebook: @notebook)
-        page.layers << Layer.new(page: page, writer: user_notebook)
-        @notebook.pages << page
+    if params[:notebook][:background].nil?
+      # Create single page and corresponding owner layer when no background is specified
+      page = Page.new(number: 1, notebook: @notebook)
+      page.layers << Layer.new(page: page, writer: user_notebook)
+      @notebook.pages << page
+    elsif params[:notebook][:background].content_type.eql?(PDF_MIME)
+      # Create page and corresponding owner layer for each page in uploaded file
+      File.open(params[:notebook][:background].tempfile, 'r') do |f|
+        f.binmode
+        r = PDF::Reader.new f
+        r.pages.each_with_index do |_pdf_page, i|
+          page = Page.new(number: i + 1, notebook: @notebook)
+          page.layers << Layer.new(page: page, writer: user_notebook)
+          @notebook.pages << page
+        end
       end
     end
 

@@ -19,7 +19,7 @@
 
   <% unless notebook.persisted? %>
     <div class="mb-8">
-      <%= form.label :background, class: 'label' %>
+      <%= form.label "#{:background} (optional)", class: 'label' %>
       <%= form.file_field :background, class: 'file-input' %>
     </div>
   <% end %>

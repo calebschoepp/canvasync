@@ -72,9 +72,12 @@ gem 'active_storage_validations'
 # Read PDFs
 gem 'pdf-reader'
 
-# generate PDFs
+# Generate PDFs
 gem 'prawn'
 gem 'prawn-templates'
+
+# Convert PowerPoint to PDF
+gem 'convert_api'
 
 # Configuration
 gem 'figaro'

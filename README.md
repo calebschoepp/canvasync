@@ -34,12 +34,19 @@ Create a file at `config/application.yml` and insert the following contents:
 development:
   EMAIL_USERNAME: "<A Gmail username>"
   EMAIL_PASSWORD: "<A Gmail app password>"
+  CONVERT_API_SECRET: "<Convert API secret>"
 ```
 
 ### Email Username and Password
 
 For sending email locally you can use a Gmail account. You'll need to [generate an app password](https://devanswers.co/create-application-specific-password-gmail/).
 
+### Convert API Secret
+
+[Convert API](https://www.convertapi.com) is used to convert uploaded PowerPoints, PNGs, and JPEGs to their PDF 
+equivalent so that canvasync can provide its services to those file types. You can get a secret 
+[here](https://www.convertapi.com/a). It is free to use for the first 1500 seconds of conversion time so it should be 
+more than enough for our purposes.  
 
 ## Initialize database
 

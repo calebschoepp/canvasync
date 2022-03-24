@@ -9,7 +9,7 @@ class Notebook < ApplicationRecord
   has_many :exports, dependent: :destroy
   has_one_attached :background, dependent: :purge_later
   validates :name, presence: true, length: { maximum: 100 }
-  validates :background, attached: true, content_type: ALLOWED_FILE_TYPES, size: FILE_SIZE_SETTINGS
+  validates :background, content_type: ALLOWED_FILE_TYPES, size: FILE_SIZE_SETTINGS
 
   def owner?(user)
     user_notebook = user_notebooks.find_by(user_id: user.id)
