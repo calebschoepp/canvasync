@@ -1,10 +1,10 @@
 require 'prawn'
 require 'json'
+require './app/lib/page_dimensions'
 
 class ExportNotebookJob < ApplicationJob
+  include PageDimensions
   queue_as :default
-
-  PAGE_HEIGHT = 777
 
   def perform(export_id)
     export = Export.find(export_id)
@@ -16,7 +16,7 @@ class ExportNotebookJob < ApplicationJob
 
     begin
       notebook.background.blob.open do |template|
-        Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => [0, 0, 0, 0]) do |pdf|
+        Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => PAGE_MARGINS) do |pdf|
           (1..notebook.pages.length).each do |i|
             pdf.start_new_page :template => template, :template_page => i
             pdf.go_to_page(i)
@@ -92,9 +92,9 @@ class ExportNotebookJob < ApplicationJob
         if segments
           (1..(segments.length - 1)).each do |point|
             # get last point anchor
-            source = [segments[point - 1][0][0].to_f, PAGE_HEIGHT - segments[point - 1][0][1].to_f]
+            source = [segments[point - 1][0][0].to_f, PAGE_DIMS[1] - segments[point - 1][0][1].to_f]
             # get this point anchor
-            dest = [segments[point][0][0].to_f, PAGE_HEIGHT - segments[point][0][1].to_f]
+            dest = [segments[point][0][0].to_f, PAGE_DIMS[1] - segments[point][0][1].to_f]
             # get last point handle out + last point anchor to get first bezier anchor point
             bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
             # get this point handle in + this point anchor to get second bezier anchor point
@@ -113,7 +113,7 @@ class ExportNotebookJob < ApplicationJob
         pdf.line_width 3
         pdf.stroke
       when 'PointText'
-        pdf.draw_text data[1]['content'], :at => [data[1]['matrix'][4].to_f, PAGE_HEIGHT - data[1]['matrix'][5].to_f], :size => 25
+        pdf.draw_text data[1]['content'], :at => [data[1]['matrix'][4].to_f, PAGE_DIMS[1] - data[1]['matrix'][5].to_f], :size => 25
       end
     end
   end
