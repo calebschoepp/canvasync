@@ -16,19 +16,21 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     if (raster) {
       const scope = new Paper.PaperScope();
       const canvas = canvasRef.current;
+      const width = canvas.width;
+      const height = canvas.height;
       scope.setup(canvas);
-
-      let owner, participant;
-
-      owner = new Paper.Layer();
-      scope.project.addLayer(owner);
 
       // draw background PDF raster only if there is a background PDF page for this page number
       if (raster !== -1) {
         const paperRaster = new Paper.Raster(raster);
         // fit raster in middle of canvas
-        paperRaster.translate(canvas.width / 2, canvas.height / 2);
+        paperRaster.position = new Paper.Point(width / 2, height / 2);
       }
+
+      let owner, participant;
+
+      owner = new Paper.Layer();
+      scope.project.addLayer(owner);
 
       // Only create participant layer if user is a participant of notebook
       if (!window.isOwner) {
@@ -51,7 +53,6 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       window.location.origin + '/pdf.worker.min.js';
     pdfJS.getDocument(window.backgroundPdf).promise.then((pdf) => {
       pdf.getPage(pageNumber).then((page) => {
-        // TODO: align this scaling with PDF generation scaling
         const viewport = page.getViewport({ scale: 1.5 });
   
         // Prepare canvas using PDF page dimensions.
