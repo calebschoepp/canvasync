@@ -127,6 +127,7 @@ class ExportNotebookJob < ApplicationJob
         blue = (blue * 255).round.to_s(16).rjust(2, '0').upcase
 
         pdf.stroke_color "#{red}#{green}#{blue}"
+        pdf.fill_color "#{red}#{green}#{blue}"
         pdf.line_width 3
         pdf.stroke
       when 'PointText'
