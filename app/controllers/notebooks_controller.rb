@@ -2,6 +2,7 @@ require 'convert_api'
 require './app/lib/accepted_file_types'
 
 class NotebooksController < ApplicationController
+  include ActiveStorage::SetCurrent
   include AcceptedFileTypes
 
   before_action :set_notebook, only: %i[show edit update destroy preview join]
