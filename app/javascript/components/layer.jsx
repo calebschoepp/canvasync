@@ -320,8 +320,8 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         const point = new Paper.Point(event.point.x, event.point.y);
         pathRef.current = new Paper.PointText({
           point: point,
-          fontFamily: 'serif',
           fontSize: 25,
+          fillColor: activeColor,
         });
         pathRef.current.fullySelected = true;
       }

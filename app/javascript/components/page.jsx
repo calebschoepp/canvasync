@@ -51,29 +51,33 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
   useEffect(() => {
     pdfJS.GlobalWorkerOptions.workerSrc =
       window.location.origin + '/pdf.worker.min.js';
-    pdfJS.getDocument(window.backgroundPdf).promise.then((pdf) => {
-      pdf.getPage(pageNumber).then((page) => {
-        const viewport = page.getViewport({ scale: 1.5 });
-  
-        // Prepare canvas using PDF page dimensions.
-        const canvas = canvasRef.current;
-        const canvasContext = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-  
-        // Render PDF page into canvas context.
-        const renderContext = { canvasContext, viewport };
-        page.render(renderContext).promise.then(() => {
-          // set raster image source as pdf canvas image
-          const image = new Image();
-          image.src = canvas.toDataURL()
-          setRaster(image);
+    if (window.backgroundPdf) {
+      pdfJS.getDocument(window.backgroundPdf).promise.then((pdf) => {
+        pdf.getPage(pageNumber).then((page) => {
+          const viewport = page.getViewport({ scale: 1.5 });
+    
+          // Prepare canvas using PDF page dimensions.
+          const canvas = canvasRef.current;
+          const canvasContext = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+    
+          // Render PDF page into canvas context.
+          const renderContext = { canvasContext, viewport };
+          page.render(renderContext).promise.then(() => {
+            // set raster image source as pdf canvas image
+            const image = new Image();
+            image.src = canvas.toDataURL()
+            setRaster(image);
+          });
+        }).catch(() => {
+          // there is no page in document with given page number so set raster as -1 
+          setRaster(-1);
         });
-      }).catch(() => {
-        // there is no page in document with given page number so set raster as -1 
-        setRaster(-1);
       });
-    });
+    } else {
+      setRaster(-1);
+    }
   }, []);
 
   // Only render participant layer if user is a participant of notebook.
