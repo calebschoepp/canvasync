@@ -4,7 +4,7 @@ class LoginTest < ApplicationSystemTestCase
   test 'email matches and password matches' do
     visit new_user_session_url
     fill_in 'user[email]', with: users(:one).email
-    fill_in 'user[password]', with: '123greetings'
+    fill_in 'user[password]', with: '123Greetings'
     click_on 'commit'
     assert_selector 'h1', text: 'Your Notebooks'
   end
@@ -12,7 +12,7 @@ class LoginTest < ApplicationSystemTestCase
   test 'email does not match and password matches' do
     visit new_user_session_url
     fill_in 'user[email]', with: 'wrong@email.com'
-    fill_in 'user[password]', with: '123greetings'
+    fill_in 'user[password]', with: '123Greetings'
     click_on 'commit'
     assert_text 'Invalid Email or password.'
   end
