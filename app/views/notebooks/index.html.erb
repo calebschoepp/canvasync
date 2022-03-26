@@ -24,7 +24,7 @@
   <div>You don't have any of your own notebooks yet. Create one to get started.</div>
 <% end %>
 
-<div id="owned-notebooks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+<div id="owned-notebooks" class="grid-display">
   <% @owned_notebooks.each do |notebook| %>
     <%= render notebook %>
   <% end %>
@@ -43,7 +43,7 @@
   <div>You haven't joined any notebooks yet. Enter a notebook code to join it and get started.</div>
 <% end %>
 
-<div id="joined-notebooks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+<div id="joined-notebooks" class="grid-display">
   <% @joined_notebooks.each do |notebook| %>
     <%= render notebook %>
   <% end %>

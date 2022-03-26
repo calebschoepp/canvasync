@@ -1,31 +1,33 @@
 <!--TODO: Render as a square card-->
 <div id="<%= dom_id notebook %>" class="card">
-  <div class='flex flex-row items-center justify-between'>
-    <%= link_to notebook.name, notebook, class: 'heading-3 overflow-hidden whitespace-nowrap hover:text-gray-800' %>
-    <div data-controller="dropdown" class="relative flex-none">
-      <div class="flex">
-        <button class='' type="button" data-action="dropdown#toggle click@window->dropdown#hide">
-          <%= image_tag('3-dots.png', class: 'w-5 h-5 my-auto') %>
-        </button>
-      </div>
+  <div class="flex flex-col justify-between">
+    <div class='flex flex-row items-center justify-between w-full'>
+      <%= link_to notebook.name, notebook, class: 'heading-3 overflow-hidden whitespace-nowrap hover:text-gray-800' %>
+      <div data-controller="dropdown" class="relative flex-none">
+        <div class="flex">
+          <button class='' type="button" data-action="dropdown#toggle click@window->dropdown#hide">
+            <%= image_tag('3-dots.png', class: 'w-5 h-5 my-auto') %>
+          </button>
+        </div>
 
-<!--      TODO: Make this popup show in front of other cards-->
-      <div
-        data-dropdown-target="menu"
-        class="hidden transition transform origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-        data-transition-enter-from="opacity-0 scale-95"
-        data-transition-enter-to="opacity-100 scale-100"
-        data-transition-leave-from="opacity-100 scale-100"
-        data-transition-leave-to="opacity-0 scale-95"
-      >
-        <div class="py-1">
-          <%= link_to "Open", notebook, data: { action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
-          <% if notebook.owner?(current_user) %>
-            <%= link_to "Edit", edit_notebook_path(notebook), data: { action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
-          <% end %>
-          <%= link_to "Export to PDF", notebook_exports_path(notebook), data: { action: "dropdown#toggle" }, class: 'hover:bg-gray-100 block px-4 py-2' %>
+        <div
+          data-dropdown-target="menu"
+          class="hidden transition transform origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+          data-transition-enter-from="opacity-0 scale-95"
+          data-transition-enter-to="opacity-100 scale-100"
+          data-transition-leave-from="opacity-100 scale-100"
+          data-transition-leave-to="opacity-0 scale-95"
+        >
+          <div class="py-1">
+            <%= link_to "Open", notebook, data: { action: "dropdown#toggle" }, class: 'dropdown-item' %>
+            <% if notebook.owner?(current_user) %>
+              <%= link_to "Edit", edit_notebook_path(notebook), data: { action: "dropdown#toggle" }, class: 'dropdown-item' %>
+            <% end %>
+            <%= link_to "Export to PDF", notebook_exports_path(notebook), data: { action: "dropdown#toggle" }, class: 'dropdown-item' %>
+          </div>
         </div>
       </div>
     </div>
+    <%= image_tag("content-icon.svg", class: 'inline-block h-28 mt-2 mb-3', alt: 'Content Icon') %>
   </div>
 </div>
