@@ -108,4 +108,8 @@
     .dropdown-item {
         @apply hover:bg-gray-100 block px-4 py-2
     }
+
+    .content-icon {
+        @apply inline-block h-28 mt-2 mb-3
+    }
 }
