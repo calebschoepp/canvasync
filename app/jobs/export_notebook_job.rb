@@ -17,28 +17,63 @@ class ExportNotebookJob < ApplicationJob
     tempfile = Tempfile.new ['export', '.pdf']
 
     begin
-      notebook.background.blob.open do |template|
-        orientation = pdf_orientation(template)
+      if notebook.background.blob
+        notebook.background.blob.open do |template|
+          Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => PAGE_MARGINS) do |pdf|
+            num_pdf_pages = count_pdf_pages(template)
+            (1..notebook.pages.length).each do |i|
+              if i <= num_pdf_pages
+                pdf.start_new_page :template => template, :template_page => i
+              else
+                pdf.start_new_page
+              end
+              pdf.go_to_page(i)
+
+              # default height is landscape letter size
+              page_height = PAGE_DIMS[1]
+              if i <= num_pdf_pages
+                # Set the transformation matrix for the page
+                set_transformation_matrix(pdf, template.path)
+                page_height = pdf_page_height(template, i)
+              else
+                # otherwise set the transformation matrix for the viewport
+                pdf.transformation_matrix((2.0 / 3.0), 0, 0, (2.0 / 3.0), 0, 0)
+              end
+
+              page = notebook.pages.find_by(:number => i)
+              if page && user_notebook.is_owner
+                layer = page.layers.find_by(:writer => user_notebook)
+                draw_layer_diffs(pdf, layer, page_height)
+              elsif page
+                owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
+                owner_layer = page.layers.find_by(:writer => owner_user_notebook)
+                draw_layer_diffs(pdf, owner_layer, page_height)
+                participant_layer = page.layers.find_by(:writer => user_notebook)
+                draw_layer_diffs(pdf, participant_layer, page_height)
+              end
+            end
+          end
+        end
+      else
         Prawn::Document.generate(tempfile.path, :skip_page_creation => true, :margin => PAGE_MARGINS) do |pdf|
           (1..notebook.pages.length).each do |i|
-            pdf.start_new_page :template => template, :template_page => i
+            pdf.start_new_page
             pdf.go_to_page(i)
 
-            if i <= count_pdf_pages(template)
-              # Set the transformation matrix for the page
-              set_transformation_matrix(pdf, template.path)
-            end
+            # page height is landscape letter size
+            page_height = PAGE_DIMS[1]
+            pdf.transformation_matrix((2.0 / 3.0), 0, 0, (2.0 / 3.0), 0, 0)
 
             page = notebook.pages.find_by(:number => i)
             if page && user_notebook.is_owner
               layer = page.layers.find_by(:writer => user_notebook)
-              draw_layer_diffs(pdf, layer, orientation)
+              draw_layer_diffs(pdf, layer, page_height)
             elsif page
               owner_user_notebook = notebook.user_notebooks.find_by(user_id: notebook.owner)
               owner_layer = page.layers.find_by(:writer => owner_user_notebook)
-              draw_layer_diffs(pdf, owner_layer, orientation)
+              draw_layer_diffs(pdf, owner_layer, page_height)
               participant_layer = page.layers.find_by(:writer => user_notebook)
-              draw_layer_diffs(pdf, participant_layer, orientation)
+              draw_layer_diffs(pdf, participant_layer, page_height)
             end
           end
         end
@@ -54,9 +89,9 @@ class ExportNotebookJob < ApplicationJob
     end
   end
 
-  def pdf_orientation(filename)
+  def pdf_page_height(filename, page_number)
     pdf_reader = PDF::Reader.new(filename)
-    pdf_reader.pages.first.orientation
+    pdf_reader.page(page_number).height
   end
 
   def count_pdf_pages(pdf_file_path)
@@ -64,8 +99,14 @@ class ExportNotebookJob < ApplicationJob
     pdf.page_count
   end
 
-  def scaled_page_dimensions
-    PAGE_DIMS.map { |dim| dim * SCALING_FACTOR }
+  def color_hex(color_params)
+    red = color_params[0].to_f
+    red = (red * 255).round.to_s(16).rjust(2, '0').upcase
+    green = color_params[1].to_f
+    green = (green * 255).round.to_s(16).rjust(2, '0').upcase
+    blue = color_params[2].to_f
+    blue = (blue * 255).round.to_s(16).rjust(2, '0').upcase
+    "#{red}#{green}#{blue}"
   end
 
   def set_transformation_matrix(pdf, filename)
@@ -97,8 +138,8 @@ class ExportNotebookJob < ApplicationJob
     end
   end
 
-  def draw_layer_diffs(pdf, layer, orientation)
-    vertical_offset = orientation == 'portrait' ? scaled_page_dimensions[1] : scaled_page_dimensions[0]
+  def draw_layer_diffs(pdf, layer, page_height)
+    vertical_offset = page_height * SCALING_FACTOR
     layer&.diffs&.each do |diff|
       next unless diff.diff_type == 'tangible' && diff.visible
 
@@ -119,17 +160,14 @@ class ExportNotebookJob < ApplicationJob
             pdf.curve source, dest, :bounds => [bezier1, bezier2]
           end
         end
-        red = data[1]['strokeColor'][0].to_f
-        red = (red * 255).round.to_s(16).rjust(2, '0').upcase
-        green = data[1]['strokeColor'][1].to_f
-        green = (green * 255).round.to_s(16).rjust(2, '0').upcase
-        blue = data[1]['strokeColor'][2].to_f
-        blue = (blue * 255).round.to_s(16).rjust(2, '0').upcase
+        hex = color_hex(data[1]['strokeColor'])
 
-        pdf.stroke_color "#{red}#{green}#{blue}"
+        pdf.stroke_color hex
         pdf.line_width 3
         pdf.stroke
       when 'PointText'
+        hex = color_hex(data[1]['strokeColor'])
+        pdf.fill_color hex
         pdf.draw_text data[1]['content'], :at => [data[1]['matrix'][4].to_f, vertical_offset - data[1]['matrix'][5].to_f], :size => 25
       end
     end

@@ -8,7 +8,7 @@
     window.currentUser = <%= current_user.id %>
     window.ownerId = <%= @notebook.owner.id %>
     window.userNotebookId = <%= @notebook.user_notebooks.find_by(:user => current_user.id).id %>
-    window.backgroundPdf = <%= @notebook.background.blob.url.to_json.html_safe %>
+    window.backgroundPdf = <%= @notebook.background.blob ? @notebook.background.blob.url.to_json.html_safe : nil.to_json.html_safe %>
   <% end %>
   <% content_for :for_head do -%>
     <%= javascript_include_tag "index", "data-turbo-track": "reload", defer: true %>
