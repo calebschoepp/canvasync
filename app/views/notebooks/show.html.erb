@@ -13,5 +13,12 @@
   <% content_for :for_head do -%>
     <%= javascript_include_tag "index", "data-turbo-track": "reload", defer: true %>
   <% end -%>
+  <% if @notebook.owner?(current_user) %>
+    <div class="w-full mb-6 text-center">
+      Go to
+      <a class="text-primary-700" href="<%= preview_notebook_url @notebook %>"><%= preview_notebook_url @notebook %></a>
+      or enter notebook ID <%= @notebook.id %> to join this notebook.
+    </div>
+  <% end %>
   <div id="root"></div>
 </div>
