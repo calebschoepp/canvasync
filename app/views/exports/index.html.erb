@@ -23,7 +23,7 @@
   <% end %>
 </div>
 
-<div id="exports" class='flex flex-col gap-4'>
+<div id="exports" class='grid-display'>
   <% @exports.each_with_index do |export, i| %>
     <%= render export, i: i %>
   <% end %>
