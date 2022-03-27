@@ -25,7 +25,7 @@ class ExportNotebookJob < ApplicationJob
               if i <= num_pdf_pages
                 pdf.start_new_page :template => template, :template_page => i
               else
-                pdf.start_new_page
+                pdf.start_new_page :size => 'LETTER', :layout => :portrait
               end
               pdf.go_to_page(i)
 
