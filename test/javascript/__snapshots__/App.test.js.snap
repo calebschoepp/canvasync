@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    className="flex flex-row"
+  >
+    <div
+      className="flex flex-col"
+    >
+      <input
+        onChange={[Function]}
+        type="color"
+        value="#000000"
+      />
+      <button
+        className="primary-button"
+        onClick={[Function]}
+      >
+        Pen
+      </button>
+      <button
+        className="primary-button"
+        onClick={[Function]}
+      >
+        Eraser
+      </button>
+      <button
+        className="primary-button"
+        onClick={[Function]}
+      >
+        Select
+      </button>
+      <button
+        className="primary-button"
+        onClick={[Function]}
+      >
+        Text
+      </button>
+    </div>
+    <div
+      className="flex flex-col"
+    />
+  </div>
+</div>
+`;
