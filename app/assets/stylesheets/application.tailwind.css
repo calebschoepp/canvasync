@@ -113,3 +113,23 @@
         @apply inline-block h-28 mt-2 mb-3
     }
 }
+
+.copied-notification {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-1em);
+    transition: all .500s;
+}
+    
+.copied .copied-notification {
+    opacity: 1;
+    transform: translateY(-2em);
+}
+
+.justify-around {
+    justify-content: space-around;
+}

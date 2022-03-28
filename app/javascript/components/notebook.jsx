@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import consumer from '../channels/consumer';
+import { NotebookHeader } from './notebookheader';
 import { Page } from './page';
+import { Toolbar } from './toolbar';
 
 export const CanvasTools = {
   pen: 'Pen',
   eraser: 'Eraser',
   select: 'Select',
   text: 'Text',
-}
+};
 
 export function Notebook() {
   const [numPages, setNumPages] = useState(Math.max(window.participantLayers.length, window.ownerLayers.length));
@@ -49,11 +53,11 @@ export function Notebook() {
     setPageChannel(setupSubscription(window.notebookId));
   }, []);
 
-  const canvasToolCallback = useCallback((event) =>
-    setActiveTool(event.target.innerText)
+  const canvasToolCallback = useCallback((tool) =>
+    setActiveTool(tool)
   );
-  const colorToolCallback = useCallback((event) =>
-    setActiveColor(event.target.value)
+  const colorToolCallback = useCallback((color) =>
+    setActiveColor(color)
   );
   const addPageCallback = useCallback(() => {
     transmitNewPage(window.notebookId);
@@ -64,24 +68,25 @@ export function Notebook() {
     const pid = window.participantLayers[i] ? window.participantLayers[i].id : null;
     const oid = window.ownerLayers[i] ? window.ownerLayers[i].id : null;
     pages.push(<Page activeTool={activeTool} activeColor={activeColor} ownerLayerId={oid} participantLayerId={pid} key={i} pageNumber={i + 1} />);
+    pages.push(<p className="text-gray-700 mx-auto" key={`page-number-${i}`}>{`${i + 1}/${numPages}`}</p>)
   }
 
   // TODO: maybe pass in page id or layer id using window here
   return (
-    <div className='flex flex-row'>
-      <div className='flex flex-col'>
-        <input type='color' value={activeColor} onChange={colorToolCallback} />
-        <button className='primary-button' onClick={canvasToolCallback}>{CanvasTools.pen}</button>
-        <button className='primary-button' onClick={canvasToolCallback}>{CanvasTools.eraser}</button>
-        <button className='primary-button' onClick={canvasToolCallback}>{CanvasTools.select}</button>
-        <button className='primary-button' onClick={canvasToolCallback}>{CanvasTools.text}</button>
-      </div>
+    <div className='flex flex-col'>
+      <NotebookHeader />
       <div className='flex flex-col'>
         {pages}
         {
-          window.isOwner && <button className='primary-button' onClick={addPageCallback}>Add Page</button>
+          window.isOwner && <button className='primary-button mx-auto' style={addPageStyle} onClick={addPageCallback}><FontAwesomeIcon icon={faPlus} /></button>
         }
       </div>
+      <Toolbar activeColor={activeColor} activeTool={activeTool} onCanvasToolChange={canvasToolCallback} onColorToolChange={colorToolCallback} />
     </div>
   );
+};
+
+const addPageStyle = {
+  marginTop: '12px',
+  marginBottom: '12px'
 };
