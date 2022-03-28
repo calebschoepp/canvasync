@@ -1,41 +1,28 @@
 require 'test_helper'
 
 class ExportsControllerTest < ActionDispatch::IntegrationTest
-  setup do
+  include Devise::Test::IntegrationHelpers
+
+  def setup
+    sign_in users(:one)
     @export = exports(:one)
   end
 
   test 'should get index' do
-    get exports_url
+    get notebook_exports_url notebooks(:one)
     assert_response :success
   end
 
-  test 'should get new' do
-    get new_export_url
-    assert_response :success
-  end
-
-  test 'should create export' do
+  test 'should create export if participant or owner' do
     assert_difference('Export.count') do
-      post exports_url, params: { export: { notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
+      post notebook_exports_url notebooks(:one), params: { export: { user_id: users(:one).id, notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
     end
-
-    assert_redirected_to export_url(Export.last)
   end
 
-  test 'should show export' do
-    get export_url(@export)
-    assert_response :success
-  end
-
-  test 'should get edit' do
-    get edit_export_url(@export)
-    assert_response :success
-  end
-
-  test 'should update export' do
-    patch export_url(@export), params: { export: { notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
-    assert_redirected_to export_url(@export)
+  test 'should not create export if not participant or owner' do
+    assert_no_difference('Export.count') do
+      post notebook_exports_url notebooks(:one), params: { export: { user_id: users(:four).id, notebook_id: @export.notebook_id, ready: @export.ready, failed: @export.failed } }
+    end
   end
 
   test 'should destroy export' do
@@ -43,6 +30,6 @@ class ExportsControllerTest < ActionDispatch::IntegrationTest
       delete export_url(@export)
     end
 
-    assert_redirected_to exports_url
+    assert_redirected_to notebook_exports_url notebooks(:one)
   end
 end
