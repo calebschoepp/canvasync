@@ -96,11 +96,10 @@ class SearchTest < ApplicationSystemTestCase
     visit notebooks_url
 
     find(id: 'notebook-search-bar').set 'Notebook1'
+    sleep 0.5
     assert_selector 'div', id: 'results' do
       click_on id: 'search-result', text: 'Notebook1'
     end
-
-    # assert_redirected_to notebook_url(Notebook.last)
-    expect(page.current_path).to eq notebook_url(Notebook.last)
+    assert_selector 'h1', text: 'Notebook1'
   end
 end
