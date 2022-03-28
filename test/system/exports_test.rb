@@ -1,43 +1,23 @@
-# require 'application_system_test_case'
+require 'application_system_test_case'
 
-# class ExportsTest < ApplicationSystemTestCase
-#   setup do
-#     @export = exports(:one)
-#   end
+class ExportsTest < ApplicationSystemTestCase
+  include Devise::Test::IntegrationHelpers
 
-#   test 'visiting the index' do
-#     visit exports_url
-#     assert_selector 'h1', text: 'Exports'
-#   end
+  def setup
+    sign_in users(:three)
+    @export = exports(:one)
+  end
 
-#   test 'should create export' do
-#     visit exports_url
-#     click_on 'New export'
-
-#     fill_in 'Notebook', with: @export.notebook_id
-#     check 'Ready' if @export.ready
-#     click_on 'Create Export'
-
-#     assert_text 'Export was successfully created'
-#     click_on 'Back'
-#   end
-
-#   test 'should update Export' do
-#     visit export_url(@export)
-#     click_on 'Edit this export', match: :first
-
-#     fill_in 'Notebook', with: @export.notebook_id
-#     check 'Ready' if @export.ready
-#     click_on 'Update Export'
-
-#     assert_text 'Export was successfully updated'
-#     click_on 'Back'
-#   end
-
-#   test 'should destroy Export' do
-#     visit export_url(@export)
-#     click_on 'Destroy this export', match: :first
-
-#     assert_text 'Export was successfully destroyed'
-#   end
-# end
+  test 'export a notebook from start to finish and download' do
+    visit notebooks_url
+    find('button.ellipse').click
+    click_on 'Export to PDF'
+    click_on 'Export Notebook'
+    assert_selector 'span', text: 'Exporting'
+    sleep 1
+    visit current_path
+    assert_selector 'span', text: 'Ready'
+    find('button.ellipse').click
+    click_on 'Preview'
+  end
+end

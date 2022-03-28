@@ -18,7 +18,7 @@ class ExportsController < ApplicationController
     respond_to do |format|
       if @export.save
         ExportNotebookJob.perform_later(@export.id)
-        format.html { redirect_to export_url(@export), notice: 'Export was successfully created.' }
+        format.html { redirect_to notebook_exports_url(@notebook), notice: 'Export was successfully created.' }
         format.json { render :show, status: :created, location: @export }
       else
         format.html { render :new, status: :unprocessable_entity }
