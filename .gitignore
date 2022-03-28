@@ -41,6 +41,8 @@
 
 .idea
 
+*.DS_Store
+
 .vscode
 # Ignore application configuration
 /config/application.yml
