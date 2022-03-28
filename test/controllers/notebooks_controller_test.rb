@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class NotebooksControllerTest < ActionDispatch::IntegrationTest
-  setup do
+  include Devise::Test::IntegrationHelpers
+
+  def setup
+    sign_in users(:four)
     @notebook = notebooks(:one)
   end
 
@@ -15,12 +18,49 @@ class NotebooksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should create notebook' do
+  test 'should create notebook with no background' do
     assert_difference('Notebook.count') do
       post notebooks_url, params: { notebook: { name: @notebook.name } }
     end
 
     assert_redirected_to notebook_url(Notebook.last)
+    assert_nil(Notebook.last.background)
+  end
+
+  test 'should create notebook with PDF background' do
+    assert_difference('Notebook.count') do
+      post notebooks_url, params: { notebook: { name: @notebook.name, background: './test/examplePDF.pdf' } }
+    end
+
+    assert_redirected_to notebook_url(Notebook.last)
+    assert_not_nil(Notebook.last.background)
+  end
+
+  test 'should create notebook with PNG background' do
+    assert_difference('Notebook.count') do
+      post notebooks_url, params: { notebook: { name: @notebook.name, background: './test/examplePNG.png' } }
+    end
+
+    assert_redirected_to notebook_url(Notebook.last)
+    assert_not_nil(Notebook.last.background)
+  end
+
+  test 'should create notebook with JPG background' do
+    assert_difference('Notebook.count') do
+      post notebooks_url, params: { notebook: { name: @notebook.name, background: './test/exampleJPG.jpg' } }
+    end
+
+    assert_redirected_to notebook_url(Notebook.last)
+    assert_not_nil(Notebook.last.background)
+  end
+
+  test 'should create notebook with PPT background' do
+    assert_difference('Notebook.count') do
+      post notebooks_url, params: { notebook: { name: @notebook.name, background: './test/examplePPT.pptx' } }
+    end
+
+    assert_redirected_to notebook_url(Notebook.last)
+    assert_not_nil(Notebook.last.background)
   end
 
   test 'should show notebook' do

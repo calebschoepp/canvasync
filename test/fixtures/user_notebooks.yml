@@ -1,11 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
+  user: two
+  notebook: one
+  is_owner: true
+
+two:
+  user: three
   notebook: one
   is_owner: false
 
-two:
-  user: two
+three:
+  user: four
   notebook: two
+  is_owner: true
+
+four:
+  user: four
+  notebook: one
   is_owner: false
