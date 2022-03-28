@@ -106,6 +106,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
 }
 
 const pageStyle = {
+  margin: '8px auto',
   border: '2px solid black',
   display: 'flex',
   justifyContent: 'center'
