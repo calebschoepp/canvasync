@@ -20,19 +20,19 @@ class NotebooksControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create notebook with no background' do
     assert_difference('Notebook.count') do
-      post notebooks_url, params: { notebook: { name: "new notebook" } }
+      post notebooks_url, params: { notebook: { name: 'new notebook' } }
     end
 
-    assert_equal(Notebook.last.name, "new notebook")
+    assert_equal(Notebook.last.name, 'new notebook')
     assert_not(Notebook.last.background.attached?)
   end
 
   test 'should create notebook with a background' do
     assert_difference('Notebook.count') do
-      post notebooks_url, params: { notebook: { name: "new notebook", background: fixture_file_upload('./examplePDF.pdf') } }
+      post notebooks_url, params: { notebook: { name: 'new notebook', background: fixture_file_upload('./examplePDF.pdf') } }
     end
 
-    assert_equal(Notebook.last.name, "new notebook")
+    assert_equal(Notebook.last.name, 'new notebook')
     assert(Notebook.last.background.attached?)
   end
 
