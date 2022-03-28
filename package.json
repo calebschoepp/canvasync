@@ -31,13 +31,20 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@testing-library/react": "^12.1.4",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "jest": "^27.5.1",
     "jest-canvas-mock": "^2.3.1",
-    "react-test-renderer": "^17.0.2"
+    "react-test-renderer": "^17.0.2",
+    "regenerator-runtime": "^0.13.9"
   },
   "jest": {
     "setupFiles": [
       "jest-canvas-mock"
+    ],
+    "setupFilesAfterEnv": [
+      "./test/javascript/setupTests.js"
     ]
   }
 }

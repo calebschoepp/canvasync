@@ -78,7 +78,7 @@ export function Notebook() {
       <div className='flex flex-col'>
         {pages}
         {
-          window.isOwner && <button className='primary-button mx-auto' style={addPageStyle} onClick={addPageCallback}><FontAwesomeIcon icon={faPlus} /></button>
+          window.isOwner && <button className='primary-button mx-auto' style={addPageStyle} onClick={addPageCallback} data-testid="new-page-button"><FontAwesomeIcon icon={faPlus} /></button>
         }
       </div>
       <Toolbar activeColor={activeColor} activeTool={activeTool} onCanvasToolChange={canvasToolCallback} onColorToolChange={colorToolCallback} />

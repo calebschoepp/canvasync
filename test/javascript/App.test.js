@@ -3,21 +3,12 @@
  */
 
 import React from "react";
-import renderer from "react-test-renderer";
+import {act, render, fireEvent, waitFor, cleanup} from '@testing-library/react';
 import App from "../../app/javascript/components/App";
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { createConsumer } from "@rails/actioncable";
+// import { createConsumer } from "@rails/actioncable";
 
 describe('react canvas app tests', () => {
   beforeEach(() => {
-    jest.mock("@rails/actioncable", () => {
-      return {
-        createConsumer: jest.fn().mockImplementation(() => {
-          return {};
-        }),
-      };
-    });
-  
     window.notebookId = 1;
     window.notebookName = "Notebook Name";
     window.isOwner = true;
@@ -31,21 +22,27 @@ describe('react canvas app tests', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    cleanup();
   });
   
   it("renders correctly", () => {
-    const app = renderer.create(<App />);
-    expect(app).toMatchSnapshot();
+    const { container, queryAllByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    expect(queryAllByTestId(/canvasync-canvas-([0-9]+|null)-([0-9]+|null)/).length).toBe(0);
   });
   
-  it("renders a new page when page added", () => {
-    const app = renderer.create(<App />);
-    expect(app).toMatchSnapshot();
-    const instance = app.root;
-    const newPageButton = instance.findByProps({icon: faPlus}).parent;
-    console.log(newPageButton.props);
-    newPageButton.props.onClick();
-    expect(app).toMatchSnapshot();
-    expect(window.ownerLayers.length).toBe(1);
+  it("renders correctly with multiple owner layers", () => {
+    window.ownerLayers = [{id: 1},{id: 2},{id: 3}];
+    const { container, getAllByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    expect(getAllByTestId(/canvasync-canvas-([0-9]+|null)-([0-9]+|null)/).length).toBe(3);
+  });
+
+  it("renders correctly with multiple owner layers and participant layers", () => {
+    window.ownerLayers = [{id: 1},{id: 2},{id: 3}];
+    window.participantLayers = [{id: 4},{id: 5},{id: 6}];
+    const { container, getAllByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    expect(getAllByTestId(/canvasync-canvas-([0-9]+|null)-([0-9]+|null)/).length).toBe(3);
   });
 });
