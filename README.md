@@ -5,7 +5,7 @@ It is expected that you have the following software already on your system.
 - Docker (for running Redis)
 - `rbenv`
 - `ruby 3.1.0` (installed via `rbenv`)
-- `node` (pretty much any version)
+- `node 16.14.0`
 - `yarn` (pretty much any version)
 - `sqlite`
 - `heroku` CLI
