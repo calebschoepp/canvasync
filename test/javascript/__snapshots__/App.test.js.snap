@@ -94,6 +94,7 @@ exports[`react canvas app tests renders correctly 1`] = `
         >
           <button
             class="primary-button"
+            data-testid="pen-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -114,6 +115,7 @@ exports[`react canvas app tests renders correctly 1`] = `
           </button>
           <button
             class="secondary-button"
+            data-testid="erase-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -134,6 +136,7 @@ exports[`react canvas app tests renders correctly 1`] = `
           </button>
           <button
             class="secondary-button"
+            data-testid="select-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -154,215 +157,7 @@ exports[`react canvas app tests renders correctly 1`] = `
           </button>
           <button
             class="secondary-button"
-            style="margin: 8px 8px;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-font "
-              data-icon="font"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 448 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M416 416h-25.81L253.1 52.76c-4.688-12.47-16.57-20.76-29.91-20.76s-25.34 8.289-30.02 20.76L57.81 416H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H126.2l17.1-48h159.6l17.1 48H320c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32S433.7 416 416 416zM168.2 304L224 155.1l55.82 148.9H168.2z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`react canvas app tests renders correctly with background PDF 1`] = `
-<div>
-  <div>
-    <div
-      class="flex flex-col"
-    >
-      <h1
-        class="heading-1 mx-auto"
-      >
-        Notebook Name
-      </h1>
-      <div
-        class="flex flex-row justify-around w-full items-center"
-      >
-        <h2
-          class="heading-3"
-        >
-          Notebook Share ID: 1
-        </h2>
-        <button
-          class="secondary-button"
-        >
-          Copy Share Link
-          <span
-            class="text-gray-700 copied-notification"
-          >
-            Copied
-          </span>
-        </button>
-      </div>
-      <div
-        class="flex flex-col"
-      >
-        <div
-          style="margin: 8px auto; border: 2px solid black; display: flex; justify-content: center;"
-        >
-          <canvas
-            data-testid="canvasync-canvas-1-null"
-            height="1188px"
-            style="background: none;"
-            width="918px"
-          />
-        </div>
-        <p
-          class="text-gray-700 mx-auto"
-        >
-          1/2
-        </p>
-        <div
-          style="margin: 8px auto; border: 2px solid black; display: flex; justify-content: center;"
-        >
-          <canvas
-            data-testid="canvasync-canvas-2-null"
-            height="1188px"
-            style="background: none;"
-            width="918px"
-          />
-        </div>
-        <p
-          class="text-gray-700 mx-auto"
-        >
-          2/2
-        </p>
-        <button
-          class="primary-button mx-auto"
-          data-testid="new-page-button"
-          style="margin-top: 12px; margin-bottom: 12px;"
-        >
-          <svg
-            aria-hidden="true"
-            class="svg-inline--fa fa-plus "
-            data-icon="plus"
-            data-prefix="fas"
-            focusable="false"
-            role="img"
-            viewBox="0 0 448 512"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-      </div>
-      <div
-        class="flex flex-col sticky items-center card mx-auto my-auto"
-        style="bottom: 12px;"
-      >
-        <div
-          class="flex flex-row justify-center"
-        >
-          <button
-            class="primary-button"
-            style="background-color: rgb(58, 134, 255); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
-          />
-          <button
-            class="primary-button"
-            style="background-color: rgb(131, 56, 236); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
-          />
-          <button
-            class="primary-button"
-            style="background-color: rgb(255, 0, 110); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
-          />
-          <button
-            class="primary-button"
-            style="background-color: rgb(251, 86, 7); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
-          />
-          <button
-            class="primary-button"
-            style="background-color: rgb(255, 190, 11); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
-          />
-        </div>
-        <input
-          class="w-full"
-          style="height: 32px; margin-top: 8px;"
-          type="color"
-          value="#000000"
-        />
-        <div
-          class="flex flex-row justify-center"
-        >
-          <button
-            class="primary-button"
-            style="margin: 8px 8px;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-pen "
-              data-icon="pen"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <button
-            class="secondary-button"
-            style="margin: 8px 8px;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-eraser "
-              data-icon="eraser"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <button
-            class="secondary-button"
-            style="margin: 8px 8px;"
-          >
-            <svg
-              aria-hidden="true"
-              class="svg-inline--fa fa-border-top-left "
-              data-icon="border-top-left"
-              data-prefix="fas"
-              focusable="false"
-              role="img"
-              viewBox="0 0 448 512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 112C0 67.82 35.82 32 80 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H80C71.16 96 64 103.2 64 112V448C64 465.7 49.67 480 32 480C14.33 480 0 465.7 0 448V112zM128 480C110.3 480 96 465.7 96 448C96 430.3 110.3 416 128 416C145.7 416 160 430.3 160 448C160 465.7 145.7 480 128 480zM320 480C302.3 480 288 465.7 288 448C288 430.3 302.3 416 320 416C337.7 416 352 430.3 352 448C352 465.7 337.7 480 320 480zM256 448C256 465.7 241.7 480 224 480C206.3 480 192 465.7 192 448C192 430.3 206.3 416 224 416C241.7 416 256 430.3 256 448zM416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416C433.7 416 448 430.3 448 448C448 465.7 433.7 480 416 480zM416 288C398.3 288 384 273.7 384 256C384 238.3 398.3 224 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288zM448 352C448 369.7 433.7 384 416 384C398.3 384 384 369.7 384 352C384 334.3 398.3 320 416 320C433.7 320 448 334.3 448 352zM416 192C398.3 192 384 177.7 384 160C384 142.3 398.3 128 416 128C433.7 128 448 142.3 448 160C448 177.7 433.7 192 416 192z"
-                fill="currentColor"
-              />
-            </svg>
-          </button>
-          <button
-            class="secondary-button"
+            data-testid="text-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -530,6 +325,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers 1`]
         >
           <button
             class="primary-button"
+            data-testid="pen-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -550,6 +346,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers 1`]
           </button>
           <button
             class="secondary-button"
+            data-testid="erase-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -570,6 +367,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers 1`]
           </button>
           <button
             class="secondary-button"
+            data-testid="select-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -590,6 +388,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers 1`]
           </button>
           <button
             class="secondary-button"
+            data-testid="text-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -757,6 +556,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers and
         >
           <button
             class="primary-button"
+            data-testid="pen-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -777,6 +577,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers and
           </button>
           <button
             class="secondary-button"
+            data-testid="erase-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -797,6 +598,7 @@ exports[`react canvas app tests renders correctly with multiple owner layers and
           </button>
           <button
             class="secondary-button"
+            data-testid="select-tool"
             style="margin: 8px 8px;"
           >
             <svg
@@ -817,6 +619,707 @@ exports[`react canvas app tests renders correctly with multiple owner layers and
           </button>
           <button
             class="secondary-button"
+            data-testid="text-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-font "
+              data-icon="font"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 416h-25.81L253.1 52.76c-4.688-12.47-16.57-20.76-29.91-20.76s-25.34 8.289-30.02 20.76L57.81 416H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H126.2l17.1-48h159.6l17.1 48H320c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32S433.7 416 416 416zM168.2 304L224 155.1l55.82 148.9H168.2z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`react canvas app tests tests that new page button callback is fired on new page click 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col"
+    >
+      <h1
+        class="heading-1 mx-auto"
+      >
+        Notebook Name
+      </h1>
+      <div
+        class="flex flex-row justify-around w-full items-center"
+      >
+        <h2
+          class="heading-3"
+        >
+          Notebook Share ID: 1
+        </h2>
+        <button
+          class="secondary-button"
+        >
+          Copy Share Link
+          <span
+            class="text-gray-700 copied-notification"
+          >
+            Copied
+          </span>
+        </button>
+      </div>
+      <div
+        class="flex flex-col"
+      >
+        <button
+          class="primary-button mx-auto"
+          data-testid="new-page-button"
+          style="margin-top: 12px; margin-bottom: 12px;"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-plus "
+            data-icon="plus"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 448 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="flex flex-col sticky items-center card mx-auto my-auto"
+        style="bottom: 12px;"
+      >
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            style="background-color: rgb(58, 134, 255); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(131, 56, 236); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 0, 110); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(251, 86, 7); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 190, 11); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+        </div>
+        <input
+          class="w-full"
+          style="height: 32px; margin-top: 8px;"
+          type="color"
+          value="#000000"
+        />
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            data-testid="pen-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-pen "
+              data-icon="pen"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="erase-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-eraser "
+              data-icon="eraser"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="select-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-border-top-left "
+              data-icon="border-top-left"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 112C0 67.82 35.82 32 80 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H80C71.16 96 64 103.2 64 112V448C64 465.7 49.67 480 32 480C14.33 480 0 465.7 0 448V112zM128 480C110.3 480 96 465.7 96 448C96 430.3 110.3 416 128 416C145.7 416 160 430.3 160 448C160 465.7 145.7 480 128 480zM320 480C302.3 480 288 465.7 288 448C288 430.3 302.3 416 320 416C337.7 416 352 430.3 352 448C352 465.7 337.7 480 320 480zM256 448C256 465.7 241.7 480 224 480C206.3 480 192 465.7 192 448C192 430.3 206.3 416 224 416C241.7 416 256 430.3 256 448zM416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416C433.7 416 448 430.3 448 448C448 465.7 433.7 480 416 480zM416 288C398.3 288 384 273.7 384 256C384 238.3 398.3 224 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288zM448 352C448 369.7 433.7 384 416 384C398.3 384 384 369.7 384 352C384 334.3 398.3 320 416 320C433.7 320 448 334.3 448 352zM416 192C398.3 192 384 177.7 384 160C384 142.3 398.3 128 416 128C433.7 128 448 142.3 448 160C448 177.7 433.7 192 416 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="text-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-font "
+              data-icon="font"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 416h-25.81L253.1 52.76c-4.688-12.47-16.57-20.76-29.91-20.76s-25.34 8.289-30.02 20.76L57.81 416H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H126.2l17.1-48h159.6l17.1 48H320c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32S433.7 416 416 416zM168.2 304L224 155.1l55.82 148.9H168.2z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`react canvas app tests tests that participants aren't given open to add new page 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col"
+    >
+      <h1
+        class="heading-1 mx-auto"
+      >
+        Notebook Name
+      </h1>
+      <div
+        class="flex flex-row justify-around w-full items-center"
+      >
+        <h2
+          class="heading-3"
+        >
+          Notebook Share ID: 1
+        </h2>
+        <button
+          class="secondary-button"
+        >
+          Copy Share Link
+          <span
+            class="text-gray-700 copied-notification"
+          >
+            Copied
+          </span>
+        </button>
+      </div>
+      <div
+        class="flex flex-col"
+      />
+      <div
+        class="flex flex-col sticky items-center card mx-auto my-auto"
+        style="bottom: 12px;"
+      >
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            style="background-color: rgb(58, 134, 255); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(131, 56, 236); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 0, 110); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(251, 86, 7); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 190, 11); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+        </div>
+        <input
+          class="w-full"
+          style="height: 32px; margin-top: 8px;"
+          type="color"
+          value="#000000"
+        />
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            data-testid="pen-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-pen "
+              data-icon="pen"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="erase-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-eraser "
+              data-icon="eraser"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="select-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-border-top-left "
+              data-icon="border-top-left"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 112C0 67.82 35.82 32 80 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H80C71.16 96 64 103.2 64 112V448C64 465.7 49.67 480 32 480C14.33 480 0 465.7 0 448V112zM128 480C110.3 480 96 465.7 96 448C96 430.3 110.3 416 128 416C145.7 416 160 430.3 160 448C160 465.7 145.7 480 128 480zM320 480C302.3 480 288 465.7 288 448C288 430.3 302.3 416 320 416C337.7 416 352 430.3 352 448C352 465.7 337.7 480 320 480zM256 448C256 465.7 241.7 480 224 480C206.3 480 192 465.7 192 448C192 430.3 206.3 416 224 416C241.7 416 256 430.3 256 448zM416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416C433.7 416 448 430.3 448 448C448 465.7 433.7 480 416 480zM416 288C398.3 288 384 273.7 384 256C384 238.3 398.3 224 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288zM448 352C448 369.7 433.7 384 416 384C398.3 384 384 369.7 384 352C384 334.3 398.3 320 416 320C433.7 320 448 334.3 448 352zM416 192C398.3 192 384 177.7 384 160C384 142.3 398.3 128 416 128C433.7 128 448 142.3 448 160C448 177.7 433.7 192 416 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="text-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-font "
+              data-icon="font"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 416h-25.81L253.1 52.76c-4.688-12.47-16.57-20.76-29.91-20.76s-25.34 8.289-30.02 20.76L57.81 416H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H126.2l17.1-48h159.6l17.1 48H320c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32S433.7 416 416 416zM168.2 304L224 155.1l55.82 148.9H168.2z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`react canvas app tests tests that users can edit canvas 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col"
+    >
+      <h1
+        class="heading-1 mx-auto"
+      >
+        Notebook Name
+      </h1>
+      <div
+        class="flex flex-row justify-around w-full items-center"
+      >
+        <h2
+          class="heading-3"
+        >
+          Notebook Share ID: 1
+        </h2>
+        <button
+          class="secondary-button"
+        >
+          Copy Share Link
+          <span
+            class="text-gray-700 copied-notification"
+          >
+            Copied
+          </span>
+        </button>
+      </div>
+      <div
+        class="flex flex-col"
+      >
+        <div
+          style="margin: 8px auto; border: 2px solid black; display: flex; justify-content: center;"
+        >
+          <canvas
+            data-testid="canvasync-canvas-1-2"
+            height="1188px"
+            id="paper-view-7"
+            style="background: none; webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
+            width="918px"
+          />
+        </div>
+        <p
+          class="text-gray-700 mx-auto"
+        >
+          1/1
+        </p>
+      </div>
+      <div
+        class="flex flex-col sticky items-center card mx-auto my-auto"
+        style="bottom: 12px;"
+      >
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            style="background-color: rgb(58, 134, 255); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(131, 56, 236); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 0, 110); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(251, 86, 7); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 190, 11); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+        </div>
+        <input
+          class="w-full"
+          style="height: 32px; margin-top: 8px;"
+          type="color"
+          value="#000000"
+        />
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            data-testid="pen-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-pen "
+              data-icon="pen"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="erase-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-eraser "
+              data-icon="eraser"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="select-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-border-top-left "
+              data-icon="border-top-left"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 112C0 67.82 35.82 32 80 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H80C71.16 96 64 103.2 64 112V448C64 465.7 49.67 480 32 480C14.33 480 0 465.7 0 448V112zM128 480C110.3 480 96 465.7 96 448C96 430.3 110.3 416 128 416C145.7 416 160 430.3 160 448C160 465.7 145.7 480 128 480zM320 480C302.3 480 288 465.7 288 448C288 430.3 302.3 416 320 416C337.7 416 352 430.3 352 448C352 465.7 337.7 480 320 480zM256 448C256 465.7 241.7 480 224 480C206.3 480 192 465.7 192 448C192 430.3 206.3 416 224 416C241.7 416 256 430.3 256 448zM416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416C433.7 416 448 430.3 448 448C448 465.7 433.7 480 416 480zM416 288C398.3 288 384 273.7 384 256C384 238.3 398.3 224 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288zM448 352C448 369.7 433.7 384 416 384C398.3 384 384 369.7 384 352C384 334.3 398.3 320 416 320C433.7 320 448 334.3 448 352zM416 192C398.3 192 384 177.7 384 160C384 142.3 398.3 128 416 128C433.7 128 448 142.3 448 160C448 177.7 433.7 192 416 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="text-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-font "
+              data-icon="font"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 416h-25.81L253.1 52.76c-4.688-12.47-16.57-20.76-29.91-20.76s-25.34 8.289-30.02 20.76L57.81 416H32c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32s-14.33-32-32-32H126.2l17.1-48h159.6l17.1 48H320c-17.67 0-32 14.31-32 32s14.33 32 32 32h96c17.67 0 32-14.31 32-32S433.7 416 416 416zM168.2 304L224 155.1l55.82 148.9H168.2z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`react canvas app tests tests that users can edit canvas with pen tool 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col"
+    >
+      <h1
+        class="heading-1 mx-auto"
+      >
+        Notebook Name
+      </h1>
+      <div
+        class="flex flex-row justify-around w-full items-center"
+      >
+        <h2
+          class="heading-3"
+        >
+          Notebook Share ID: 1
+        </h2>
+        <button
+          class="secondary-button"
+        >
+          Copy Share Link
+          <span
+            class="text-gray-700 copied-notification"
+          >
+            Copied
+          </span>
+        </button>
+      </div>
+      <div
+        class="flex flex-col"
+      >
+        <div
+          style="margin: 8px auto; border: 2px solid black; display: flex; justify-content: center;"
+        >
+          <canvas
+            data-testid="canvasync-canvas-1-2"
+            height="1188px"
+            id="paper-view-6"
+            style="background: none; webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"
+            width="918px"
+          />
+        </div>
+        <p
+          class="text-gray-700 mx-auto"
+        >
+          1/1
+        </p>
+      </div>
+      <div
+        class="flex flex-col sticky items-center card mx-auto my-auto"
+        style="bottom: 12px;"
+      >
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            style="background-color: rgb(58, 134, 255); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(131, 56, 236); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 0, 110); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(251, 86, 7); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+          <button
+            class="primary-button"
+            style="background-color: rgb(255, 190, 11); width: 32px; height: 32px; border-radius: 16px; margin: 0px 6px;"
+          />
+        </div>
+        <input
+          class="w-full"
+          style="height: 32px; margin-top: 8px;"
+          type="color"
+          value="#000000"
+        />
+        <div
+          class="flex flex-row justify-center"
+        >
+          <button
+            class="primary-button"
+            data-testid="pen-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-pen "
+              data-icon="pen"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="erase-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-eraser "
+              data-icon="eraser"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="select-tool"
+            style="margin: 8px 8px;"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-border-top-left "
+              data-icon="border-top-left"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 112C0 67.82 35.82 32 80 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H80C71.16 96 64 103.2 64 112V448C64 465.7 49.67 480 32 480C14.33 480 0 465.7 0 448V112zM128 480C110.3 480 96 465.7 96 448C96 430.3 110.3 416 128 416C145.7 416 160 430.3 160 448C160 465.7 145.7 480 128 480zM320 480C302.3 480 288 465.7 288 448C288 430.3 302.3 416 320 416C337.7 416 352 430.3 352 448C352 465.7 337.7 480 320 480zM256 448C256 465.7 241.7 480 224 480C206.3 480 192 465.7 192 448C192 430.3 206.3 416 224 416C241.7 416 256 430.3 256 448zM416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416C433.7 416 448 430.3 448 448C448 465.7 433.7 480 416 480zM416 288C398.3 288 384 273.7 384 256C384 238.3 398.3 224 416 224C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288zM448 352C448 369.7 433.7 384 416 384C398.3 384 384 369.7 384 352C384 334.3 398.3 320 416 320C433.7 320 448 334.3 448 352zM416 192C398.3 192 384 177.7 384 160C384 142.3 398.3 128 416 128C433.7 128 448 142.3 448 160C448 177.7 433.7 192 416 192z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            class="secondary-button"
+            data-testid="text-tool"
             style="margin: 8px 8px;"
           >
             <svg

@@ -44,6 +44,7 @@ export function Notebook() {
 
   const transmitNewPage = (notebookId) => {
     if (pageChannel !== null) {
+      console.log("Transmitting new page");
       pageChannel.send({ notebookId: notebookId });
     }
   };
@@ -53,9 +54,10 @@ export function Notebook() {
     setPageChannel(setupSubscription(window.notebookId));
   }, []);
 
-  const canvasToolCallback = useCallback((tool) =>
+  const canvasToolCallback = useCallback((tool) => {
+    console.log(`Setting notebook tool to ${tool}`);
     setActiveTool(tool)
-  );
+  });
   const colorToolCallback = useCallback((color) =>
     setActiveColor(color)
   );

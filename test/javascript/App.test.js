@@ -5,6 +5,8 @@
 import React from "react";
 import {act, render, fireEvent, waitFor, cleanup} from '@testing-library/react';
 import App from "../../app/javascript/components/App";
+import { Notebook } from "../../app/javascript/components/notebook";
+import { shallow } from "enzyme";
 // import { createConsumer } from "@rails/actioncable";
 
 describe('react canvas app tests', () => {
@@ -44,5 +46,55 @@ describe('react canvas app tests', () => {
     const { container, getAllByTestId } = render(<App />);
     expect(container).toMatchSnapshot();
     expect(getAllByTestId(/canvasync-canvas-([0-9]+|null)-([0-9]+|null)/).length).toBe(3);
+  });
+
+  it("tests that new page button callback is fired on new page click", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    act(() => {
+      fireEvent.click(getByTestId("new-page-button"));
+    });
+    expect(spy).toHaveBeenCalledWith("Transmitting new page");
+  });
+
+  it("tests that participants aren't given open to add new page", () => {
+    window.isOwner = false;
+    window.ownerId = 2;
+    const { container, queryByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    expect(queryByTestId("new-page-button")).toBeNull();
+  });
+
+  it("tests that users can edit canvas with pen tool", () => {
+    const spy = jest.spyOn(console, "log");
+    window.ownerId = 2;
+    window.isOwner = false;
+    window.ownerLayers = [{id: 1}];
+    window.participantLayers = [{id: 2}];
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const canvas = getByTestId(/canvasync-canvas-1-2/);
+    act(() => {
+      fireEvent.mouseDown(canvas);
+      fireEvent.mouseUp(canvas);
+    });
+    expect(spy).toHaveBeenCalledWith("Sending tangible diff (seq = 0)...");
+  });
+
+  it("tests that users can edit canvas", () => {
+    const spy = jest.spyOn(console, "log");
+    window.ownerId = 2;
+    window.isOwner = false;
+    window.ownerLayers = [{id: 1}];
+    window.participantLayers = [{id: 2}];
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const canvas = getByTestId(/canvasync-canvas-1-2/);
+    act(() => {
+      fireEvent.mouseDown(canvas);
+      fireEvent.mouseUp(canvas);
+    });
+    expect(spy).toHaveBeenCalledWith("Sending tangible diff (seq = 0)...");
   });
 });
