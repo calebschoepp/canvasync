@@ -23,7 +23,21 @@
     "tailwindcss": "^3.0.18"
   },
   "scripts": {
+    "test": "jest",
+    "test:update": "jest --updateSnapshot",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@testing-library/react": "^12.1.4",
+    "jest": "^27.5.1",
+    "jest-canvas-mock": "^2.3.1"
+  },
+  "jest": {
+    "setupFiles": [
+      "jest-canvas-mock"
+    ]
   }
 }

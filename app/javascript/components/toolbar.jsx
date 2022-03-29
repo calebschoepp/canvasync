@@ -16,6 +16,7 @@ export const Toolbar = ({ activeColor, activeTool, onCanvasToolChange, onColorTo
   const colorButtons = [];
   for (let i = 0; i < ColorPalette.length; i++) {
     colorButtons.push(<button
+      data-testid={`color-tool-${i}`}
       className='primary-button'
       onClick={() => onColorToolChange(ColorPalette[i])}
       style={colorPaletteStyle(ColorPalette[i])}
@@ -30,16 +31,16 @@ export const Toolbar = ({ activeColor, activeTool, onCanvasToolChange, onColorTo
       </div>
       <input className='w-full' type='color' value={activeColor} style={colorInputStyle} onChange={(event) => onColorToolChange(event.target.value)} />
       <div className='flex flex-row justify-center'>
-        <button className={activeTool === CanvasTools.pen ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.pen)}>
+        <button data-testid="pen-tool" className={activeTool === CanvasTools.pen ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.pen)}>
           <FontAwesomeIcon icon={faPen} />
         </button>
-        <button className={activeTool === CanvasTools.eraser ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.eraser)}>
+        <button data-testid="eraser-tool" className={activeTool === CanvasTools.eraser ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.eraser)}>
           <FontAwesomeIcon icon={faEraser} />
         </button>
-        <button className={activeTool === CanvasTools.select ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.select)}>
+        <button data-testid="select-tool" className={activeTool === CanvasTools.select ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.select)}>
           <FontAwesomeIcon icon={faBorderTopLeft} />
         </button>
-        <button className={activeTool === CanvasTools.text ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.text)}>
+        <button data-testid="text-tool" className={activeTool === CanvasTools.text ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.text)}>
           <FontAwesomeIcon icon={faFont} />
         </button>
       </div>
