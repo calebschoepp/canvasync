@@ -46,6 +46,63 @@ class NotebooksTest < ApplicationSystemTestCase
     end
   end
 
+  test 'added notebook does not exist' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set 'this-does-not-exist'
+    click_on 'Join a Notebook'
+    assert_current_path notebooks_url
+  end
+
+  test 'added notebook exists but is already owned' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set notebooks(:two).id
+    click_on 'Join a Notebook'
+    assert_text 'You are already an owner of this notebook'
+    assert_current_path notebooks_url
+  end
+
+  test 'added notebook exists but is already added' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set notebooks(:one).id
+    click_on 'Join a Notebook'
+    assert_text 'You are already a participant of this notebook'
+    assert_current_path notebooks_url
+  end
+
+  test 'added notebook exists and is not already owned or added' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set notebooks(:three).id
+    click_on 'Join a Notebook'
+    assert_current_path preview_notebook_url(:id => notebooks(:three).id)
+    assert_text 'Notebook3'
+  end
+
+  test 'user does not confirm joining of notebook that is valid to join' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set notebooks(:three).id
+    click_on 'Join a Notebook'
+    assert_current_path preview_notebook_url(:id => notebooks(:three).id)
+    click_on 'No'
+    assert_current_path notebooks_url
+    assert_no_text 'Notebook3'
+  end
+
+  test 'user confirms joining of notebook that is valid to join' do
+    sign_in users(:four)
+    visit notebooks_url
+    find(id: 'add-notebook-input').set notebooks(:three).id
+    click_on 'Join a Notebook'
+    assert_current_path preview_notebook_url(:id => notebooks(:three).id)
+    click_on 'Yes'
+    assert_current_path notebook_url(:id => notebooks(:three).id)
+    assert_text 'Notebook3'
+  end
+
   # test 'should create notebook' do
   #   visit notebooks_url
   #   click_on 'New notebook'
