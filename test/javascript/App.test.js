@@ -58,7 +58,15 @@ describe('react canvas app tests', () => {
     expect(spy).toHaveBeenCalledWith("Transmitting new page");
   });
 
-  it("tests that participants aren't given open to add new page", () => {
+  it("tests that owners are given option to add new page", () => {
+    window.isOwner = true;
+    window.ownerId = 2;
+    const { container, queryByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    expect(queryByTestId("new-page-button")).toBeTruthy();
+  });
+
+  it("tests that participants aren't given option to add new page", () => {
     window.isOwner = false;
     window.ownerId = 2;
     const { container, queryByTestId } = render(<App />);
@@ -96,5 +104,60 @@ describe('react canvas app tests', () => {
       fireEvent.mouseUp(canvas);
     });
     expect(spy).toHaveBeenCalledWith("Sending tangible diff (seq = 0)...");
+  });
+
+  it("tests that users can change to pen tool", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const toolButton = getByTestId("pen-tool");
+    act(() => {
+      fireEvent.click(toolButton);
+    });
+    expect(spy).toHaveBeenCalledWith("Setting notebook tool to Pen");
+  });
+
+  it("tests that users can change to eraser tool", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const toolButton = getByTestId("eraser-tool");
+    act(() => {
+      fireEvent.click(toolButton);
+    });
+    expect(spy).toHaveBeenCalledWith("Setting notebook tool to Eraser");
+  });
+
+  it("tests that users can change to select tool", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const toolButton = getByTestId("select-tool");
+    act(() => {
+      fireEvent.click(toolButton);
+    });
+    expect(spy).toHaveBeenCalledWith("Setting notebook tool to Select");
+  });
+
+  it("tests that users can change to text tool", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const toolButton = getByTestId("text-tool");
+    act(() => {
+      fireEvent.click(toolButton);
+    });
+    expect(spy).toHaveBeenCalledWith("Setting notebook tool to Text");
+  });
+
+  it("tests that users can change the color of tools", () => {
+    const spy = jest.spyOn(console, "log");
+    const { container, getByTestId } = render(<App />);
+    expect(container).toMatchSnapshot();
+    const toolButton = getByTestId("color-tool-0");
+    act(() => {
+      fireEvent.click(toolButton);
+    });
+    expect(spy).toHaveBeenCalledWith("Setting notebook tool color to #3a86ff");
   });
 });

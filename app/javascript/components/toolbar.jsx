@@ -16,6 +16,7 @@ export const Toolbar = ({ activeColor, activeTool, onCanvasToolChange, onColorTo
   const colorButtons = [];
   for (let i = 0; i < ColorPalette.length; i++) {
     colorButtons.push(<button
+      data-testid={`color-tool-${i}`}
       className='primary-button'
       onClick={() => onColorToolChange(ColorPalette[i])}
       style={colorPaletteStyle(ColorPalette[i])}
@@ -33,7 +34,7 @@ export const Toolbar = ({ activeColor, activeTool, onCanvasToolChange, onColorTo
         <button data-testid="pen-tool" className={activeTool === CanvasTools.pen ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.pen)}>
           <FontAwesomeIcon icon={faPen} />
         </button>
-        <button data-testid="erase-tool" className={activeTool === CanvasTools.eraser ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.eraser)}>
+        <button data-testid="eraser-tool" className={activeTool === CanvasTools.eraser ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.eraser)}>
           <FontAwesomeIcon icon={faEraser} />
         </button>
         <button data-testid="select-tool" className={activeTool === CanvasTools.select ? 'primary-button' : 'secondary-button'} style={toolButtonStyle} onClick={() => onCanvasToolChange(CanvasTools.select)}>

@@ -58,9 +58,10 @@ export function Notebook() {
     console.log(`Setting notebook tool to ${tool}`);
     setActiveTool(tool)
   });
-  const colorToolCallback = useCallback((color) =>
+  const colorToolCallback = useCallback((color) => {
+    console.log(`Setting notebook tool color to ${color}`);
     setActiveColor(color)
-  );
+  });
   const addPageCallback = useCallback(() => {
     transmitNewPage(window.notebookId);
   });
