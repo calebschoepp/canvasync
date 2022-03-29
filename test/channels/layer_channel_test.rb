@@ -142,7 +142,7 @@ class LayerChannelTest < ActionCable::Channel::TestCase
     layer = layers(:one)
     diff = { 'diff_type' => 'remove',
              'seq' => 5,
-             'data' => {'removed_diffs': []} }
+             'data' => { removed_diffs: [] } }
 
     visible_diffs = Diff.where(:visible => true).pluck(:seq)
     subscribe layer_id: layer.id
@@ -189,4 +189,40 @@ class LayerChannelTest < ActionCable::Channel::TestCase
     assert_equal(visible_diffs, new_visible_diffs)
   end
 
+  test 'empty translated_diffs array as owner' do
+    layer = layers(:one)
+    diff = { 'diff_type' => 'translate',
+             'seq' => 5,
+             'data' => { 'translated_diffs': [] } }
+
+    diff_data = Diff.where(:visible => true).pluck(:data)
+    subscribe layer_id: layer.id
+    assert_difference('Diff.count', 1) do
+      assert_broadcast_on("layer_channel_#{layer.id}", diff) do
+        subscription.receive(diff)
+      end
+    end
+    new_diff_data = Diff.where(:visible => true).pluck(:data)
+    assert_equal(diff_data, new_diff_data)
+  end
+
+  test 'array of valid translated_diffs (already existing seq) as owner' do
+    layer = layers(:one)
+    updated_diff_zero = '["Path",{"applyMatrix":true,"segments":[[[260,292],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],"strokeColor":[0,0,0],"strokeWidth":3}]'
+    updated_diff_two = '[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,559,604],\"content\":\"some text\",\"strokeColor\":[0,0,0],\"fontSize\":25,\"leading\":30}]'
+
+    diff = { 'diff_type' => 'translate',
+             'seq' => 5,
+             'data' => { 'translated_diffs' => [{ 'seq' => 0, 'data' => updated_diff_zero}, { 'seq' => 2, 'data' => updated_diff_two}], 'delta_x': 10, 'delta_y': 10 } }
+
+    subscribe layer_id: layer.id
+    assert_difference('Diff.count', 1) do
+      assert_broadcast_on("layer_channel_#{layer.id}", diff) do
+        subscription.receive(diff)
+      end
+    end
+
+    assert_equal(Diff.where(seq: 0).pluck(:data).first, updated_diff_zero)
+    assert_equal(Diff.where(seq: 2).pluck(:data).first, updated_diff_two)
+  end
 end

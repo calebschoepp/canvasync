@@ -38,7 +38,7 @@ class LayerChannel < ApplicationCable::Channel
       Diff.where(seq: diff_data['removed_diffs'], layer_id: params[:layer_id]).map { |diff| diff.update_attribute(:visible, false) }
     when TRANSLATE_DIFF
       # Update data of translated diffs
-      diff_data['translated_diffs'].each do |translated_diff|
+      diff_data['translated_diffs']&.each do |translated_diff|
         diff = Diff.where(seq: translated_diff['seq'], layer_id: params[:layer_id]).first
         diff&.update_attribute(:data, translated_diff['data'])
       end
