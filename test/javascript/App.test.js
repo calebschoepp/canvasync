@@ -71,22 +71,6 @@ describe('react canvas app tests', () => {
     expect(queryByTestId("new-page-button")).toBeNull();
   });
 
-  it("tests that users can edit canvas with pen tool", () => {
-    const spy = jest.spyOn(console, "log");
-    window.ownerId = 2;
-    window.isOwner = false;
-    window.ownerLayers = [{id: 1}];
-    window.participantLayers = [{id: 2}];
-    const { container, getByTestId } = render(<App />);
-    expect(container).toMatchSnapshot();
-    const canvas = getByTestId(/canvasync-canvas-1-2/);
-    act(() => {
-      fireEvent.mouseDown(canvas);
-      fireEvent.mouseUp(canvas);
-    });
-    expect(spy).toHaveBeenCalledWith("Sending tangible diff (seq = 0)...");
-  });
-
   it("tests that users can edit canvas", () => {
     const spy = jest.spyOn(console, "log");
     window.ownerId = 2;
