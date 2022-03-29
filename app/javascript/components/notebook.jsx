@@ -44,6 +44,7 @@ export function Notebook() {
 
   const transmitNewPage = (notebookId) => {
     if (pageChannel !== null) {
+      console.log("Transmitting new page");
       pageChannel.send({ notebookId: notebookId });
     }
   };
@@ -53,12 +54,14 @@ export function Notebook() {
     setPageChannel(setupSubscription(window.notebookId));
   }, []);
 
-  const canvasToolCallback = useCallback((tool) =>
+  const canvasToolCallback = useCallback((tool) => {
+    console.log(`Setting notebook tool to ${tool}`);
     setActiveTool(tool)
-  );
-  const colorToolCallback = useCallback((color) =>
+  });
+  const colorToolCallback = useCallback((color) => {
+    console.log(`Setting notebook tool color to ${color}`);
     setActiveColor(color)
-  );
+  });
   const addPageCallback = useCallback(() => {
     transmitNewPage(window.notebookId);
   });
@@ -78,7 +81,7 @@ export function Notebook() {
       <div className='flex flex-col'>
         {pages}
         {
-          window.isOwner && <button className='primary-button mx-auto' style={addPageStyle} onClick={addPageCallback}><FontAwesomeIcon icon={faPlus} /></button>
+          window.isOwner && <button className='primary-button mx-auto' style={addPageStyle} onClick={addPageCallback} data-testid="new-page-button"><FontAwesomeIcon icon={faPlus} /></button>
         }
       </div>
       <Toolbar activeColor={activeColor} activeTool={activeTool} onCanvasToolChange={canvasToolCallback} onColorToolChange={colorToolCallback} />

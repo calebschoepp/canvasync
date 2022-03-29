@@ -19,3 +19,8 @@ four:
   user: four
   notebook: one
   is_owner: false
+
+five:
+  user: five
+  notebook: three
+  is_owner: true
