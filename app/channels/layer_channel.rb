@@ -68,6 +68,8 @@ class LayerChannel < ApplicationCable::Channel
     diff.visible = diff_visible unless diff_visible.nil?
     diff.layer_id = params[:layer_id]
     diff.save!
+  rescue StandardError => e
+    puts "Unable to persist diff...\n#{e.inspect}"
   end
 
   def existing_diffs_for_layer
