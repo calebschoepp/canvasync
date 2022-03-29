@@ -3,3 +3,7 @@
 one:
   page: one
   writer: one
+
+two:
+  page: one
+  writer: two
