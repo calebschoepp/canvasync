@@ -84,7 +84,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
   // Layer id corresponds to id of layer in database.
   return (
     <div style={pageStyle}>
-      <canvas ref={canvasRef} width='918px' height='1188px' style={canvasStyle} />
+      <canvas data-testid={`canvasync-canvas-${ownerLayerId}-${participantLayerId}`} ref={canvasRef} width='918px' height='1188px' style={canvasStyle} />
       <Layer
         scope={window.isOwner ? paperScope : undefined}
         layer={ownerLayer}
