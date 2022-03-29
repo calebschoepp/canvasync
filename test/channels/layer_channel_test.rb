@@ -193,7 +193,7 @@ class LayerChannelTest < ActionCable::Channel::TestCase
     layer = layers(:one)
     diff = { 'diff_type' => 'translate',
              'seq' => 5,
-             'data' => { 'translated_diffs': [] } }
+             'data' => { translated_diffs: [] } }
 
     diff_data = Diff.where(layer: layer.id, :visible => true).pluck(:data)
     subscribe layer_id: layer.id
@@ -213,7 +213,7 @@ class LayerChannelTest < ActionCable::Channel::TestCase
 
     diff = { 'diff_type' => 'translate',
              'seq' => 5,
-             'data' => { 'translated_diffs' => [{ 'seq' => 0, 'data' => updated_diff_zero}, { 'seq' => 2, 'data' => updated_diff_two}], 'delta_x': 10, 'delta_y': 10 } }
+             'data' => { 'translated_diffs' => [{ 'seq' => 0, 'data' => updated_diff_zero }, { 'seq' => 2, 'data' => updated_diff_two }], delta_x: 10, delta_y: 10 } }
 
     subscribe layer_id: layer.id
     assert_difference('Diff.count', 1) do
@@ -233,12 +233,12 @@ class LayerChannelTest < ActionCable::Channel::TestCase
                        [{ 'diff_type' => 'tangible',
                           'seq' => 0,
                           'data' =>
-                            "[\"Path\",{\"applyMatrix\":true,\"segments\":[[[230,222],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],\"strokeColor\":[0,0,0],\"strokeWidth\":3}]",
+                            '["Path",{"applyMatrix":true,"segments":[[[230,222],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],"strokeColor":[0,0,0],"strokeWidth":3}]',
                           'visible' => true },
                         { 'diff_type' => 'tangible',
                           'seq' => 2,
                           'data' =>
-                            "[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,519,614],\"content\":\"some text\",\"strokeColor\":[0,0,0],\"fontSize\":25,\"leading\":30}]",
+                            '["PointText",{"applyMatrix":false,"matrix":[1,0,0,1,519,614],"content":"some text","strokeColor":[0,0,0],"fontSize":25,"leading":30}]',
                           'visible' => true }],
                      'next_seq' => 5 }
 
@@ -401,7 +401,7 @@ class LayerChannelTest < ActionCable::Channel::TestCase
     layer = layers(:two)
     diff = { 'diff_type' => 'translate',
              'seq' => 5,
-             'data' => { 'translated_diffs': [] } }
+             'data' => { translated_diffs: [] } }
 
     diff_data = Diff.where(layer: layer.id, :visible => true).pluck(:data)
     subscribe layer_id: layer.id
@@ -421,7 +421,7 @@ class LayerChannelTest < ActionCable::Channel::TestCase
 
     diff = { 'diff_type' => 'translate',
              'seq' => 5,
-             'data' => { 'translated_diffs' => [{ 'seq' => 0, 'data' => updated_diff_zero}, { 'seq' => 2, 'data' => updated_diff_two}], 'delta_x': 10, 'delta_y': 10 } }
+             'data' => { 'translated_diffs' => [{ 'seq' => 0, 'data' => updated_diff_zero }, { 'seq' => 2, 'data' => updated_diff_two }], delta_x: 10, delta_y: 10 } }
 
     subscribe layer_id: layer.id
     assert_difference('Diff.count', 1) do
