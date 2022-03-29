@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   page: one
-#   user_notebook: one
+one:
+  page: one
+  writer: one
 
-# two:
-#   page: two
-#   user_notebook: two
+two:
+  page: one
+  writer: two

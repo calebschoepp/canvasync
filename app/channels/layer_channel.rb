@@ -7,6 +7,7 @@ class LayerChannel < ApplicationCable::Channel
   FETCH_EXISTING_SIGNAL = 'fetch-existing'.freeze
 
   def subscribed
+    reject unless params[:layer_id]
     stream_from "layer_channel_#{params[:layer_id]}"
     puts "Connection established with layer #{params[:layer_id]}"
     # Send existing diffs for the layer
@@ -37,7 +38,7 @@ class LayerChannel < ApplicationCable::Channel
       Diff.where(seq: diff_data['removed_diffs'], layer_id: params[:layer_id]).map { |diff| diff.update_attribute(:visible, false) }
     when TRANSLATE_DIFF
       # Update data of translated diffs
-      diff_data['translated_diffs'].each do |translated_diff|
+      diff_data['translated_diffs']&.each do |translated_diff|
         diff = Diff.where(seq: translated_diff['seq'], layer_id: params[:layer_id]).first
         diff&.update_attribute(:data, translated_diff['data'])
       end
@@ -67,6 +68,8 @@ class LayerChannel < ApplicationCable::Channel
     diff.visible = diff_visible unless diff_visible.nil?
     diff.layer_id = params[:layer_id]
     diff.save!
+  rescue StandardError => e
+    puts "Unable to persist diff...\n#{e.inspect}"
   end
 
   def existing_diffs_for_layer

@@ -1,11 +1,81 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   layer: one
-#   seq: 1
-#   data: MyText
+one:
+  layer: one
+  seq: 0
+  data: "[\"Path\",{\"applyMatrix\":true,\"segments\":[[[250,282],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],\"strokeColor\":[0,0,0],\"strokeWidth\":3}]"
+  diff_type: "tangible"
+  visible: true
 
-# two:
-#   layer: two
-#   seq: 1
-#   data: MyText
+two:
+  layer: one
+  seq: 1
+  data: "[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,593,500],\"content\":\"more text\",\"fillColor\":[0.98431,0.33725,0.02745],\"strokeColor\":[0.98431,0.33725,0.02745],\"fontSize\":25,\"leading\":30}]"
+  diff_type: "tangible"
+  visible: false
+
+three:
+  layer: one
+  seq: 2
+  data: "[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,549,594],\"content\":\"some text\",\"strokeColor\":[0,0,0],\"fontSize\":25,\"leading\":30}]"
+  diff_type: "tangible"
+  visible: true
+
+four:
+  layer: one
+  seq: 3
+  data: { "removed_diffs": [ 1 ] }
+  diff_type: "remove"
+  visible: false
+
+five:
+  layer: one
+  seq: 4
+  data: { "translated_diffs":
+            [ { "seq": 0,
+                "data": "[\"Path\",{\"applyMatrix\":true,\"segments\":[[[250,282],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],\"strokeColor\":[0,0,0],\"strokeWidth\":3}]"
+            } ],
+          "delta_x": 73,
+          "delta_y": -175 }
+  diff_type: "translate"
+  visible: false
+
+six:
+  layer: two
+  seq: 0
+  data: "[\"Path\",{\"applyMatrix\":true,\"segments\":[[[230,222],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],\"strokeColor\":[0,0,0],\"strokeWidth\":3}]"
+  diff_type: "tangible"
+  visible: true
+
+seven:
+  layer: two
+  seq: 1
+  data: "[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,563,510],\"content\":\"more text\",\"fillColor\":[0.98431,0.33725,0.02745],\"strokeColor\":[0.98431,0.33725,0.02745],\"fontSize\":25,\"leading\":30}]"
+  diff_type: "tangible"
+  visible: false
+
+eight:
+  layer: two
+  seq: 2
+  data: "[\"PointText\",{\"applyMatrix\":false,\"matrix\":[1,0,0,1,519,614],\"content\":\"some text\",\"strokeColor\":[0,0,0],\"fontSize\":25,\"leading\":30}]"
+  diff_type: "tangible"
+  visible: true
+
+nine:
+  layer: two
+  seq: 3
+  data: { "removed_diffs": [ 1 ] }
+  diff_type: "remove"
+  visible: false
+
+ten:
+  layer: two
+  seq: 4
+  data: { "translated_diffs":
+            [ { "seq": 0,
+                "data": "[\"Path\",{\"applyMatrix\":true,\"segments\":[[[220,322],[0,0],[48.14208,-48.14208]],[[388,306],[-44.79859,-10.33814],[53.0259,12.23675]],[[527,251],[-34.26694,37.69363],[0,0]]],\"strokeColor\":[0,0,0],\"strokeWidth\":3}]"
+            } ],
+          "delta_x": 73,
+          "delta_y": -175 }
+  diff_type: "translate"
+  visible: false
