@@ -1,9 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   number: 1
-#   notebook: one
-
-# two:
-#   number: 1
-#   notebook: two
+one:
+  number: 1
+  notebook: one
