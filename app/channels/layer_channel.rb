@@ -7,6 +7,7 @@ class LayerChannel < ApplicationCable::Channel
   FETCH_EXISTING_SIGNAL = 'fetch-existing'.freeze
 
   def subscribed
+    reject unless params[:layer_id]
     stream_from "layer_channel_#{params[:layer_id]}"
     puts "Connection established with layer #{params[:layer_id]}"
     # Send existing diffs for the layer
