@@ -1,6 +1,7 @@
 class PageChannel < ApplicationCable::Channel
   # TODO: store pages broadcasted by owner client in db
   def subscribed
+    reject unless params[:notebook_id]
     stream_from "page_channel_#{params[:notebook_id]}"
   end
 
