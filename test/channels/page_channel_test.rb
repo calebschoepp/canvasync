@@ -66,6 +66,6 @@ class PageChannelTest < ActionCable::Channel::TestCase
       assert_broadcasts "page_channel_#{notebook.id}", 1
       assert_broadcast_on "page_channel_#{notebook.id}", new_layers
     end
-    assert_equal(Page.last.layers.map { |layer| layer.writer.user_id}, user_notebooks)
+    assert_equal(Page.last.layers.map { |layer| layer.writer.user_id }, user_notebooks)
   end
 end
