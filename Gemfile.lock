@@ -352,6 +352,7 @@ DEPENDENCIES
   figaro
   jbuilder
   jsbundling-rails
+  matrix
   pdf-reader
   pg (= 1.2.3)
   prawn
