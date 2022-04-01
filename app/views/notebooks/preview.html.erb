@@ -1,7 +1,5 @@
 <h1 class="heading-1">Would you like to join <span class="font-bold"><%= @notebook.name %></span>?</h1>
 
-<p>Put a preview of the notebook here</p>
-
 <br/>
 
 <%= form_with(model: @notebook, url: join_notebook_url, method: :post) do |form| %>
