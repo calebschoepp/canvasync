@@ -1,4 +1,6 @@
 class NotebookPolicy < ApplicationPolicy
+  # Mandated by FR-4: Display.Notebooks through FR-13: Export.Notebook
+
   class Scope < Scope
     def resolve
       scope.joins(:user_notebooks).where(user_notebooks: { user_id: user.id })

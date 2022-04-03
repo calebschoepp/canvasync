@@ -1,3 +1,5 @@
+<!--Mandated by FR-5: Search.Notebooks-->
+
 <% @notebooks.each do |notebook| %>
   <a href="<%= notebook_path notebook %>" id="search-result" class="hover:bg-gray-100 block px-4 py-2"><%= notebook.name %></a>
 <% end %>

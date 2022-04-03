@@ -1,6 +1,6 @@
-# TODO: Improve logging
-
 class LayerChannel < ApplicationCable::Channel
+  # Mandated by FR-10: OwnerEdit.Canvas, FR-12: ParticipantEdit.Canvas
+
   TANGIBLE_DIFF = 'tangible'.freeze
   REMOVE_DIFF = 'remove'.freeze
   TRANSLATE_DIFF = 'translate'.freeze
@@ -44,7 +44,6 @@ class LayerChannel < ApplicationCable::Channel
       end
     end
   rescue StandardError => e
-    # TODO: Handle scenario where save fails
     puts "Failed to save and process incoming diff!\n#{e.inspect}"
   end
 

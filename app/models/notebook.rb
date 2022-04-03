@@ -1,8 +1,9 @@
 class Notebook < ApplicationRecord
+  # Mandated by FR-4: Display.Notebooks through FR-13: Export.Notebook
+
   ALLOWED_FILE_TYPES = ['application/pdf'].freeze
   FILE_SIZE_SETTINGS = { less_than: 30.megabytes, message: 'is not given between size' }.freeze
 
-  # TODO: Validate that user_id notebook_id combo is unique?
   has_many :user_notebooks, dependent: :destroy
   has_many :users, through: :user_notebooks
   has_many :pages, dependent: :destroy

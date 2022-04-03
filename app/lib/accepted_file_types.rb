@@ -1,4 +1,6 @@
 module AcceptedFileTypes
+  # Mandated by FR-6: Create.Notebook
+
   PDF_MIME = 'application/pdf'.freeze
   PNG_MIME = 'image/png'.freeze
   POWERPOINT_MIME = %w[application/vnd.ms-powerpoint application/vnd.openxmlformats-officedocument.presentationml.presentation].freeze

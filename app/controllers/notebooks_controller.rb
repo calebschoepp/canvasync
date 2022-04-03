@@ -2,6 +2,8 @@ require 'convert_api'
 require './app/lib/accepted_file_types'
 
 class NotebooksController < ApplicationController
+  # Mandated by FR-4: Display.Notebooks through FR-8: Open.Notebook and FR-13: Export.Notebook
+
   include ActiveStorage::SetCurrent
   include AcceptedFileTypes
 

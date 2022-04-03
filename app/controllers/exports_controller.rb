@@ -1,4 +1,6 @@
 class ExportsController < ApplicationController
+  # Mandated by FR-13: Export.Notebook
+
   before_action :set_export, only: %i[destroy]
   before_action :set_notebook, only: %i[index create]
 

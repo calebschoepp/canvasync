@@ -1,12 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="join"
+// Mandated by FR-7: Add.Notebook
 export default class extends Controller {
+  // Connects to data-controller="join"
   static targets = ["id"];
 
   connect() {}
 
-  // TODO: Display an error if id is invalid
   preview() {
     const id = this.id;
     if (id && /^\d+$/.test(id)) {

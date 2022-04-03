@@ -3,6 +3,8 @@ require 'json'
 require './app/lib/page_dimensions'
 
 class ExportNotebookJob < ApplicationJob
+  # Mandated by FR-13: Export.Notebook
+
   include PageDimensions
   queue_as :default
 
