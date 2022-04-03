@@ -149,7 +149,6 @@ class ExportNotebookJob < ApplicationJob
         segments = data[1]['segments']
         if segments
           (1..(segments.length - 1)).each do |point|
-
             source = nil
             bezier1 = nil
 
@@ -159,7 +158,7 @@ class ExportNotebookJob < ApplicationJob
               source = [segments[point - 1][0][0].to_f, vertical_offset - segments[point - 1][0][1].to_f]
               # get last point handle out + last point anchor to get first bezier anchor point
               bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
-            
+
             # or the last point was a line with only an origin (which is not stored in an array)
             else
               # get last point anchor
@@ -177,7 +176,7 @@ class ExportNotebookJob < ApplicationJob
               dest = [segments[point][0][0].to_f, vertical_offset - segments[point][0][1].to_f]
               # get this point handle in + this point anchor to get second bezier anchor point
               bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
-            
+
             # or this point is a line with only an origin (which is not stored in an array)
             else
               # get this point anchor
