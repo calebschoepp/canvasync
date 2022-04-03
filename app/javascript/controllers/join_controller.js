@@ -10,7 +10,20 @@ export default class extends Controller {
   preview() {
     const id = this.id;
     if (id && /^\d+$/.test(id)) {
-      window.location.href = `/notebooks/${this.id}/preview`;
+        const url = `/notebooks/${this.id}/preview`;
+        fetch(url)
+            .then(response => response.status)
+            .then(status => {
+                if (status === 404) {
+                    alert("Notebook does not exist");
+                } else if (status === 200) {
+                    window.location.href = url;
+                } else {
+                    alert("Something went wrong");
+                }
+            });
+    } else {
+        alert("Invalid notebook id");
     }
   }
 
