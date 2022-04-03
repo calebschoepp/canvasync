@@ -15,8 +15,10 @@ export default class extends Controller {
             .then(status => {
                 if (status === 404) {
                     alert("Notebook does not exist");
-                } else {
+                } else if (status === 200) {
                     window.location.href = url;
+                } else {
+                    alert("Something went wrong");
                 }
             });
     } else {
