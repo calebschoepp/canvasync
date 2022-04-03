@@ -6,7 +6,6 @@
 
 <%= form_with(model: @notebook, url: join_notebook_url, method: :post) do |form| %>
   <div>
-    <!--    TODO: Fix the size of these buttons-->
     <%= form.submit 'Yes', class: 'primary-button' %>
     <%= link_to "No", notebooks_path, class: 'secondary-button' %>
   </div>

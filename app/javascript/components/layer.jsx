@@ -3,8 +3,6 @@ import Paper from 'paper';
 import { CanvasTools } from './notebook';
 import consumer from '../channels/consumer';
 
-// TODO: make font size, line width, etc. variables
-
 const DiffType = {
   Tangible: 'tangible',
   Remove: 'remove',
