@@ -50,7 +50,9 @@ class NotebooksTest < ApplicationSystemTestCase
     sign_in users(:four)
     visit notebooks_url
     find(id: 'add-notebook-input').set 'this-does-not-exist'
-    click_on 'Join a Notebook'
+    page.accept_confirm 'Invalid notebook id' do
+      click_on 'Join a Notebook'
+    end
     assert_current_path notebooks_url
   end
 
