@@ -33,8 +33,8 @@ class ExportNotebookJob < ApplicationJob
               page_height = PAGE_DIMS[1]
               if i <= num_pdf_pages
                 # Set the transformation matrix for the page
-                set_transformation_matrix(pdf, template.path)
                 page_height = pdf_page_height(template, i)
+                set_transformation_matrix(pdf, template.path, page_height)
               else
                 # otherwise set the transformation matrix for the viewport
                 pdf.transformation_matrix((2.0 / 3.0), 0, 0, (2.0 / 3.0), 0, 0)
@@ -109,9 +109,44 @@ class ExportNotebookJob < ApplicationJob
     "#{red}#{green}#{blue}"
   end
 
-  def set_transformation_matrix(pdf, filename)
+  def set_transformation_matrix(pdf, filename, page_height)
     pdf_reader = PDF::Reader.new(filename)
     return if pdf_reader.pages.empty?
+
+    cm_params = nil
+    tm_params = nil
+    File.foreach(filename) do |line|
+      line = line.scrub(' ')
+      params = line.split
+      case params[-1]
+      when 'cm'
+        cm_params = Matrix[
+          [params[0].to_f, params[1].to_f, 0],
+          [params[2].to_f, params[3].to_f, 0],
+          [params[4].to_f, params[5].to_f, 1]
+        ]
+      when 'Tm'
+        tm_params = Matrix[
+          [params[0].to_f * (2.0 / 3.0), params[1].to_f, 0],
+          [params[2].to_f, params[3].to_f * (2.0 / 3.0), 0],
+          [0, page_height, 1 * (2.0 / 3.0)]
+        ]
+      end
+      if cm_params && tm_params
+        transformation_matrix = tm_params * cm_params
+        transformation_params = transformation_matrix.to_a
+        transformation_params = [
+          transformation_params[0][0],
+          transformation_params[0][1],
+          transformation_params[1][0],
+          transformation_params[1][1],
+          transformation_params[2][0],
+          transformation_params[2][1]
+        ]
+        pdf.transformation_matrix(*transformation_params)
+        return nil
+      end
+    end
 
     page = pdf_reader.pages.first
 
@@ -149,14 +184,42 @@ class ExportNotebookJob < ApplicationJob
         segments = data[1]['segments']
         if segments
           (1..(segments.length - 1)).each do |point|
-            # get last point anchor
-            source = [segments[point - 1][0][0].to_f, vertical_offset - segments[point - 1][0][1].to_f]
-            # get this point anchor
-            dest = [segments[point][0][0].to_f, vertical_offset - segments[point][0][1].to_f]
-            # get last point handle out + last point anchor to get first bezier anchor point
-            bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
-            # get this point handle in + this point anchor to get second bezier anchor point
-            bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
+            source = nil
+            bezier1 = nil
+
+            # either the last point was a bezier curve with an origin, handle in, and handle out all in an array
+            if segments[point - 1].length == 3
+              # get last point anchor
+              source = [segments[point - 1][0][0].to_f, vertical_offset - segments[point - 1][0][1].to_f]
+              # get last point handle out + last point anchor to get first bezier anchor point
+              bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
+
+            # or the last point was a line with only an origin (which is not stored in an array)
+            else
+              # get last point anchor
+              source = [segments[point - 1][0].to_f, vertical_offset - segments[point - 1][1].to_f]
+              # make the bezier anchor of last point the same as the origin (because this is a line not a curve)
+              bezier1 = source
+            end
+
+            dest = nil
+            bezier2 = nil
+
+            # either this point is a bezier curve with an origin, handle in, and handle out all in an array
+            if segments[point].length == 3
+              # get this point anchor
+              dest = [segments[point][0][0].to_f, vertical_offset - segments[point][0][1].to_f]
+              # get this point handle in + this point anchor to get second bezier anchor point
+              bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
+
+            # or this point is a line with only an origin (which is not stored in an array)
+            else
+              # get this point anchor
+              dest = [segments[point][0].to_f, vertical_offset - segments[point][1].to_f]
+              # make the bezier anchor of this point the same as the origin (because this is a line not a curve)
+              bezier2 = dest
+            end
+
             pdf.curve source, dest, :bounds => [bezier1, bezier2]
           end
         end
