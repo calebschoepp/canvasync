@@ -184,14 +184,42 @@ class ExportNotebookJob < ApplicationJob
         segments = data[1]['segments']
         if segments
           (1..(segments.length - 1)).each do |point|
-            # get last point anchor
-            source = [segments[point - 1][0][0].to_f, vertical_offset - segments[point - 1][0][1].to_f]
-            # get this point anchor
-            dest = [segments[point][0][0].to_f, vertical_offset - segments[point][0][1].to_f]
-            # get last point handle out + last point anchor to get first bezier anchor point
-            bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
-            # get this point handle in + this point anchor to get second bezier anchor point
-            bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
+            source = nil
+            bezier1 = nil
+
+            # either the last point was a bezier curve with an origin, handle in, and handle out all in an array
+            if segments[point - 1].length == 3
+              # get last point anchor
+              source = [segments[point - 1][0][0].to_f, vertical_offset - segments[point - 1][0][1].to_f]
+              # get last point handle out + last point anchor to get first bezier anchor point
+              bezier1 = [source[0] + segments[point - 1][2][0].to_f, source[1] - segments[point - 1][2][1].to_f]
+
+            # or the last point was a line with only an origin (which is not stored in an array)
+            else
+              # get last point anchor
+              source = [segments[point - 1][0].to_f, vertical_offset - segments[point - 1][1].to_f]
+              # make the bezier anchor of last point the same as the origin (because this is a line not a curve)
+              bezier1 = source
+            end
+
+            dest = nil
+            bezier2 = nil
+
+            # either this point is a bezier curve with an origin, handle in, and handle out all in an array
+            if segments[point].length == 3
+              # get this point anchor
+              dest = [segments[point][0][0].to_f, vertical_offset - segments[point][0][1].to_f]
+              # get this point handle in + this point anchor to get second bezier anchor point
+              bezier2 = [dest[0] + segments[point][1][0].to_f, dest[1] - segments[point][1][1].to_f]
+
+            # or this point is a line with only an origin (which is not stored in an array)
+            else
+              # get this point anchor
+              dest = [segments[point][0].to_f, vertical_offset - segments[point][1].to_f]
+              # make the bezier anchor of this point the same as the origin (because this is a line not a curve)
+              bezier2 = dest
+            end
+
             pdf.curve source, dest, :bounds => [bezier1, bezier2]
           end
         end
