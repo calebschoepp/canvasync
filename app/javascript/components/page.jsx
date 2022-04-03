@@ -41,10 +41,13 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
 
       // draw background PDF raster only if there is a background PDF page for this page number
       if (raster !== -1) {
+        const rasterLayer = new Paper.Layer();
+        scope.project.addLayer(rasterLayer);
+        rasterLayer.activate();
         const paperRaster = new Paper.Raster(raster);
         // fit raster in middle of canvas
         paperRaster.position = new Paper.Point(width / 2, height / 2);
-        paperRaster.sendToBack();
+        rasterLayer.sendToBack();
       }
     }
   }, [raster]);
