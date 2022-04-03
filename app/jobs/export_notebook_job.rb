@@ -33,8 +33,8 @@ class ExportNotebookJob < ApplicationJob
               page_height = PAGE_DIMS[1]
               if i <= num_pdf_pages
                 # Set the transformation matrix for the page
-                set_transformation_matrix(pdf, template.path)
                 page_height = pdf_page_height(template, i)
+                set_transformation_matrix(pdf, template.path, page_height)
               else
                 # otherwise set the transformation matrix for the viewport
                 pdf.transformation_matrix((2.0 / 3.0), 0, 0, (2.0 / 3.0), 0, 0)
@@ -109,9 +109,44 @@ class ExportNotebookJob < ApplicationJob
     "#{red}#{green}#{blue}"
   end
 
-  def set_transformation_matrix(pdf, filename)
+  def set_transformation_matrix(pdf, filename, page_height)
     pdf_reader = PDF::Reader.new(filename)
     return if pdf_reader.pages.empty?
+
+    cm_params = nil
+    tm_params = nil
+    File.foreach(filename) do |line|
+      line = line.scrub(' ')
+      params = line.split
+      case params[-1]
+      when 'cm'
+        cm_params = Matrix[
+          [params[0].to_f, params[1].to_f, 0],
+          [params[2].to_f, params[3].to_f, 0],
+          [params[4].to_f, params[5].to_f, 1]
+        ]
+      when 'Tm'
+        tm_params = Matrix[
+          [params[0].to_f * (2.0 / 3.0), params[1].to_f, 0],
+          [params[2].to_f, params[3].to_f * (2.0 / 3.0), 0],
+          [0, page_height, 1 * (2.0 / 3.0)]
+        ]
+      end
+      if cm_params && tm_params
+        transformation_matrix = tm_params * cm_params
+        transformation_params = transformation_matrix.to_a
+        transformation_params = [
+          transformation_params[0][0],
+          transformation_params[0][1],
+          transformation_params[1][0],
+          transformation_params[1][1],
+          transformation_params[2][0],
+          transformation_params[2][1]
+        ]
+        pdf.transformation_matrix(*transformation_params)
+        return nil
+      end
+    end
 
     page = pdf_reader.pages.first
 
