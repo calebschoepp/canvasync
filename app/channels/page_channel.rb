@@ -8,7 +8,7 @@ class PageChannel < ApplicationCable::Channel
 
   def receive(_data)
     unless (page = persist_page)
-      puts "Failed to save page!"
+      puts 'Failed to save page!'
     end
     ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", page.layers.as_json)
   end
