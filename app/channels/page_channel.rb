@@ -1,5 +1,6 @@
 class PageChannel < ApplicationCable::Channel
-  # TODO: store pages broadcasted by owner client in db
+  # Mandated by FR-11: New.Canvas
+
   def subscribed
     reject unless params[:notebook_id]
     stream_from "page_channel_#{params[:notebook_id]}"
@@ -7,8 +8,7 @@ class PageChannel < ApplicationCable::Channel
 
   def receive(_data)
     unless (page = persist_page)
-      # TODO: Handle scenario where save fails
-      puts "\n\n\nFailed to save page\n\n\n"
+      puts 'Failed to save page!'
     end
     ActionCable.server.broadcast("page_channel_#{params[:notebook_id]}", page.layers.as_json)
   end

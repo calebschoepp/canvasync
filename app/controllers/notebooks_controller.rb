@@ -2,6 +2,8 @@ require 'convert_api'
 require './app/lib/accepted_file_types'
 
 class NotebooksController < ApplicationController
+  # Mandated by FR-4: Display.Notebooks through FR-8: Open.Notebook and FR-13: Export.Notebook
+
   include ActiveStorage::SetCurrent
   include AcceptedFileTypes
 
@@ -21,7 +23,6 @@ class NotebooksController < ApplicationController
   # GET /notebooks/1 or /notebooks/1.json
   def show
     authorize @notebook
-    # TODO: Support multiple pages
     @owner_layers = @notebook.pages.map(&:layers).flatten.filter { |l| l.writer.is_owner }
     @participant_layers = @notebook.pages.map(&:layers).flatten.filter { |l| l.writer.user.id == current_user.id && !l.writer.is_owner }
   end

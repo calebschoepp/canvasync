@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*TODO: Customize all these styles*/
 @layer components {
     .card {
         @apply bg-neutral-50 rounded-lg p-4 drop-shadow-xl

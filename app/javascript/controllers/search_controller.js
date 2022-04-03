@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="search"
+// Mandated by FR-5: Search.Notebooks
 export default class extends Controller {
+  // Connects to data-controller="search"
   static targets = ["query"];
 
   connect() {

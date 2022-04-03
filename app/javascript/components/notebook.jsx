@@ -13,12 +13,14 @@ export const CanvasTools = {
   text: 'Text',
 };
 
+// Mandated by FR-8: Open.Notebook through FR-12: ParticipantEdit.Canvas
 export function Notebook() {
   const [numPages, setNumPages] = useState(Math.max(window.participantLayers.length, window.ownerLayers.length));
   const [activeTool, setActiveTool] = useState(CanvasTools.pen);
   const [activeColor, setActiveColor] = useState('#000000');
   const [pageChannel, setPageChannel] = useState(null);
 
+  // Mandated by FR-11: New.Canvas
   const setupSubscription = () => {
     const notebookId = window.notebookId;
     return consumer.subscriptions.create({ channel: 'PageChannel', notebook_id: notebookId }, {
@@ -42,6 +44,7 @@ export function Notebook() {
     });
   };
 
+  // Mandated by FR-11: New.Canvas
   const transmitNewPage = (notebookId) => {
     if (pageChannel !== null) {
       console.log("Transmitting new page");
@@ -74,7 +77,6 @@ export function Notebook() {
     pages.push(<p className="text-gray-700 mx-auto" key={`page-number-${i}`}>{`${i + 1}/${numPages}`}</p>)
   }
 
-  // TODO: maybe pass in page id or layer id using window here
   return (
     <div className='flex flex-col'>
       <NotebookHeader />

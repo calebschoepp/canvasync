@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="join"
+// Mandated by FR-7: Add.Notebook
 export default class extends Controller {
+  // Connects to data-controller="join"
   static targets = ["id"];
 
   connect() {}

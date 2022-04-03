@@ -91,8 +91,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { host: 'https://canvasync.herokuapp.com' } # TODO: This is probably wrong
-  # config.action_mailer.delivery_method = :smtp TODO: Set this up when deploying to production
+  config.action_mailer.default_url_options = { host: 'https://canvasync.herokuapp.com' }
+  # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.smtp_settings = {
   #   address: 'smtp.sendgrid.net',
   #   port: 587,

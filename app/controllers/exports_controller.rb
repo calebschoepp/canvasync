@@ -1,10 +1,12 @@
 class ExportsController < ApplicationController
+  # Mandated by FR-13: Export.Notebook
+
   before_action :set_export, only: %i[destroy]
   before_action :set_notebook, only: %i[index create]
 
   # GET /notebooks/1/exports or /notebookes/1/exports.json
   def index
-    @exports = policy_scope(@notebook.exports).order(updated_at: :desc) # TODO: Check ordering
+    @exports = policy_scope(@notebook.exports).order(updated_at: :desc)
     @export = Export.new
   end
 

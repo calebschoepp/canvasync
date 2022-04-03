@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
+// This component contains presentational functionality
 export const NotebookHeader = () => {
-
   const handleCopyButtonCallback = useCallback((event) => {
     const copyUrl = window.location.href + '/preview';
     if (navigator.clipboard && window.isSecureContext) {

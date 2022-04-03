@@ -3,8 +3,6 @@ import Paper from 'paper';
 import { CanvasTools } from './notebook';
 import consumer from '../channels/consumer';
 
-// TODO: make font size, line width, etc. variables
-
 const DiffType = {
   Tangible: 'tangible',
   Remove: 'remove',
@@ -12,6 +10,7 @@ const DiffType = {
   FetchExistingSignal: 'fetch-existing'
 }
 
+// Mandated by FR-8: Open.Notebook through FR-10: OwnerEdit.Canvas and FR-12: ParticipantEdit.Canvas
 export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   const seqRef = useRef(0);
   const tangibleSeqsRef = useRef([]);
@@ -19,6 +18,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
   const [outOfSync, setOutOfSync] = useState(false);
   const [layerChannel, setLayerChannel] = useState(null);
 
+  // Mandated by FR-8: Open.Notebook, FR-10: OwnerEdit.Canvas, FR-12: ParticipantEdit.Canvas
   const setupSubscription = () => {
     return consumer.subscriptions.create({ channel: 'LayerChannel', layer_id: layerId }, {
       connected() {
@@ -54,6 +54,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     });
   }
 
+  // Mandated by FR-8: Open.Notebook, FR-10: OwnerEdit.Canvas, FR-12: ParticipantEdit.Canvas
   const processIncomingDiff = (diff, checkSeq) => {
     // Process an incoming diff
     const diffType = diff['diff_type'];
@@ -135,6 +136,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     transmitDiff(DiffType.FetchExistingSignal, null);
   };
 
+  // Mandated by FR-8: Open.Notebook, FR-10: OwnerEdit.Canvas, FR-12: ParticipantEdit.Canvas
   const transmitDiff = (diffType, data) => {
     console.log(`Sending ${diffType} diff${(diffType !== DiffType.FetchExistingSignal) ? 
         ` (seq = ${seqRef.current})` : ''}...`);
@@ -282,6 +284,7 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     }
   }
 
+  // Mandated by FR-9: Edit.Canvas
   const paperHandler = () => {
     let path = null;
     let rect = null;

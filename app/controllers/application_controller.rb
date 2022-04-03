@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  # Mandated by all functional requirements except FR-9: Edit.Canvas through FR-12: ParticipantEdit.Canvas
+
   include Pundit::Authorization
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   after_action :verify_policy_scoped, only: :index, unless: :devise_controller?

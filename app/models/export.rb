@@ -1,4 +1,6 @@
 class Export < ApplicationRecord
+  # Mandated by FR-13: Export.Notebook
+
   belongs_to :notebook
   belongs_to :user
   has_one_attached :document, dependent: :purge_later

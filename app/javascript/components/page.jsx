@@ -3,7 +3,7 @@ import Paper from 'paper';
 import { Layer } from './layer';
 import * as pdfJS from "pdfjs-dist/build/pdf";
 
-
+// Mandated by FR-8: Open.Notebook through FR-12: ParticipantEdit.Canvas
 export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId, pageNumber }) {
   const canvasRef = useRef(null);
   const [raster, setRaster] = useState(null);
@@ -52,6 +52,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
     }
   }, [raster]);
 
+  // Mandated by FR-9: Edit.Canvas
   useEffect(() => {
     pdfJS.GlobalWorkerOptions.workerSrc =
       window.location.origin + '/pdf.worker.min.js';

@@ -1,4 +1,6 @@
 class ApplicationJob < ActiveJob::Base
+  # Mandated by FR-13: Export.Notebook
+
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked
 

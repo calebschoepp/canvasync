@@ -1,6 +1,6 @@
 class Page < ApplicationRecord
-  # TODO: Handle delete cascading
+  # Mandated by FR-8: Open.Notebook through FR-13: Export.Notebook
+
   has_many :layers, dependent: :destroy
   belongs_to :notebook
-  # TODO: Validations
 end

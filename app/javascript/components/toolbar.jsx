@@ -11,8 +11,8 @@ const ColorPalette = [
   '#ffbe0b',
 ];
 
+// Mandated by FR-9: Edit.Canvas
 export const Toolbar = ({ activeColor, activeTool, onCanvasToolChange, onColorToolChange }) => {
-
   const colorButtons = [];
   for (let i = 0; i < ColorPalette.length; i++) {
     colorButtons.push(<button

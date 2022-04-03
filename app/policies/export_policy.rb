@@ -1,4 +1,6 @@
 class ExportPolicy < ApplicationPolicy
+  # Mandated by FR-13: Export.Notebook
+
   class Scope < Scope
     def resolve
       scope.where(user_id: user.id)
