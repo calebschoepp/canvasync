@@ -8,11 +8,12 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
   const canvasRef = useRef(null);
   const [raster, setRaster] = useState(null);
   const [paperScope, setPaperScope] = useState(null);
+  const [background, setBackground] = useState(null);
   const [ownerLayer, setOwnerLayer] = useState(null);
   const [participantLayer, setParticipantLayer] = useState(null);
 
   useEffect(() => {
-    // defer PaperScope creation until after PDF background raster is created
+    // Defer PaperScope creation until after PDF background raster is created
     if (raster) {
       const scope = new Paper.PaperScope();
       const canvas = canvasRef.current;
@@ -20,10 +21,21 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       const height = canvas.height;
       scope.setup(canvas);
 
-      let owner, participant;
+      let rasterLayer, owner, participant;
+
+      // Draw background PDF raster only if there is a background PDF page for this page number
+      if (raster !== -1) {
+        rasterLayer = new Paper.Layer();
+        scope.project.addLayer(rasterLayer);
+        rasterLayer.activate();
+        const paperRaster = new Paper.Raster(raster);
+        // Fit raster in middle of canvas
+        paperRaster.position = new Paper.Point(width / 2, height / 2);
+      }
 
       owner = new Paper.Layer();
       scope.project.addLayer(owner);
+      owner.bringToFront();
 
       // Only create participant layer if user is a participant of notebook
       if (!window.isOwner) {
@@ -33,21 +45,15 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       }
 
       setPaperScope(scope);
+
+      if (raster !== -1) {
+        setBackground(rasterLayer);
+      }
+
       setOwnerLayer(owner);
 
       if (!window.isOwner) {
         setParticipantLayer(participant);
-      }
-
-      // draw background PDF raster only if there is a background PDF page for this page number
-      if (raster !== -1) {
-        const rasterLayer = new Paper.Layer();
-        scope.project.addLayer(rasterLayer);
-        rasterLayer.activate();
-        const paperRaster = new Paper.Raster(raster);
-        // fit raster in middle of canvas
-        paperRaster.position = new Paper.Point(width / 2, height / 2);
-        rasterLayer.sendToBack();
       }
     }
   }, [raster]);
@@ -92,6 +98,7 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       <canvas data-testid={`canvasync-canvas-${ownerLayerId}-${participantLayerId}`} ref={canvasRef} width='918px' height='1188px' style={canvasStyle} />
       <Layer
         scope={window.isOwner ? paperScope : undefined}
+        background={background}
         layer={ownerLayer}
         layerId={ownerLayerId}
         activeTool={activeTool}
