@@ -38,10 +38,13 @@ export function Page({ activeTool, activeColor, ownerLayerId, participantLayerId
       owner.bringToFront();
 
       // Only create participant layer if user is a participant of notebook
-      if (!window.isOwner) {
+      if (window.isOwner) {
+        owner.activate();
+      } else {
         participant = new Paper.Layer();
         scope.project.addLayer(participant);
         participant.bringToFront();
+        participant.activate();
       }
 
       setPaperScope(scope);
