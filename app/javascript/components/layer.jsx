@@ -11,7 +11,7 @@ const DiffType = {
 }
 
 // Mandated by FR-8: Open.Notebook through FR-10: OwnerEdit.Canvas and FR-12: ParticipantEdit.Canvas
-export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
+export function Layer({ scope, background, layer, layerId, activeTool, activeColor }) {
   const seqRef = useRef(0);
   const tangibleSeqsRef = useRef([]);
   const pathRef = useRef(null);
@@ -49,6 +49,10 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
         // scenes optimizations and merge the two layers if not)
         if (!scope) {
           layer.sendToBack();
+          // Only send background to back if it exists
+          if (!!background) {
+            background.sendToBack();
+          }
         }
       }
     });
@@ -66,7 +70,6 @@ export function Layer({ scope, layer, layerId, activeTool, activeColor }) {
     }
 
     if (diffSeq < seqRef.current) {
-      console.log(`Diff already part of notebook state`);
       return;
     }
 
