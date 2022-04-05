@@ -1,0 +1,1126 @@
+commit 837fe47bd9a7730eea4aa34c6c5154d0ea60f95b
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 13:42:50 2022 -0700
+
+    Initial commit
+
+commit b6a6f70ff0361a75b631617dba1840abf7b89183
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 14:05:05 2022 -0700
+
+    Update README
+
+commit a05bc6300f4d8619712d94b106a9a85d55a04bb9
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 15:52:33 2022 -0700
+
+    Setup user authentication with Devise
+
+commit 0f705b8cc053ec87afc74dc9add96e18767e7ec8
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 16:22:26 2022 -0700
+
+    Scaffold notebook
+
+commit d38b2c333dc6c81e940cfa6c9fc01184eff723ac
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 16:32:43 2022 -0700
+
+    Setup user_notebooks
+
+commit 2939fbb74d70a324ee87f70286a92d14eb518f10
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 16:50:20 2022 -0700
+
+    Install rubocop
+
+commit 6a1c5a6cbec1c41d8ea53268e26b0b62b30dd48c
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 16:50:36 2022 -0700
+
+    Touch up notebook logic a bit
+
+commit d2600ca1b3b4f0628d91486a2961a230a79eb13c
+Merge: a05bc63 6a1c5a6
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 17:02:42 2022 -0700
+
+    Merge pull request #1 from calebschoepp/caleb/notebooks
+    
+    Create notebooks
+
+commit 52c8ce1407b3511694038dc92596d1536cb317ea
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 17:20:58 2022 -0700
+
+    Setup tailwind styling
+
+commit d87f2ca9aabc8031b29e8cbd2d598a3ed4b88210
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 17:47:30 2022 -0700
+
+    Style notebooks
+
+commit 810b0729b23c7b9cf7b62b1d6641543c9a41e6e0
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 17:58:01 2022 -0700
+
+    Style devise
+
+commit 1d3fb84a1d8df744d53deaadadc2b360c1046d68
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 19:26:28 2022 -0700
+
+    Use pg in production
+
+commit 4ecf5ca296ad07c508daa47f8e44db3c1f776b88
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Jan 29 19:29:29 2022 -0700
+
+    Relegate sqlite3 to only local
+
+commit d937166d302722930365c1692586a797e11cf04f
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 11:28:48 2022 -0700
+
+    Fix error on sign up
+
+commit c34fcf7c3569864c7a37a6927e80a1b6a10fafc6
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 11:39:56 2022 -0700
+
+    Some README updates
+
+commit 7f3a021d039ce24504d4053db04b0c8e01984edc
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 11:58:24 2022 -0700
+
+    Setup CI/CD and install necessary gems
+
+commit 8317f8d9cc39d89d2cdb608dc23d9829e02f9f64
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 11:59:36 2022 -0700
+
+    Use main instead of master terminology
+
+commit b34095faade76d2d920a74d5b58de9538ce1d9e8
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 12:02:03 2022 -0700
+
+    Try using head ruby
+
+commit 97f99f85854e66e550eef8d835894f9698510962
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 12:04:25 2022 -0700
+
+    Use a more up to date version of ruby/setup-ruby
+
+commit 1a01e907725b652a764ce870fc3f2f00cfb909e4
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 12:06:31 2022 -0700
+
+    Add a TODO
+
+commit d3305595f63c1443e4afc85f97276d5d19cff26c
+Merge: c34fcf7 1a01e90
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 12:08:28 2022 -0700
+
+    Merge pull request #2 from calebschoepp/caleb/ci-cd
+    
+    Setup CI/CD and install necessary gems
+
+commit 5f577b4a770b2f006fdd549d3d187f1b229938ce
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 12:43:41 2022 -0700
+
+    Setup admin (#3)
+    
+    * Install rolify
+    
+    * Integrate rollify
+    
+    * Install rails_admin
+
+commit 4ce2fa75e8360e6ce919336ae1295960ef725337
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Jan 31 16:32:36 2022 -0700
+
+    Pundit and Notebooks (#4)
+    
+    * Remove delete and a few touchups
+    
+    * Setup pundit authorization
+
+commit 1f18434f553f07cb989bd43fdda8072df059a545
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Feb 1 00:07:04 2022 -0700
+
+    Join Notebook (#5)
+    
+    * Some more styling and code to differ owned and joined notebooks on index page
+    
+    * Wire up join and preview actions
+    
+    * Little playing around with styling
+
+commit 69dd95cee6f7c922b2df1cbf318d08c335cc568f
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Feb 1 00:18:16 2022 -0700
+
+    Fix Devise errors (#6)
+    
+    * Put back some accidentally removed error render calls
+    
+    * Redirect to unauthenticated_root after logout
+
+commit dfcdf5966fec085b9b3d9c7d5be7690696214654
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Feb 1 00:32:22 2022 -0700
+
+    Try turning off css compressor from sassc (#7)
+
+commit f6044eaf99b5a6d5bc685837ae4f27c4f5dd0dca
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Feb 1 11:09:16 2022 -0700
+
+    Formatting (#8)
+    
+    * Auto correct format issues
+    
+    * Refactor method names
+    
+    * Stop allowing formatting errors
+    
+    * Try to fix it :D
+    
+    * Install another rubocop extension
+    
+    * Ignore gemfile rubocop
+    
+    * More ignores
+    
+    * Final fix
+    
+    * Quick readme update
+
+commit 583d0b817ab98b1d95149c2fe24aead12aace03e
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 3 15:10:40 2022 -0700
+
+    React scaffolding (#9)
+    
+    * Scaffold out dead simple React app
+    
+    * Remove log
+
+commit 80e93e2fd5adaa347cc82e5601c80b225a10fdfa
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Thu Feb 3 17:56:58 2022 -0700
+
+    Files modified during install process
+
+commit 078f914f82b0e5e49473671141f86af1b10827c4
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Thu Feb 3 17:58:36 2022 -0700
+
+    Reformat using rubocop
+
+commit b7419a02f2bb38d3e7fc28fd3a13e414836c7105
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Thu Feb 3 18:06:30 2022 -0700
+
+    Ignore .vscode dir
+
+commit 0b5a06d60d32740210bb0bcc19684159e43e5d20
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 13:43:36 2022 -0700
+
+    implement static drawing, erasing, path selection
+
+commit a6e19e56ff856a9f7d731d1272bd0c246849178d
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 13:57:39 2022 -0700
+
+    fix typo
+
+commit 8f8ddfe07dba45d4a0f0ddc17e9ac9b77bc8f3fc
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 15:06:36 2022 -0700
+
+    implement text pen
+
+commit 755742382b8f5cf09474a12adba09552e0c555c5
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 17:32:25 2022 -0700
+
+    improve state management
+
+commit 6aeed40829391093d5d21661dcb9b1bc6b6e2fef
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 19:01:42 2022 -0700
+
+    fix state management bug for in-progress text
+
+commit 67ecb5ca5a365cb93dafc907028e4d0aadd90951
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 19:15:21 2022 -0700
+
+    implement select and delete
+
+commit 2312e22451517b3c798fa0bb0465d145fd51846d
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 19:24:18 2022 -0700
+
+    implement basic colors
+
+commit 0bad0624204f214cdedee124503282a9811bb4df
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 19:30:04 2022 -0700
+
+    make delete tool and select tool always black
+
+commit a89365f8774de4a86bd49d18f2c0cc9f9b6ea550
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 21:04:16 2022 -0700
+
+    remove state arguments from paperHandler()
+
+commit a7f656278d66b841e104212dcca5204467fa31a6
+Author: Nayan Prakash <nayanprakash2@gmail.com>
+Date:   Sun Feb 6 21:44:17 2022 -0700
+
+    implement color picker and select and move
+
+commit d95fcce91e0a2da6f9486b55a3400e20daee7d1e
+Merge: 583d0b8 b7419a0
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Feb 7 10:21:15 2022 -0700
+
+    Merge pull request #10 from calebschoepp/ryan/auto-gen-changes
+    
+    Minor updates
+
+commit b0d879f1b5763beb81ebd6595d2d8083c00a27b4
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 7 11:15:46 2022 -0700
+
+    Finish wbs
+
+commit 5d34247e9f1ae49540c774edf031c3d8b60009c5
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 7 12:08:18 2022 -0700
+
+    Fix typo in wbs
+
+commit 1aae0914efda4e5306f6132e1b9f8fde7a51b52f
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Feb 7 12:11:06 2022 -0700
+
+    Commit wbs png
+
+commit bcfdd087bcb6a79e64eb3f094a5884b208ba6447
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 7 12:16:36 2022 -0700
+
+    Finish project netowkr diagram
+
+commit f885d1b1abd5d43b4f0a29099b68ddd898f0dd63
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 7 12:19:58 2022 -0700
+
+    Check in use case diagrma
+
+commit b1ec7c015f5b5c0f23a9681e07ff52cc0d8f5315
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Feb 7 12:22:31 2022 -0700
+
+    Changes are good'
+
+commit 75af38a914d706ee57987a2d0fd5a3afaa3e07bf
+Merge: d95fcce b1ec7c0
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Feb 7 12:37:23 2022 -0700
+
+    Merge pull request #12 from calebschoepp/ryan/docs
+    
+    Initial project plan deliverable
+
+commit 6cb31eeebad94b2333b3cfb45b9725858f4dffde
+Merge: a7f6562 75af38a
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Mon Feb 7 14:01:14 2022 -0700
+
+    Merge branch 'main' into static-canvas-drawing
+
+commit 30ac0c385b6a5f200908292d778115e374b1f94c
+Merge: 75af38a 6cb31ee
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Mon Feb 7 14:06:04 2022 -0700
+
+    Merge pull request #11 from calebschoepp/static-canvas-drawing
+    
+    feat: implement static drawing, erasing, path selection, and text
+
+commit c11e50512a546507f2a209adb97f3f22fca3079f
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 10:05:21 2022 -0700
+
+    Setup canvas models (#13)
+    
+    * Setup Page model
+    
+    * Setup layer model
+    
+    * Setup Diff model
+    
+    * Some TODOs
+    
+    * TODOs
+    
+    * Wire up pages and layers to be created when making or joining notebooks
+    
+    * Formatting
+    
+    * Fix errors
+
+commit 1ac5b70aecef39cac0dde8cd48cd2b25e77ba3b9
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 10:23:25 2022 -0700
+
+    Scaffold channel
+
+commit ad7b2953dd7643ffe13066eee5688615e1fd2574
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 11:00:19 2022 -0700
+
+    Fix Redis and get a basic message streaming
+
+commit 60eafcb2dc79a891850784b32d6ed74f36c0ee62
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 11:47:55 2022 -0700
+
+    Make channel dynamic
+
+commit 622d47a76f25ca6ed96a56874ac0b2503069a49d
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 11:54:06 2022 -0700
+
+    Setup authentication for action cable
+
+commit 12bb1e1df1a208498ccdf70453f5255a84a0e2af
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Feb 10 11:56:37 2022 -0700
+
+    Styling
+
+commit 2085aa2ba3fcafb98aab1c5af9713202d4348492
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 17:46:45 2022 -0700
+
+    Pass window.isOwner value re whether user is owner of notebook being opened
+
+commit 95286a2778ad00251ddff99689fcd95bb372f65d
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 17:49:31 2022 -0700
+
+    Add todos for server side handling of action cable
+
+commit df6a0d48f6f6dd83dbb23fefb3b72e7a8c2f4d80
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 17:50:21 2022 -0700
+
+    Delete unnecessary files
+
+commit 08588592374b167583a2e011cb0c45c68c831bf0
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 17:54:35 2022 -0700
+
+    Scaffold notebook structure
+
+commit 0714852b700b7b04698851aa33a601ec64343fb9
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 18:46:32 2022 -0700
+
+    Add skeleton functions and todos
+
+commit 6827c738476f6706125c033bc44cb158aef2b55a
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 18:52:56 2022 -0700
+
+    Minor change
+
+commit b837b46fc7bd77b71d86b275cdf562b80aa9425f
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 18:54:14 2022 -0700
+
+    Remove invalid import
+
+commit 5fbf0417e9664604ef48c83b167d45e8c78cb5d5
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Sun Feb 13 18:55:28 2022 -0700
+
+    Fix font size
+
+commit 1eda576cb732bfb3568205fb7f3f6ea829e9ca48
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Feb 14 12:24:36 2022 -0700
+
+    Server side action cable (#14)
+    
+    * Scaffold channel
+    
+    * Fix Redis and get a basic message streaming
+    
+    * Make channel dynamic
+    
+    * Setup authentication for action cable
+    
+    * Styling
+
+commit 9b1300b1709487235facc4a6ba44444dd10132d3
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Feb 14 14:07:32 2022 -0700
+
+    Update app/javascript/components/notebook.jsx
+    
+    Fix value of Tool.text
+    
+    Co-authored-by: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+
+commit 2fe395929a79f3451ac6538b033aa655f72bde5a
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 14:33:14 2022 -0700
+
+    Destructure props and clarify comments
+
+commit 9e4f32039878a25b1f05522ff2de861a0e625fcc
+Merge: 2fe3959 9b1300b
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 14:33:45 2022 -0700
+
+    Merge branch 'ryan/client-action-cable' of github.com:calebschoepp/canvasync into ryan/client-action-cable
+
+commit 100f65ce57570d2fb30b62454e0733a60389555d
+Merge: 9e4f320 1eda576
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 14:42:23 2022 -0700
+
+    Resolve conflicts
+
+commit aa20f4f47608c51d0146d6f99ee33cad042e0f09
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 15:21:09 2022 -0700
+
+    Remove breaking import
+
+commit 3011ae35906b4bc85680fc5a588a4adeead521e9
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 15:22:49 2022 -0700
+
+    Fix formatting
+
+commit 4f87a3e696dd0a23d8af3ad3003513faceffdca9
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 15:23:23 2022 -0700
+
+    Add bool to determine whether layer is an owner layer and improve comments
+
+commit 5cdc09d97819478cd470090195e4f2a13723d924
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 15:35:13 2022 -0700
+
+    Upgrade puma version to fix tests
+
+commit 2146e208e5b4367180361d74ad04d449533f5d6f
+Author: Ryan Kortbeek <rakortbe@ualberta.ca>
+Date:   Mon Feb 14 15:35:31 2022 -0700
+
+    Upgrade puma version to fix tests
+
+commit b737e53eb6118baa57f2d06dd6dfb0105f58eae1
+Merge: 1eda576 2146e20
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Feb 14 15:37:05 2022 -0700
+
+    Merge pull request #15 from calebschoepp/ryan/client-action-cable
+    
+    Client action cable scaffolding
+
+commit a28343e362f783bad37ddc1426eeb720a4c34c58
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Tue Feb 15 21:27:56 2022 -0700
+
+    reimplement paperjs functionality after ryan's changes (#16)
+    
+    * reimplement paperjs functionality after ryan's changes
+
+commit 8187f2e21013f1651dc82de1946f147a554ae858
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Mar 5 10:30:41 2022 -0700
+
+    Fix devise errors (#17)
+    
+    * Fix devise errors
+    
+    * Formatting
+    
+    * Remove extra quotes
+
+commit aaa1f58e62d3428c4f5862df266345cd2aa7a4fb
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sat Mar 5 10:32:20 2022 -0700
+
+    Prelim design (#18)
+    
+    * Rework docs a bit and add class diagram
+    
+    * More class diagram
+    
+    * More seq diagrams
+    
+    * More changes woohoo
+    
+    * Finish owner and participant create diff seq
+    
+    * Checkpoint
+    
+    * Checkpoint
+    
+    * Check in
+    
+    * Woohoo
+    
+    * Finish sequence diagrams
+    
+    * Check in for safety
+    
+    * Checkpoint
+    
+    * Lotta uml
+    
+    * Include pngs
+    
+    * Fix missing suffix
+    
+    * Ryan can do it
+    
+    * Export class diagram
+    
+    * Missing one
+    
+    Co-authored-by: Ryan Kortbeek <rakortbe@ualberta.ca>
+
+commit bac07bfd6e0ca329f1219b748258c215001c809a
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Mar 7 10:29:10 2022 -0700
+
+    Prototype diff broadcasting (#19)
+    
+    * Send diffs from client
+    
+    * Persist diffs and rebroadcast to other clients
+
+commit 31fa98e907ee5b1c375726c34ea7ea221010dec9
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Mar 10 08:25:58 2022 -0700
+
+    Revamp Dashboard (#20)
+    
+    * Handle deleting dependent models
+    
+    * Relayout dashboard
+    
+    * Setup join controller
+    
+    * Make cards square
+    
+    * WIP 3 dots
+    
+    * Improve card menu
+    
+    * Make title a link
+    
+    * Nits
+    
+    * Improve header
+    
+    * Clean up notebook forms
+    
+    * Nits
+    
+    * Fix vulns
+
+commit bc6ebe71812c7f1f89c9474ca0a6daa98246d681
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Thu Mar 10 17:44:56 2022 -0700
+
+    Scaffold exports (#21)
+    
+    * Active storage migrations
+    
+    * Make users upload a background when creating a new notebook
+    
+    * Dynamically build pages for PDF
+    
+    * Don't let users preview notebooks they're already involved with
+    
+    * Formatting
+    
+    * Do the things
+    
+    * Formatting
+
+commit a83835653000b6784bd370953f0e45d09545ee4f
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Sun Mar 13 18:50:30 2022 -0600
+
+    Implement Page Channel Subscription and New Page Broadcast (#22)
+    
+    * work on page channel
+    
+    * get page channel working
+    
+    * fix schema.rb format
+    
+    * restore main version of schema
+    
+    * lint
+
+commit cea3eec48a5f5145e15caf901bff7fa6e0e253a0
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Wed Mar 16 15:31:09 2022 -0600
+
+    Diff transmission (#23)
+    
+    * Add visible and type columns to db
+    
+    * Implement initial transmission updates
+    
+    * Update schema
+    
+    * Reword comment
+    
+    * Modify migration files to fix error with default diff.data json value
+    
+    * Implement pen, text, and eraser diff transmission
+    
+    * Fix migrations re addition of diff_type and visible columns to diffs table
+    
+    * Remove no null constraint on diffs.visible
+    
+    * Refactor incoming diff processing
+    
+    * Pass in scope to layer selectively
+    
+    * Remove unnecessary useEffect
+    
+    * Implement transmission of translation diffs and refactor implementation of other diff types
+    
+    * Implement server side persisting/processing of diff transmission
+    
+    * Finish implementing processing of incoming diffs of type tangible, remove, or translate
+    
+    * Finish implementation of diff transmission, diff preserving, diff processing, and error handling
+    
+    * Remove isOwner prop
+    
+    * Fix rubocop error
+    
+    * Fix bug where color of text was not modifyable
+    
+    * Reword fetch_existing to fetch_existing_signal for clarity
+    
+    * Remove unnecessary sort
+    
+    * Dont transmit empty text diffs and fix backspace
+    
+    * Remove irrelevant comment
+
+commit e34133e8f6280e25287255d699be432a67a54606
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Mar 22 12:03:32 2022 -0600
+
+    Implement search bar (#25)
+    
+    * Basic implementation of search
+    
+    * Fix wrong link design
+    
+    * Format
+
+commit 147d2d6a698ee258ff1d58b72072c6952a61b1ec
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Mar 22 12:06:01 2022 -0600
+
+    Enforce password complexity and setup password resets (#26)
+    
+    * Enforce password complexity
+    
+    * Setup password reset
+
+commit 255ec3610af35d99a98093c4846ddb11abe98d6c
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Wed Mar 23 11:19:16 2022 -0600
+
+    Implement PDF Export Generation (#24)
+    
+    * add pdf generation for owners and participants
+    
+    * add transformation matrix and fix writer id references
+    
+    * add error checking
+    
+    * fix pdf generation colors
+    
+    * add a failed export state
+    
+    * fix bug that impacted page creation as owner
+
+commit 2167af5f4ee7fac9edc62741b201df4049a49af8
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Wed Mar 23 18:13:45 2022 -0600
+
+    Increase notebook upload file type support (#28)
+    
+    * Allow creation of blank notebook
+    
+    * Convert png and jpegs to pdf on upload
+    
+    * Convert png and jpegs to pdf on upload
+    
+    * Do migration
+    
+    * Add support for png and jpeg uploads and refactor out constants to scoped modules
+    
+    * Tweak to use PageDimension module
+    
+    * Add covert_api gem to use for converting jpegs, pngs, and powerpoints to pdf
+    
+    * Implement support for uploading jpegs, pngs, and powerpoints
+    
+    * Add size check before performing conversion
+
+commit 908a4f399af9186dedf56c561883bbe150bd7c1c
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Thu Mar 24 11:41:04 2022 -0600
+
+    Implement Drawing of Background PDF on Paper.js Canvas (#27)
+    
+    * implement drawing of source PDF on paperjs background
+    
+    * lint notebooks_controller.rb
+
+commit c8e7d22822f67ddf13363f98f1c1256a0236e360
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Thu Mar 24 16:46:56 2022 -0600
+
+    Align PDF Generation and PDF Markup (#29)
+    
+    * fix bugs and align pdf generation
+    
+    * add adjustments for landscape slides
+
+commit 989488dd441b1425cb08aa5369a725f3671d118e
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Thu Mar 24 16:56:58 2022 -0600
+
+    fix pdf generation text color (#30)
+
+commit 9041ef09185f9d416d285aa1462a66191f2678f7
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Fri Mar 25 14:29:10 2022 -0600
+
+    fix bugs and allow for dynamic sizes during PDF generation (#31)
+
+commit f2562e4c1ef9289ccb4d88a52c4ee894bf700d74
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Sun Mar 27 17:41:33 2022 -0600
+
+    Add styling changes to notebooks page (#33)
+    
+    * add styling changes for notebooks page
+    
+    * rubocop linting
+
+commit 40092ee88b1137ef7c72ccf606c4578389dcfa5b
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Mar 28 15:30:59 2022 -0600
+
+    start implementing tests (#35)
+    
+    * Complete test cases for user password
+    
+    * Comment out fixtures to get tets working
+    
+    * Complete test cases for registration
+    
+    * Complete test cases for login
+    
+    * Change password to meet strength requirements
+    
+    * Complete test cases for notebook dashboard
+    
+    * Comment out exports tests for now
+    
+    * Add search tests
+    
+    * Push implemented tests
+
+commit 100478f6e680340cc1a0d945fe0adb4a38b163a3
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Mar 28 15:51:36 2022 -0600
+
+    Fix grid and card styling (#34)
+    
+    * Create notebook icon
+    
+    * Ignore *.DS_Store files
+    
+    * Style notebook dashboard, fix dropdown bug, and add notebook icon
+    
+    * Create css tailwinds class for content icon
+    
+    * Style export page and export cards
+    
+    * Remove todos
+
+commit 28c7181739d45cf8d3788e2f030cc9c8e14cdce2
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Mon Mar 28 16:08:31 2022 -0600
+
+    add Create.Notebook tests (#36)
+    
+    * add Create.Notebook tests
+    
+    * lint
+
+commit e8e5e6d4c5fa34e1e7a56a6add550e8ec53ab380
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Mar 28 16:25:13 2022 -0600
+
+    finish search tests (#37)
+    
+    * Complete test cases for user password
+    
+    * Comment out fixtures to get tets working
+    
+    * Complete test cases for registration
+    
+    * Complete test cases for login
+    
+    * Change password to meet strength requirements
+    
+    * Complete test cases for notebook dashboard
+    
+    * Comment out exports tests for now
+    
+    * Add search tests
+    
+    * Push implemented tests
+    
+    * Finish system tests
+
+commit 51ca087dee9d60891a8b40ae6103a8a87120bddc
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Mon Mar 28 16:32:43 2022 -0600
+
+    Export tests (#38)
+    
+    * Get export tests to run
+    
+    * Do class stuff
+    
+    * System test
+
+commit 26ffefb932e50f3a70665e64b0c0e85a09d8de57
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Tue Mar 29 14:53:52 2022 -0600
+
+    Implement Tests for React App (#40)
+    
+    * implement react testing
+    
+    * remove redundant test
+
+commit 0029e77b01dbc5b1d405d4044ad08f79394d07d2
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Tue Mar 29 15:07:37 2022 -0600
+
+    implement tests for adding a notebook (#39)
+    
+    * Complete test cases for user password
+    
+    * Comment out fixtures to get tets working
+    
+    * Complete test cases for registration
+    
+    * Complete test cases for login
+    
+    * Change password to meet strength requirements
+    
+    * Complete test cases for notebook dashboard
+    
+    * Comment out exports tests for now
+    
+    * Add search tests
+    
+    * Push implemented tests
+    
+    * Finish system tests
+    
+    * Implement tests for adding a notebook
+
+commit dad863d09e616c6db4e9c24bca1f9f9b89e834b7
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Tue Mar 29 17:39:39 2022 -0600
+
+    Finish tests (#42)
+    
+    * Make good stuff happen
+    
+    * IT WORKS!
+    
+    * Prog
+    
+    * Enforce unique seq number
+    
+    * Prog
+    
+    * Checkpoint
+    
+    * asdf
+    
+    * Format
+    
+    * Node version
+    
+    * Remove test files
+    
+    * Fix quotes
+
+commit 4de62c89dea71a30d3c0d42eecf7d792c9deb90c
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Tue Mar 29 17:55:10 2022 -0600
+
+    Add node version constraint (#41)
+    
+    * Complete test cases for user password
+    
+    * Comment out fixtures to get tets working
+    
+    * Complete test cases for registration
+    
+    * Complete test cases for login
+    
+    * Change password to meet strength requirements
+    
+    * Complete test cases for notebook dashboard
+    
+    * Comment out exports tests for now
+    
+    * Add search tests
+    
+    * Push implemented tests
+    
+    * Finish system tests
+    
+    * Implement tests for adding a notebook
+    
+    * Add constraint on node version so jest tests pass
+    
+    * Fix linting error
+
+commit fcf74ac21efde0c9cbd15c4f7ac64c60b0514b93
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Tue Mar 29 23:11:24 2022 -0600
+
+    Add Page Channel Tests (#43)
+    
+    * add page channel tests
+    
+    * lint
+
+commit 5190fbb49bda0b06ba6c42cb4871612747080dbb
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Fri Apr 1 01:59:26 2022 -0600
+
+    Remove pdf preview todo (#45)
+
+commit e4927da6644929f8d1e9ede477b596de519b190a
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Fri Apr 1 11:57:05 2022 -0600
+
+    add bug fixes (#46)
+
+commit ea21c67aec7a13a185eb2facb59793a4d2cdde8d
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Sat Apr 2 15:01:47 2022 -0600
+
+    Fix position of banner (#47)
+    
+    * Fix position of banner
+    
+    * Rebuild gemfile lock
+
+commit c8de56a82953cc6b094198ca2c7fe8dfd6c5e720
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Sun Apr 3 00:50:46 2022 -0600
+
+    Fix unexpected segments during PDF export (#49)
+    
+    * add fix for pdf export line segments
+    
+    * lint
+
+commit 79287ba3f2bba4bdc59fc1610d470a92699734a8
+Author: Nayan Prakash <43127491+nayancprakash@users.noreply.github.com>
+Date:   Sun Apr 3 00:52:01 2022 -0600
+
+    add fix for some pdf types (ex. notion) (#48)
+
+commit 4b17bfb5fe447d8c8d299d133656337505d157d3
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Sun Apr 3 13:02:31 2022 -0600
+
+    Fix eraser bug (#50)
+    
+    * Fix issue where first diff would not properly erase due to raster being zeroth element of active layer
+    
+    * Revert useless change
+
+commit 3321d0a1e856a9acd7d8a1cb62757ae377c5de85
+Author: Caleb Schoepp <caleb.schoepp@gmail.com>
+Date:   Sun Apr 3 13:52:25 2022 -0600
+
+    Show error when joining invalid notebook id (#51)
+    
+    * Show error when giving invalid notebook id
+    
+    * More stuff
+
+commit 694326548b90a6164931dd1a6ec36728225b4025
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Sun Apr 3 14:17:29 2022 -0600
+
+    Add fr refs (#52)
+    
+    * Add functional requirement references to code units
+    
+    * Resolve remaining todos
+    
+    * Minor formatting change
+    
+    * Fix notebook test to work with alert message when trying to add notebook that dne
+
+commit 0d819b751a2dc7eba7d3af2e4c51144c6dc59019
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Apr 4 00:41:36 2022 -0600
+
+    Fix bug with layer hierarchy (#53)
+
+commit 58a787a590f5f8f86e4e34aa457202464f83724d
+Author: Ryan Kortbeek <43446631+ryankortbeek@users.noreply.github.com>
+Date:   Mon Apr 4 10:52:33 2022 -0600
+
+    Explicitly activate the appropriate layer (#54)
